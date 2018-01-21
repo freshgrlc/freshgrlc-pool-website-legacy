@@ -73,6 +73,13 @@ th {
     font-family: 'Space Mono', monospace;
 }
 
+.smallheading {
+    color: #ffa517;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 18px;
+}
+
 #currentblock {
     font-family: 'Space Mono', monospace;
     color: #ffa517;
