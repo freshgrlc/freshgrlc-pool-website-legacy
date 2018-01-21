@@ -2,7 +2,9 @@ var blocks = {};
 
 var setCbOutputs = function (data) {
     $('.cbouttx').remove();
-    $.each(data, function (i, output) {
+    $.each(data.sort(function (a, b) {
+        return a.reward < b.reward ? 1 : -1;
+    }), function (i, output) {
         var prefix = 'cbouttxrow' + i;
         var html = '<tr class="cbouttx" id="' + prefix + '"><td><a class="mono" href="" id="' + prefix + 'addr"></a></td><td id="' + prefix + 'reward"></td><td id="' + prefix + 'pct"></td><td id="' + prefix + 'shares"></td></tr>';
         $('#cbout').append(html);
