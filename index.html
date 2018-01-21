@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Karla|Space+Mono:700" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css" />
+        <title>FreshGRLC.NET - FreshGarlicBlocks.net - 0% fee, instant payout communitiy mining pool</title>
+
+        <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script language="javascript" src="js/main.js"></script>
+    </head>
+    <body onLoad="init();">
+        <div id="banner">
+            <p>
+                <img src="banner.png" />
+            </p>
+            <h1>The 0% fee, instant<span class="tooltip">*<span class="tooltiptext">
+                <p>The mining reward is transfered to your wallet instantly whenever a block gets mined.</p>
+                <p> However, as part of the Garlicoin protocol, you will not be able to use these new coins
+                until the network as a whole has mined another 100 blocks.</p>
+                <p>Depending on the wallet you are using, these coins might or might not show up on your balance in the mean time.
+                If in doubt, please use a block explorer to verify you were properly payed out.</p>
+            </span></span>
+            payout Garlicoin mining pool.</h1>
+            <table align="center">
+                <tr>
+                    <td>
+                        <i>Current block being mined:</i>
+                    </td>
+                    <td class="monocolored" id="currentblock"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <i>Current global Garlicoin network hashrate:</i>
+                    </td>
+                    <td class="monocolored" id="globalhashrate"></td>
+                </tr>
+            </table>
+            <p>
+                Stratum server URL: <span id="stratumurl"></span>
+            </p>
+        </div>
+        <div>
+            <hr width="80%" />
+        </div>
+        <div>
+            <table align="center" id="cbout">
+                <tr>
+                    <th colspan="4">
+                        <span class="table-header">Coinbase transaction outputs for block currently being mined</span><br />
+                        <i>(If a block was found right now, this would be everyone's rewards)</i>
+                        <p>&nbsp;</p>
+                    </th>
+                </tr>
+                <tr class="table-colheader">
+                    <th>Address</th>
+                    <th>Reward</th>
+                    <th>Percentage</th>
+                    <th>Shares</th>
+                </tr>
+            </table>
+        </div>
+        <div>
+            &nbsp;
+        </div>
+        <div>
+            <table align="center" id="blks">
+                <tr>
+                    <th colspan="2">
+                        <span class="table-header">Last blocks mined by the pool</span>
+                        <p>&nbsp;</p>
+                    </th>
+                </tr>
+                <tr class="table-colheader">
+                    <th style="text-align: center;">Height</th>
+                    <th style="text-align: center;">Miner</th>
+                </tr>
+            </table>
+        </div>
+        <div>
+            &nbsp;
+        </div>
+        <div>
+            <i>More and better UI will be coming soon!</i>
+        </div>
+    </body>
+</html>

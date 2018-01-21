@@ -1,0 +1,108 @@
+body {
+    background-color: #333;
+    color: #d2b383;
+    font-family: 'Karla', sans-serif;
+    text-align: center;
+}
+
+a {
+    color: #40abef;
+}
+
+h1 {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 2em;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted #40abef;
+    text-decoration: none;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 500px;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    padding: 15px;
+    border-radius: 6px;
+
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+
+    position: absolute;
+    z-index: 1;
+}
+
+div {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.table-header {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+}
+
+.table-colheader th {
+    color: #f31010;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 18px;
+    text-align: left;
+}
+
+th {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+}
+
+
+.mono {
+    font-family: 'Space Mono', monospace;
+}
+
+#currentblock {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+    font-style: normal;
+    font-weight: normal;
+    padding: 2px 20px;
+}
+
+#globalhashrate {
+    font-family: 'Space Mono', monospace;
+    color: #f31010;
+    font-style: normal;
+    font-weight: normal;
+    padding: 2px 20px;
+}
+
+#stratumurl {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.cbouttx {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+}
+
+.blkheight {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+}
+
