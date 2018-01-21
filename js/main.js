@@ -9,7 +9,7 @@ var setCbOutputs = function (data) {
         $('#' + prefix + 'addr').text(output.address);
         $('#' + prefix + 'addr').attr("href", 'https://explorer.grlc-bakery.fun/address/' + output.address);
         $('#' + prefix + 'reward').text(Math.floor(output.reward) / 100000000);
-        $('#' + prefix + 'pct').text(output.percent + '%');
+        $('#' + prefix + 'pct').text(output.percentage + '%');
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
     });
 };
