@@ -23,6 +23,12 @@ th {
     padding: 3px 15px;
 }
 
+em {
+    color: #f31010;
+    font-weight: normal;
+    font-style: normal;
+}
+
 .tooltip {
     position: relative;
     display: inline-block;
