@@ -88,7 +88,7 @@ th {
     padding: 2px 20px;
 }
 
-#globalhashrate {
+.hashrate {
     font-family: 'Space Mono', monospace;
     color: #f31010;
     font-style: normal;
@@ -96,7 +96,7 @@ th {
     padding: 2px 20px;
 }
 
-#stratumurl {
+.stratumurl {
     font-family: 'Space Mono', monospace;
     color: #ffa517;
     font-style: normal;

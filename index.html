@@ -29,14 +29,25 @@
                 </tr>
                 <tr>
                     <td>
+                        <i>Estimated current pool hashrate:</i>
+                    </td>
+                    <td class="hashrate" id="poolhashrate"></td>
+                </tr>
+                <tr>
+                    <td>
                         <i>Current global Garlicoin network hashrate:</i>
                     </td>
-                    <td class="monocolored" id="globalhashrate"></td>
+                    <td class="hashrate" id="globalhashrate"></td>
                 </tr>
             </table>
-            <p>
-                Stratum server URL: <span id="stratumurl"></span>
-            </p>
+            <div style="text-align: center;">
+                <div style="display: inline-block; text-align: left;">
+                    <p>
+                        Stratum server URL (vardiff): <span class="stratumurl" id="stratumurl1"></span> <i>(if in doubt, use this)</i><br />
+                        Stratum server URL (diff 16): <span class="stratumurl" id="stratumurl2"></span>
+                    </p>
+                </div>
+            </div>
         </div>
         <div>
             <hr width="80%" />
@@ -55,6 +66,7 @@
                     <th>Reward</th>
                     <th>Percentage</th>
                     <th>Shares</th>
+                    <th>Hashrate</th>
                 </tr>
             </table>
             <p>&nbsp;</p>
