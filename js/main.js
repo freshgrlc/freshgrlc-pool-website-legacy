@@ -99,6 +99,7 @@ var init = function () {
     };
 
     eventSource.onerror = function () {
+        eventSource.close();
         $('#overlay').show();
     };
 };
