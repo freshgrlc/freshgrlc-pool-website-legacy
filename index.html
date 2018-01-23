@@ -8,6 +8,21 @@
         <script language="javascript" src="js/main.js"></script>
     </head>
     <body onLoad="init();">
+        <div id="overlay">
+            <div id="overlay-box">
+                <h1>Auto-refresh has been disabled</h1>
+                <p>
+                    To save server network bandwidth, the auto-refresh<br />
+                    on this page automatically disables after some time.
+                </p>
+                <p>
+                    Please refresh to page to continue receiving updates.
+                </p>
+                <p>
+                    <a style="color: #fefefe;" href="#" onClick="$('#overlay').hide();">Close</a>
+                </p>
+            </div>
+        </div>
         <div id="banner">
             <p>
                 <img src="banner.png" />

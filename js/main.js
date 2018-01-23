@@ -74,7 +74,9 @@ var init = function () {
     $('#stratumurl1').text('stratum+tcp://freshgarlicblocks.net:3032');
     $('#stratumurl2').text('stratum+tcp://freshgarlicblocks.net:3333');
 
-    new EventSource('/api/getinfo').onmessage = function(event) {
+    var eventSource = new EventSource('/api/getinfo');
+
+    eventSource.onmessage = function(event) {
         var rawdata = JSON.parse(event.data);
         var type = Object.keys(rawdata)[0];
         var data = rawdata[type];
@@ -94,5 +96,9 @@ var init = function () {
         } else if (type == 'workerhashrates') {
             workerHashrate = data;
         }
+    };
+
+    eventSource.onerror = function () {
+        $('#overlay').show();
     };
 };
