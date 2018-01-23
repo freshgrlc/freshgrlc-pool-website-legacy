@@ -1,6 +1,15 @@
 var blocks = {};
 var workerHashrate = {};
 
+var setAddressHashrate = function (address, hashrate) {
+    if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
+        hashrate = '--';
+    } else {
+        hashrate = Math.floor(hashrate / 100) / 10;
+    }
+    $('#hashrate' + address).text(hashrate + ' kH/s');
+};
+
 var setCbOutputs = function (data) {
     $('.cbouttx').remove();
     $.each(data.sort(function (a, b) {
@@ -12,7 +21,7 @@ var setCbOutputs = function (data) {
                         '<td id="' + prefix + 'reward"></td>' +
                         '<td id="' + prefix + 'pct"></td>' +
                         '<td id="' + prefix + 'shares"></td>' +
-                        '<td id="' + prefix + 'hashrate"></td>' +
+                        '<td id="hashrate' + output.address + '"></td>' +
                     '</tr>';
         $('#cbout').append(html);
         $('#' + prefix + 'addr').text(output.address);
@@ -21,13 +30,7 @@ var setCbOutputs = function (data) {
         $('#' + prefix + 'pct').text(output.percentage + '%');
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
 
-        var hashrate = workerHashrate[output.address];
-        if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
-            hashrate = '--';
-        } else {
-            hashrate = Math.floor(hashrate / 100) / 10;
-        }
-        $('#' + prefix + 'hashrate').text(hashrate + ' kH/s');
+        setAddressHashrate(output.address, workerHashrate[output.address]);
     });
 };
 
@@ -96,6 +99,10 @@ var init = function () {
             setPoolHashrate(data);
         } else if (type == 'workerhashrates') {
             workerHashrate = data;
+            var addresses = Object.keys(data);
+            for (var i in addresses) {
+                setAddressHashrate(addresses[i], workerHashrate[addresses[i]]);
+            }
         }
     };
 
