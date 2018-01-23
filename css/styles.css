@@ -19,6 +19,10 @@ td {
     padding: 3px 15px;
 }
 
+.table-nopad td {
+    padding: 2px;
+}
+
 th {
     padding: 3px 15px;
 }
