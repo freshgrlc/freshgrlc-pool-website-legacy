@@ -72,7 +72,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Stratum server URL (diff 16):
+                                    Stratum server URL (vardiff):
                                 </td>
                                 <td>
                                     <span class="stratumurl" id="stratumurl2"></span>
@@ -81,10 +81,19 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Stratum server URL (diff 48):
+                                    Stratum server URL (diff 96):
                                 </td>
                                 <td>
                                     <span class="stratumurl" id="stratumurl3"></span>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Stratum server URL (diff 512):
+                                </td>
+                                <td>
+                                    <span class="stratumurl" id="stratumurl4"></span>
                                 </td>
                                 <td></td>
                             </tr>
@@ -128,6 +137,8 @@
                 Everyone's shares will decrease by 90% if the pool finds a block.<br />
                 (Except when multiple blocks are found within a small time window.)<br />
                 They decrease by 5% whenever anyone finds a new block on the network (about every 40 seconds).<br />
+                Workers under the minimum share floor don't get paid, but are also not affected by the 5% share decrease<br />
+                (this to somewhat decrease the amount of dust the pool is generating).<br />
                 This is part of the payout management logic in order to keep payout fair.<br />
                 These numbers might change in the future.
             </p>
