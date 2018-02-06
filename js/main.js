@@ -81,15 +81,13 @@ var _showWorker = function (address) {
                     date.setUTCSeconds(data.lastseen);
                     $('#workerinfo_lastseen').text(date);
 
-                    $('#workerinfo_blockslist');
-
                     $('.worker-solved').remove();
                     $.each(data.foundblocks, function (i, block) {
                         var prefix = 'foundblockrow' + i;
                         var html =  '<tr class="worker-solved" id="' + prefix + '">' +
                                         '<td><a class="mono" href="" target="_blank" id="' + prefix + 'height"></a></td>' +
                                     '</tr>';
-                        $('#cbout').append(html);
+                        $('#workerinfo_blockslist').append(html);
                         $('#' + prefix + 'height').text(block);
                         $('#' + prefix + 'height').attr("href", 'https://garlicinsight.com/block-index/' + block);
                     });
