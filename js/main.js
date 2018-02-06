@@ -33,7 +33,7 @@ var setCbOutputs = function (data) {
         $('#' + prefix + 'pct').text(output.percentage + '%');
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
 
-        setAddressHashrate('#hashrate' + output.address, workerHashrate[output.address]);
+        setAddressHashrate('#hashrate' + output.address, workerHashrate[output.address] != null ? workerHashrate[output.address].average : 0);
     });
 };
 
@@ -124,7 +124,7 @@ var buildWorkerList = function (data) {
     $('.workerentry').remove();
 
     $.each(data, function (address, hashrate) {
-        asList.push({ 'address': address, 'hashrate': hashrate });
+        asList.push({ 'address': address, 'hashrate': hashrate.average });
     });
 
     $.each(asList.sort(function (a, b) {
@@ -487,11 +487,11 @@ var init = function () {
             var workers = 0;
             var addresses = Object.keys(data);
             for (var i in addresses) {
-                var workerRate = workerHashrate[addresses[i]];
+                var workerRate = workerHashrate[addresses[i]] != null ? workerHashrate[addresses[i]].average : 0;
 
                 setAddressHashrate('#hashrate' + addresses[i], workerRate);
 
-                if (workerRate != null && !isNaN(workerRate) && workerRate > 0) {
+                if (workerRate != null && !isNaN(workerRate) && workerRate > 0 && workerHashrate[addresses[i]].current > 0) {
                     workers++;
                 }
             }
