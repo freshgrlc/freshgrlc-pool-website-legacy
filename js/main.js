@@ -152,7 +152,7 @@ var redrawMinedBlocks = function () {
     });
     $.each(ids, function (_, height) {
         var prefix = 'blk' + height;
-        var html = '<tr class="blkheight" id="' + prefix + '"><td><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td></tr>';
+        var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td></tr>';
         $('#blks').append(html);
         $('#' + prefix + 'nr').text(height);
         $('#' + prefix + 'nr').attr("href", 'https://garlicinsight.com/block-index/' + height);

@@ -317,8 +317,24 @@ th {
     color: #ffa517;
 }
 
+.worker-solved {
+    text-align: center;
+}
+
+.worker-solved a {
+    color: #ffa517;
+}
+
 .blkheight {
     font-family: 'Space Mono', monospace;
+    color: #ffa517;
+}
+
+.blkheight a {
+    color: #f31010;
+}
+
+.blkheight-blk a {
     color: #ffa517;
 }
 
