@@ -5,6 +5,10 @@ body {
     text-align: center;
 }
 
+.lightertext {
+    color: #eee;
+}
+
 a {
     color: #40abef;
 }
@@ -57,13 +61,29 @@ em {
     font-style: normal;
     font-size: 14px;
 
-    position: absolute;
+    position: fixed;
+    top: 0;
     z-index: 1;
 }
 
 div {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    position: relative;
+    padding: 10px;
+}
+
+.contentdiv {
+    width: 1000px;
+    margin: 0px auto;
+}
+
+.toplevel {
+    position: fixed;
+    overflow-y: hidden;
+    background-color: #333;
+    margin: 0px;
+    padding: 0px;
+    left: 0;
+    width: 100%;
 }
 
 #overlay {
@@ -94,10 +114,115 @@ div {
     color: #ffa517;
 }
 
+#banner {
+    top: 0;
+    height: 150px;
+}
+
+#banner h1 {
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.5em;
+    font-style: italic;
+}
+
+#banner p {
+    margin: 0px;
+    padding: 0px;
+}
+
+#menu {
+    top: 150px;
+    height: 65px;
+}
+
+#menu table {
+    border: none;
+    border-collapse: collapse;
+    margin: 0px auto;
+    padding: 0px;
+    width: 68%;
+}
+
+#menu tr {
+    padding: 0px 10px;
+}
+
+#menu table td {
+    border-left: 2px #eee solid;
+    border-right: 2px #eee solid;
+    height: 30px;
+    margin: 0px;
+    text-align: center;
+    width: 100px;
+    cursor: pointer;
+
+    color: #ffa517;
+    font-style: normal;
+    font-weight: bold;
+}
+
+#menu table .selected {
+    color: #f31010;
+    font-style: italic;
+}
+
+#content {
+    top: 220px;
+    bottom: 60px;
+    overflow-y: auto;
+}
+
+#footer {
+    bottom: 0;
+    height: 60px;
+    text-align: center;
+}
+
+#footer table {
+    background-color: #333;
+    border-collapse: collapse;
+    border: none;
+    margin: 0px auto;
+    padding: 0px;
+}
+
+#footer tr {
+    padding: 0px 10px;
+}
+
+#footer table td {
+    border: 2px #888 solid;
+    height: 60px;
+    margin: 0px;
+    text-align: center;
+    width: 320px;
+}
+
+#footer .monocolored {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+    font-style: normal;
+    font-weight: normal;
+    padding: 2px 10px;
+}
+
+.wrapper {
+    display: inline-block;
+}
+
 .table-header {
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
+}
+
+.table-smallheader {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 18px;
+    text-align: left;
+    color: #ffa517;
 }
 
 .table-colheader th {
@@ -105,6 +230,12 @@ div {
     font-weight: bold;
     font-style: normal;
     font-size: 18px;
+    text-align: left;
+}
+
+.table-rowheader {
+    font-weight: bold;
+    font-style: italic;
     text-align: left;
 }
 
@@ -119,6 +250,27 @@ th {
     font-family: 'Space Mono', monospace;
 }
 
+.monocolored {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+    font-style: normal;
+}
+
+.monocolored-small {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+    font-style: normal;
+    font-size: 11.5px;
+}
+
+.date {
+    font-family: 'Space Mono', monospace;
+    color: #f31010;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 20px;
+}
+
 .smallheading {
     color: #ffa517;
     font-style: italic;
@@ -126,7 +278,13 @@ th {
     font-size: 18px;
 }
 
-#currentblock {
+.smallerheading {
+    color: #f31010;
+    font-style: italic;
+    font-size: 16px;
+}
+
+.currentblock {
     font-family: 'Space Mono', monospace;
     color: #ffa517;
     font-style: normal;
@@ -150,6 +308,11 @@ th {
 }
 
 .cbouttx {
+    font-family: 'Space Mono', monospace;
+    color: #ffa517;
+}
+
+.workerentry {
     font-family: 'Space Mono', monospace;
     color: #ffa517;
 }

@@ -5,6 +5,7 @@
         <title>FreshGRLC.NET - FreshGarlicBlocks.net - 0% fee, instant payout Garlicoin mining pool</title>
 
         <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script language="javascript" src="js/highcharts.js"></script>
         <script language="javascript" src="js/main.js"></script>
     </head>
     <body onLoad="init();">
@@ -23,148 +24,329 @@
                 </p>
             </div>
         </div>
-        <div id="banner">
+        <div id="banner" class="toplevel">
             <p>
                 <a href="/"><img src="../banner.png" /></a>
             </p>
-            <h1>The 0% fee, instant<span class="tooltip">*<span class="tooltiptext">
+            <h1>The 0% fee, instant<span class="tooltip">*<div class="tooltiptext">
                 <p>The mining reward is transfered to your wallet instantly whenever a block gets mined.</p>
                 <p> However, as part of the Garlicoin protocol, you will not be able to use these new coins
                 until the network as a whole has mined another 100 blocks.</p>
                 <p>Depending on the wallet you are using, these coins might or might not show up on your balance in the mean time.
                 If in doubt, please use a block explorer to verify you were properly payed out.</p>
-            </span></span>
+            </div></span>
             payout Garlicoin mining pool.</h1>
-            <table align="center">
+        </div>
+        <div id="menu" class="toplevel">
+            <hr width="75%" />
+            <table>
                 <tr>
-                    <td>
-                        <i>Current block being mined:</i>
-                    </td>
-                    <td class="monocolored" id="currentblock"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <i>Estimated current pool hashrate:</i>
-                    </td>
-                    <td class="hashrate" id="poolhashrate"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <i>Current global Garlicoin network hashrate:</i>
-                    </td>
-                    <td class="hashrate" id="globalhashrate"></td>
+                    <td id="poolnews" class="menuitem">Pool news</td>
+                    <td id="howtomine" class="menuitem">How to mine</td>
+                    <td id="stats" class="menuitem">Pool stats</td>
+                    <td id="workers" class="menuitem">Workers list</td>
+                    <td id="curblock" class="menuitem">Current block</td>
+                    <td id="myworker" class="menuitem">My worker</td>
                 </tr>
             </table>
-            <div style="text-align: center; padding: 0px;">
+            <hr width="75%" />
+        </div>
+        <div id="content" class="toplevel">
+            <div id="content-poolnews" class="contentdiv">
+                <h1>Pool news &amp; announcements</h1>
+                <p style="text-align: right;">
+                    <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
+                </p>
+                <div style="text-align: left">
+                    <span class="date">06-02-2018</span><span class="smallheading">New website</span>
+                    <p>
+                        We have a new website layout!
+                    </p>
+                    <p>
+                        The original website was only made with 20 - 30 workers in mind and a hardcoded limit of 100 workers.<br />
+                        When Garlicoin mainnet launched and both the network as a whole as well as this pool got a lot more traction
+                        than expected, a lot of changes had to be made in a short time.
+                    </p>
+                    <p>
+                        One of the final changes, and overhaul of this website, is now complete: Have a look around!
+                    </p>
+                    <p>
+                        Apart from the overal design (and the same shitty style ;-) , the main features are pool luck graphs
+                        and an easier way to view worker statistics.
+                    </p>
+                </div>
+            </div>
+            <div id="content-howtomine" class="contentdiv">
+                <h1>How to mine on the FreshGRLC pool</h1>
+                <div style="text-align: left;">
+                    <p>
+                        You can mine at our pool by simply connecting with your mining software to our pool's stratum server,
+                        using your wallet address as username.
+                    </p>
+                    <p>
+                        For the 2 most popular miners, <em>ccminer</em> and <em>sgminer</em>, you would use a command (or BAT file line)
+                        that looks something like this:
+                    </p>
+                    <p>
+                        <span class="smallerheading">ccminer (generic)</span><br />
+                        <span class="monocolored-small">
+                            ccminer --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
+                        </span>
+                    </p>
+                    <p>
+                        <span class="smallerheading">ccminer (based on <a href="https://pandawanfr.github.io/GarlicRecipes/mining-win-nvidia.html" target="_blank">Pandawan's Guide</a>)</span><br />
+                        <span class="monocolored-small">
+                            ccminer-x64 --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85
+                        </span>
+                    </p>
+                    <p>
+                        <span class="smallerheading">sgminer</span><br />
+                        <span class="monocolored-small">
+                            sgminer --algorithm scrypt-n --nfactor 11 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
+                        </span>
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                        Once you are connected and see your first accepted share, your miner should pop up in the <em>Worker list</em> tab
+                        and <em>Current block</em> estimated payout tab within a minute.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                        <span class="smallheading">NOTE</span><br />
+                        <i>Don't forget to replace <em>GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB</em> in the above examples with your own mainnet wallet address<br />
+                        (34 characters long and starting with a <em>G</em>). The example address is fake and will cause authentication failures if you try to use it.</i>
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                        <span class="lightertext"><i>For questions:</i></span> Message <em>nuc1e4r5n4k3#5815</em> on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.
+                    </p>
+                    <p>&nbsp;</p>
+                    <h1>Static stratum difficulty</h1>
+                    <p>
+                        First of all: if you don't know what this is, don't worry. The examples above should be both sufficient <i>and</i> optimal in almost all scenarios.
+                    </p>
+                    <p>
+                        Apart from the stratum server on port <em>3032</em>, which is a vardiff (variable difficulty, tries to make workers send 1 share every
+                        15 seconds on average), there are a couple of other ports available as well.
+                    </p>
+                </div>
                 <div style="display: inline-block; text-align: left;">
                     <p>
-                        <table class="table-nopad">
+                        <table>
                             <tr>
-                                <td>
-                                    Stratum server URL (vardiff):
-                                </td>
+                                <th class="table-smallheader">URL</th>
+                                <th class="table-smallheader">Type</th>
+                                <th class="table-smallheader">Used for</th>
+                            </tr>
+                            <tr>
                                 <td>
                                     <span class="stratumurl" id="stratumurl1"></span>
                                 </td>
-                                <td>
-                                    <i>(if in doubt, use this)</i>
-                                </td>
+                                <td>Vardiff</td>
+                                <td>Generic purpose, works for any miner</td>
                             </tr>
                             <tr>
-                                <td>
-                                    Stratum server URL (vardiff):
-                                </td>
                                 <td>
                                     <span class="stratumurl" id="stratumurl2"></span>
                                 </td>
-                                <td></td>
+                                <td>Vardiff</td>
+                                <td>Legacy port, used to be static 16 diff</td>
                             </tr>
                             <tr>
-                                <td>
-                                    Stratum server URL (diff 96):
-                                </td>
-                                <td>
-                                    <span class="stratumurl" id="stratumurl3"></span>
-                                </td>
-                                <td></td>
+                                <td><span class="stratumurl" id="stratumurl3"></span></td>
+                                <td>Diff 96</td>
+                                <td>GPU mining users that can't use/have<br />problems with vardiff</td>
                             </tr>
                             <tr>
-                                <td>
-                                    Stratum server URL (diff 512):
-                                </td>
-                                <td>
-                                    <span class="stratumurl" id="stratumurl4"></span>
-                                </td>
-                                <td></td>
+                                <td><span class="stratumurl" id="stratumurl4"></span></td>
+                                <td>Diff 512</td>
+                                <td>Higher hashrate mining rigs (up to ~ 4 MH/s)<br /> that can't use/have problems with vardiff</td></td>
                             </tr>
                         </table>
                     </p>
                 </div>
             </div>
-            <div>
-                For questions: <em>nuc1e4r5n4k3#5815</em> on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp">our own discord</a>.
+            <div id="content-stats" class="contentdiv">
+                <div>
+                    <h1>Pool stats</h1>
+                    <table align="center">
+                        <tr>
+                            <td>
+                                <i>Current block being mined:</i>
+                            </td>
+                            <td class="monocolored currentblock"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i>Estimated current pool hashrate:</i>
+                            </td>
+                            <td class="hashrate poolhashrate"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i>Global Garlicoin network hashrate:</i>
+                            </td>
+                            <td class="hashrate globalhashrate"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i>Pool's hashrate as percentage:</i>
+                            </td>
+                            <td class="hashrate poolhashratepercent"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i>Pool's luck over last 48 hours:</i>
+                            </td>
+                            <td class="hashrate poolluck"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <h1 style="margin: 0px; padding: 0px;">Blocks vs Hashrate</h1>
+                    <div id="graph_blkhash" style="width: 900px; margin: 0px auto;"></div>
+                </div>
+                <div>
+                    <h1 style="margin: 0px; padding: 0px;">Pool's luck</h1>
+                    <div id="graph_luck" style="width: 900px; margin: 0px auto;"></div>
+                </div>
+                <div>&nbsp;</div>
+                <div>
+                    <table align="center" id="blks">
+                        <tr>
+                            <th colspan="2">
+                                <span class="table-header">Last blocks mined by the pool</span>
+                                <p>&nbsp;</p>
+                            </th>
+                        </tr>
+                        <tr class="table-colheader">
+                            <th style="text-align: center;">Height</th>
+                            <th style="text-align: center;">Miner</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div style="padding-top: 30px;">
-                <span class="smallheading">Note</span><br />
-                There are currently some issues with the hashrate calculations.<br />
-                However, we have verified that all received shares are correctly processed<br />
-                and workers are payed out according to work submitted.
-            </div>
-        </div>
-        <div>
-            <hr width="80%" />
-        </div>
-        <div>
-            <table align="center" id="cbout">
-                <tr>
-                    <th colspan="5">
-                        <span class="table-header">Coinbase transaction outputs for block currently being mined</span><br />
-                        <i>(If a block was found right now, this would be everyone's rewards)</i>
-                        <p>&nbsp;</p>
-                    </th>
-                </tr>
-                <tr class="table-colheader">
-                    <th>Address</th>
-                    <th>Reward</th>
-                    <th>Percentage</th>
-                    <th>Shares</th>
-                    <th>Hashrate</th>
-                </tr>
-            </table>
-            <p>&nbsp;</p>
-            <p>
-                <span class="smallheading">Note</span><br />
-                Everyone's shares will decrease by 90% if the pool finds a block.<br />
-                (Except when multiple blocks are found within a small time window.)<br />
-                They decrease by 5% whenever anyone finds a new block on the network (about every 40 seconds).<br />
-                Workers under the minimum share floor don't get paid, but are also not affected by the 5% share decrease<br />
-                (this to somewhat decrease the amount of dust the pool is generating).<br />
-                This is part of the payout management logic in order to keep payout fair.<br />
-                These numbers might change in the future.
-            </p>
-        </div>
-        <div>
-            &nbsp;
-        </div>
-        <div>
-            <table align="center" id="blks">
-                <tr>
+            <div id="content-workers" class="contentdiv">
+                <table align="center" id="workerslist">
                     <th colspan="2">
-                        <span class="table-header">Last blocks mined by the pool</span>
+                        <h1 style="padding-bottom: 0px; margin-bottom: 0px;">Workers</h1>
                         <p>&nbsp;</p>
                     </th>
-                </tr>
-                <tr class="table-colheader">
-                    <th style="text-align: center;">Height</th>
-                    <th style="text-align: center;">Miner</th>
+                    <tr class="table-colheader">
+                        <th>Worker (address)</th>
+                        <th>Hashrate</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="content-curblock" class="contentdiv">
+                <table align="center" id="cbout">
+                    <tr>
+                        <th colspan="5">
+                            <h1 style="padding-bottom: 0px; margin-bottom: 0px;">Coinbase tx outputs for current block</h1>
+                            <i>(If a block was found right now, this would be everyone's rewards)</i>
+                            <p>&nbsp;</p>
+                        </th>
+                    </tr>
+                    <tr class="table-colheader">
+                        <th>Address</th>
+                        <th>Reward</th>
+                        <th>Percentage</th>
+                        <th>Shares</th>
+                        <th>Hashrate</th>
+                    </tr>
+                </table>
+                <p>&nbsp;</p>
+                <p>
+                    <div class="smallheading">Note on share management</div>
+                    Everyone's shares will decrease by 90% if the pool finds a block<br />
+                    (except when multiple blocks are found within a small amount of time).
+                </p>
+                <p>
+                    Shares decrease by 5% whenever anyone finds a new block on the network<br />
+                    (this happens more or less every 41 seconds).
+                </p>
+                <p>
+                    Workers under the minimum share floor of 8 shares don't get paid,<br />
+                    but are also not affected by the 5% share decrease<br />
+                    (this to decrease the amount of dust the pool is generating somewhat).
+                </p>
+                <p>
+                    This is all part of the payout management logic in order to keep payout fair.
+                </p>
+                <p>
+                    Note that this does not mean that the pool takes a fee by decreasing worker shares,<br />
+                    as shares are the only thing on which block reward payout is based. Rather,<br />
+                    this is a way to get workers that stopped mining slowly out of the system<br />
+                    while still giving them something for their work.<br />
+                    It also helps new workers joining to pool to get a little bit extra in times<br />
+                    where the pool is unlucky and can't find a block for a while.
+                </p>
+                <p>
+                    These numbers might change in the future.
+                </p>
+            </div>
+            <div id="content-myworker" class="contentdiv">
+                <div id="genericworkerheader">
+                    <h1 >Worker <small><span class="monocolored currentworker"></span></small></h1>
+                    <a href="#" onClick="setAsMyWorker();">Set as my worker</a>
+                </div>
+                <h1 id="myworkerheader">My worker</h1>
+                <div id="nomyworker">
+                    You have not yet selected a worker as your own. Click on your worker address in the <em>Workers list</em> tab
+                    and select <em>Select as my worker</em>.
+                </div>
+                <div id="workerinfo" style="width: 800px; margin: 0px auto">
+                    <table align="center">
+                        <tr>
+                            <th class="table-rowheader">Address</th>
+                            <td class="monocolored"><a href="#" target="_blank" id="workerinfo_address" class="workerinfo-info"></a></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Next payout</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_payout"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Hashrate (average)</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_hashrate_avg"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Hashrate (current)</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_hashrate_cur"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Valid shares percentage</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_validsharepercent"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Last seen</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_lastseen"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Blocks solved</th>
+                            <td class="monocolored workerinfo-info" id="workerinfo_blocks"></td>
+                        </tr>
+                    </table>
+                    <p>
+                        <a href="#" onClick="refreshWorker();">Refresh</a>
+                    </p>
+                    <table id="workerinfo_blockslist" align="center">
+                        <tr>
+                            <th class="table-header">Solved blocks list</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="footer" class="toplevel">
+            <table>
+                <tr>
+                    <td><em>Network hashrate:</em><span class="wrapper"><span class="globalhashrate monocolored">-- MH/s</span></span></td>
+                    <td><em>Pool hashrate:</em><span class="wrapper"><span class="poolhashrate monocolored">-- MH/s</span>/<span class="poolhashratepercent monocolored">-- %</span></span></td>
+                    <td><em>Current block:</em><span class="wrapper"><span class="currentblock monocolored">----</span></span></td>
+                    <td><em>Active workers:</em><span class="wrapper"><span class="workers monocolored">---</span></span></td>
+                    <td><em>Pool luck:</em><span class="wrapper"><span class="poolluck monocolored">-- %</span></span></td>
                 </tr>
             </table>
-        </div>
-        <div>
-            &nbsp;
-        </div>
-        <div>
-            <i>More and better UI will be coming soon!</i>
         </div>
     </body>
 </html>
