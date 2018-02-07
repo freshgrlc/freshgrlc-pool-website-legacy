@@ -212,9 +212,11 @@ var getAndSetLuckInfo = function () {
                     totalLuck += luckInfo[i].luck;
                 }
 
-                $('.poolluck').text('' + (Math.floor(totalLuck / periods * 1000) / 10) + ' %');
+                var luckAverage = Math.floor(totalLuck / periods * 1000) / 10;
 
-                drawLuckGraphs(luckInfo);
+                $('.poolluck').text('' + luckAverage + ' %');
+
+                drawLuckGraphs(luckInfo, luckAverage);
             }
         }
     });
@@ -234,7 +236,7 @@ var selectMenu = function (id) {
     }
 };
 
-var drawLuckGraphs = function (data) {
+var drawLuckGraphs = function (data, average) {
     var blocksVsHashrateSeries = [];
     var luckSeries = [];
 
@@ -243,20 +245,20 @@ var drawLuckGraphs = function (data) {
         'data': []
     });
     blocksVsHashrateSeries.push({
-        'name': 'Blocks',
+        'name': 'Solved blocks',
         'data': []
     });
 
     luckSeries.push({
-        'name': 'Luck',
+        'name': 'Pool\'s luck',
         'data': []
     });
 
     $.each(data, function (i, entry) {
-        blocksVsHashrateSeries[0].data.push([ entry.startBlock, Math.floor(entry.hashratePercent * 1000) / 10 ]);
-        blocksVsHashrateSeries[1].data.push([ entry.startBlock, Math.floor(entry.blocksPercent * 1000) / 10 ]);
+        blocksVsHashrateSeries[0].data.push([ entry.startBlock + 50, Math.floor(entry.hashratePercent * 1000) / 10 ]);
+        blocksVsHashrateSeries[1].data.push([ entry.startBlock + 50, Math.floor(entry.blocksPercent * 1000) / 10 ]);
 
-        luckSeries[0].data.push([ entry.startBlock, Math.floor(entry.luck * 1000) / 10 ]);
+        luckSeries[0].data.push([ entry.startBlock + 50, Math.floor(entry.luck * 1000) / 10 ]);
     });
 
     $('#graph_blkhash').highcharts({
@@ -311,7 +313,7 @@ var drawLuckGraphs = function (data) {
         },
         tooltip: {
             formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+ this.y + ' %';
+                return '<b>' + this.series.name + '</b><br/><i>' + (this.x - 50) + '-' + (this.x + 50) + '</i>:   <b>' + this.y + ' %</b>';
             }
         },
         chart: {
@@ -380,7 +382,19 @@ var drawLuckGraphs = function (data) {
                     color: '#dddddd',
                     fontSize: '14px'
                 }
-            }
+            },
+            plotLines: [{
+                value: average,
+                color: '#aaaaaa',
+                dashStyle: 'shortdash',
+                width: 1,
+                label: {
+                    style: {
+                        color: '#eeeeee'
+                    },
+                    text: '48-hour average (' + average + ' %)'
+                }
+            }]
         },
         legend: {
             layout: 'vertical',
@@ -398,7 +412,7 @@ var drawLuckGraphs = function (data) {
         },
         tooltip: {
             formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+ this.y + ' %';
+                return '<b>' + this.series.name + '</b><br/><i>' + (this.x - 50) + '-' + (this.x + 50) + '</i>:   <b>' + this.y + ' %</b>';
             }
         },
         chart: {
