@@ -233,6 +233,8 @@ var selectMenu = function (id) {
 
     if (id == 'myworker') {
         _showWorker(myAddress);
+    } else if (id == 'stats') {
+        getAndSetLuckInfo();
     }
 };
 
