@@ -9,6 +9,14 @@ body {
     color: #eee;
 }
 
+.yellow {
+    color: #ffa517;
+}
+
+.red {
+    color: #f31010;
+}
+
 a {
     color: #40abef;
 }
@@ -282,6 +290,13 @@ th {
     color: #f31010;
     font-style: italic;
     font-size: 16px;
+}
+
+#status {
+    color: #ffa517;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .currentblock {
