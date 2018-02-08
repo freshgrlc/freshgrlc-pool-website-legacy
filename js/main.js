@@ -57,6 +57,7 @@ var _showWorker = function (address) {
 
     $('.worker-solved').remove();
     $('.workerinfo-info').text('');
+    $('#workerinfo_check_hashrate_cont').hide();
 
     if (address != null) {
         $('#workerinfo_address').text(address);
@@ -76,6 +77,11 @@ var _showWorker = function (address) {
 
                     setAddressHashrate('#workerinfo_hashrate_avg', data.hashrate);
                     setAddressHashrate('#workerinfo_hashrate_cur', data.curhashrate);
+
+                    if (address == myAddress) {
+                        $('#workerinfo_check_hashrate_cont').show();
+                        $('#workerinfo_check_hashrate').attr('href', 'hashratecheck/?' + address);
+                    }
 
                     var date = new Date(0);
                     date.setUTCSeconds(data.lastseen);
