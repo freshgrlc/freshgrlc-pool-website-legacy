@@ -58,6 +58,56 @@
                     <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
                 </p>
                 <div style="text-align: left">
+                    <span class="date">08-02-2018</span><span class="smallheading">Pool hashrate verification test available</span>
+                    <p>
+                        One of the complaints I still get from time to time is that the reported hashrate one
+                        this website is lower than it should be. Some miners therefore decide to go to other
+                        pools.
+                    </p>
+                    <p>
+                        Ever since the new rolling-average hashrate estimation has been implemented, I feel
+                        that the hashrate calculations should be pretty precise (once they have fully stabilized
+                        after a few hours) and I have therefore also removed the warning/disclaimer we used
+                        to have on the site.
+                    </p>
+                    <p>
+                        That said, it is still true that the hashrate estimations are only used within the website's
+                        UI. Payout is 100% based on shares sent to the pool. The main issue here however, is that if
+                        the reported hashrate is lower than expected, it is probably being caused by the fact that
+                        less shares are being send to the pool than otherwise would be the case, hence the pool's
+                        hashrate estimation (based on those shares), as well as miner reward payout, is lower than
+                        expected.
+                    </p>
+                    <p>
+                        Now, it is of course easy to say that the pool is somehow showing incorrect information or maybe
+                        even ignoring some shares send by the miner, therefore reducing both the estimated hashrate
+                        as well as payouts.
+                    </p>
+                    <p>
+                        To counter these claims, and in an attempt at full transparency, we do now have a special page
+                        that can be used to test and verify the pool's processing of your submitted shares. That way,
+                        you can verify that the pool is correctly processing all the shares you sent in and therefore
+                        rewarding you correctly based on the work you are actually doing (i.e. if you are randomly hashing,
+                        but for example generating a lot of hardware errors, therefore not doing a lot of actual work,
+                        there is no reason for the pool to reward you for the work you did not do).
+                    </p>
+                    <p>
+                        Hopefully, this page will clear things up and lead to one of the following conclusions with
+                        relation to why you are maybe paid less than you thought you would:
+                        <ul>
+                            <li>Your miner is fine, but the pool had a period of bad luck (this is now verifiable using the new luck graphs).</li>
+                            <li>Your miner is fine, but it itself had a peiod of bad luck (hence it was sending in less shares than expected).</li>
+                            <li>There is an actual issue with your mining setup and you might be able to tweak it by changing (for example) intensity settings.</li>
+                        </ul>
+                    </p>
+                    <p>
+                        The page is available through the 'My worker' tab. You can run the test without having to stop
+                        mining at the pool, as it just analyses pool worker data. You do however need access to your mining
+                        software (i.e. you - typically - can't do this remotely), as you will need to verify the pool's share
+                        counter using the share counter within your miner software.
+                    </p>
+                </div>
+                <div style="text-align: left">
                     <span class="date">07-02-2018</span><span class="smallheading">Pool luck graph fix</span>
                     <p>
                         The pool has been restarted to apply a small fix to the pool's luck data gathering.
