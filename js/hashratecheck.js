@@ -116,7 +116,7 @@ var init = function () {
         console.debug(totalShares, newShares, lastVal, baseVal, shareValue);
 
         if (shareValue == null) {
-            if (newShares == 96 || newShares == 512) {
+            if (newShares == 32 || newShares == 192) {
                 shareValue = newShares;
                 message('Ready. Please enter details below.', false);
                 setup();
