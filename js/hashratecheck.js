@@ -28,9 +28,9 @@ var showHashrate = function (hashrate) {
 };
 
 var updateData = function () {
-    var seconds = Math.floor(Date.now() / 1000 - startTime);
+    var seconds = Math.round(Date.now() / 1000 - startTime);
     var testShares = sharevals ? testShareVals : testShareCount;
-    var result = Math.floor(testShareVals / seconds * 65536);
+    var result = Math.round(testShareVals / seconds * 65536);
 
     $('#curseconds').text(seconds);
     $('#curminershares').text(minerBaseShares + testShares);
@@ -91,7 +91,7 @@ var init = function () {
     message('Synchronizing with worker - Connecting to pool...', true);
 
     eventSource.onmessage = function(event) {
-        var newShares = JSON.parse(event.data).shares;
+        var newShares = Math.round(JSON.parse(event.data).shares);
 
         console.log('Worker [' + worker + ']: Shares: ' + newShares);
 
@@ -112,6 +112,7 @@ var init = function () {
         newShares -= lastVal;
         lastVal += newShares;
 
+        newShares = Math.round(newShares);
         console.debug(totalShares, newShares, lastVal, baseVal, shareValue);
 
         if (shareValue == null) {
