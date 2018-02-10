@@ -478,6 +478,7 @@ var init = function () {
     $('#stratumurl2').text('stratum+tcp://freshgarlicblocks.net:3333');
     $('#stratumurl3').text('stratum+tcp://freshgarlicblocks.net:3334');
     $('#stratumurl4').text('stratum+tcp://freshgarlicblocks.net:3335');
+    $('#stratumurl5').text('stratum+tcp://freshgarlicblocks.net:3336');
 
     var eventSource = new EventSource('/api/getinfo');
 
