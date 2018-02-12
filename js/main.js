@@ -168,6 +168,9 @@ var _showWorker = function (address) {
                                     var estimatedFee = estimatedSize * 5.0 / 100000000.0;
 
                                     $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + ' %');
+                                } else {
+                                    $('#workerinfo_consolidated').text('0 GRLC');
+                                    $('#workerinfo_consolidatefee').text(' - ');
                                 }
                             }
                         });
