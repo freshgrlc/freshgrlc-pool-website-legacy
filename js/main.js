@@ -139,9 +139,11 @@ var _showWorker = function (address) {
                     });
 
                     if (dailyPayout) {
+                        var payoutAddress = data.nextpayout.address;
+
                         $.ajax({
                             type:   'GET',
-                            url:    'https://garli.co.in/ext/getaddress/' + data.nextpayout.address,
+                            url:    'https://garli.co.in/ext/getaddress/' + payoutAddress,
                             contentType: "application/json",
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
@@ -154,7 +156,7 @@ var _showWorker = function (address) {
                                         var tx = data.last_txs[i];
 
                                         if (tx.vin.coinbase != undefined) {
-                                            utxos.push(tx.vout[data.nextpayout.address]);
+                                            utxos.push(tx.vout[payoutAddress]);
                                         } else {
                                             break;
                                         }
