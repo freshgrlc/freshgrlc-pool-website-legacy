@@ -147,11 +147,24 @@ var _showWorker = function (address) {
                             success: function (data, textStatus, jqXHR) {
                                 if (data.balance != null) {
                                     $('#workerinfo_consolidated').text('' + data.balance + ' GRLC');
+
+                                    var utxos = [];
+
+                                    for (var i in data.last_txs) {
+                                        var tx = data.last_txs[i];
+
+                                        if (tx.vin.coinbase != undefined) {
+                                            utxos.push(tx.vout[data.nextpayout.address]);
+                                        } else {
+                                            break;
+                                        }
+                                    }
+
+                                    var estimatedFee = (utxos.length * 76 + 7 + 34) * 1.457;
+                                    $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / data.balance * 100000) / 1000) + ' %');
                                 }
                             }
                         });
-
-                        $('#workerinfo_consolidefee').text('N/A');
                     }
                 }
             }
