@@ -230,25 +230,31 @@
                         using your wallet address as username.
                     </p>
                     <p>
-                        For the 2 most popular miners, <em>ccminer</em> and <em>sgminer</em>, you would use a command (or BAT file line)
+                        For the 3 most popular miners, <em>ccminer</em>, <em>sgminer</em> and <em>cpuminer</em>, you would use a command (or BAT file line)
                         that looks something like this:
                     </p>
                     <p>
                         <span class="smallerheading">ccminer-nanashi</span><br />
                         <span class="monocolored-small">
-                            ccminer --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
+                            ccminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
                         </span>
                     </p>
                     <p>
                         <span class="smallerheading">ccminer-tpruvot (based on <a href="https://pandawanfr.github.io/GarlicRecipes/mining-win-nvidia.html" target="_blank">Pandawan's Guide</a>)</span><br />
                         <span class="monocolored-small">
-                            ccminer-x64 --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale
+                            ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85
                         </span>
                     </p>
                     <p>
                         <span class="smallerheading">sgminer</span><br />
                         <span class="monocolored-small">
-                            sgminer --algorithm scrypt-n --nfactor 11 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
+                            sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
+                        </span>
+                    </p>
+                    <p>
+                        <span class="smallerheading">cpuminer</span><br />
+                        <span class="monocolored-small">
+                            cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
                         </span>
                     </p>
                     <p>&nbsp;</p>
