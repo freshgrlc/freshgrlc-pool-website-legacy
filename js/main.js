@@ -104,7 +104,7 @@ var _showWorker = function (address) {
                     $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + ' %');
                     $('#workerinfo_blocks').text('' + data.foundblocks.length);
 
-                    setAddress('#workerinfo_consolidationaddress', data.nextpayout.address);
+                    setAddress('#workerinfo_consolidationaddress', data.nextpayout.address, 'workerinfo-info');
 
                     setAddressHashrate('#workerinfo_hashrate_avg', data.hashrate);
                     setAddressHashrate('#workerinfo_hashrate_cur', data.curhashrate);
