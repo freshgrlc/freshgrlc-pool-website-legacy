@@ -5,10 +5,10 @@ var luckInfo = [];
 var myAddress = null;
 var currentWorker = null;
 
-var setAddress = function(id, address) {
+var setAddress = function(id, address, cls) {
     var $target = $(id);
     var $parent = $target.parent();
-    var linkIcon = '<span style="color: #777;">&#x2197;</span>';
+    var linkIcon = '<span' + (cls != null ? ' class="' + cls + '"' : '') + ' style="color: #777;">&#x2197;</span>';
 
     $target.text(address);
     $target.attr('href', (address.substring(0, 1) == 'G' ? 'https://garlicinsight.com/address/' : 'https://garli.co.in/address/') + address);
