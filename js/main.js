@@ -15,6 +15,16 @@ var setAddress = function(id, address, cls) {
     $parent.html($parent.html() + linkIcon);
 };
 
+var setBlockLink = function(id, height, cls) {
+    var $target = $(id);
+    var $parent = $target.parent();
+    var linkIcon = '<span' + (cls != null ? ' class="' + cls + '"' : '') + ' style="color: #777;">&#x2197;</span>';
+
+    $target.text(height);
+    $target.attr('href', 'https://garlicinsight.com/block-index/' + height);
+    $parent.html($parent.html() + linkIcon);
+};
+
 var setAddressHashrate = function (query, hashrate) {
     if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
         hashrate = '--';
@@ -125,13 +135,10 @@ var _showWorker = function (address) {
                                         '<td><a class="mono" href="" target="_blank" id="' + prefix + 'height"></a></td>' +
                                     '</tr>';
                         $('#workerinfo_blockslist').append(html);
-                        $('#' + prefix + 'height').text(block);
-                        $('#' + prefix + 'height').attr("href", 'https://garlicinsight.com/block-index/' + block);
+                        setBlockLink('#' + prefix + 'height', block);
                     });
 
-                    if (!dailyPayout) {
-                        $('#workerinfo_consolidated').text('N/A');
-                    } else {
+                    if (dailyPayout) {
                         $.ajax({
                             type:   'GET',
                             url:    'https://garli.co.in/ext/getaddress/' + data.nextpayout.address,
@@ -143,6 +150,8 @@ var _showWorker = function (address) {
                                 }
                             }
                         });
+
+                        $('#workerinfo_consolidefee').text('N/A');
                     }
                 }
             }
@@ -207,8 +216,7 @@ var redrawMinedBlocks = function () {
         var prefix = 'blk' + height;
         var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td></tr>';
         $('#blks').append(html);
-        $('#' + prefix + 'nr').text(height);
-        $('#' + prefix + 'nr').attr("href", 'https://garlicinsight.com/block-index/' + height);
+        setBlockLink('#' + prefix + 'nr', height);
         $('#' + prefix + 'miner').text(blocks[height]);
         $('#' + prefix + 'miner').click(function () {
             showWorker(blocks[height]);
