@@ -383,37 +383,50 @@
                 <div id="workerinfo" style="width: 800px; margin: 0px auto">
                     <table align="center">
                         <tr>
-                            <th class="table-rowheader">Address</th>
+                            <th class="table-rowheader">Payout type:</th>
+                            <td class="monocolored" id="workerinfo_payout_type" class="workerinfo-info"></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Payout address:</th>
                             <td class="monocolored"><a href="#" target="_blank" id="workerinfo_address" class="workerinfo-info"></a></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Next payout</th>
+                            <th class="table-rowheader">Consolidation address:</th>
+                            <td class="monocolored"><span class="dailypayoutworker"><a href="#" target="_blank" id="workerinfo_consolidationaddress" class="workerinfo-info"></a></span><span class="na instantpayoutworker">N / A</span></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Next mining reward:</th>
                             <td class="monocolored workerinfo-info" id="workerinfo_payout"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Hashrate (average)</th>
+                            <th class="table-rowheader">GRLC waiting for payout:</th>
+                            <td><span class="monocolored workerinfo-info dailypayoutworker" id="workerinfo_consolidated"></span><span class="na instantpayoutworker">N / A</span></td>
+                        </tr>
+                        <tr>
+                            <th class="table-rowheader">Hashrate (average):</th>
                             <td><span class="monocolored workerinfo-info" id="workerinfo_hashrate_avg"></span> <span id="workerinfo_check_hashrate_cont"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a id="workerinfo_check_hashrate" href="#" target="_blank"> Run hashrate verification test</a></span></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Hashrate (current)</th>
+                            <th class="table-rowheader">Hashrate (current):</th>
                             <td class="monocolored workerinfo-info" id="workerinfo_hashrate_cur"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Valid shares percentage</th>
+                            <th class="table-rowheader">Valid shares percentage:</th>
                             <td class="monocolored workerinfo-info" id="workerinfo_validsharepercent"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Last seen</th>
+                            <th class="table-rowheader">Last seen:</th>
                             <td class="monocolored workerinfo-info" id="workerinfo_lastseen"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Blocks solved</th>
+                            <th class="table-rowheader">Blocks solved:</th>
                             <td class="monocolored workerinfo-info" id="workerinfo_blocks"></td>
                         </tr>
                     </table>
                     <p>
                         <a href="#" onClick="refreshWorker();">Refresh</a>
                     </p>
+                    <p>&nbsp;</p>
                     <table id="workerinfo_blockslist" align="center">
                         <tr>
                             <th class="table-header">Solved blocks list</th>

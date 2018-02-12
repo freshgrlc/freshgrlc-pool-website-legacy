@@ -1,14 +1,25 @@
 var blocks = {};
 var workerHashrate = {};
+var workerAddressMap = {};
 var luckInfo = [];
 var myAddress = null;
 var currentWorker = null;
+
+var setAddress = function(id, address) {
+    var $target = $(id);
+    var $parent = $target.parent();
+    var linkIcon = '<span style="color: #777;">&#x2197;</span>';
+
+    $target.text(address);
+    $target.attr('href', (address.substring(0, 1) == 'G' ? 'https://garlicinsight.com/address/' : 'https://garli.co.in/address/') + address);
+    $parent.html($parent.html() + linkIcon);
+};
 
 var setAddressHashrate = function (query, hashrate) {
     if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
         hashrate = '--';
     } else {
-        hashrate = Math.floor(hashrate / 100) / 10;
+        hashrate = Math.round(hashrate / 100) / 10;
     }
     $(query).text(hashrate + ' kH/s');
 };
@@ -27,17 +38,28 @@ var setCbOutputs = function (data) {
                         '<td id="hashrate' + output.address + '"></td>' +
                     '</tr>';
         $('#cbout').append(html);
-        $('#' + prefix + 'addr').text(output.address);
-        $('#' + prefix + 'addr').attr("href", 'https://garlicinsight.com/address/' + output.address);
+        setAddress('#' + prefix + 'addr', output.address);
         $('#' + prefix + 'reward').text(Math.floor(output.reward) / 100000000);
         $('#' + prefix + 'pct').text(output.percentage + '%');
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
 
-        setAddressHashrate('#hashrate' + output.address, workerHashrate[output.address] != null ? workerHashrate[output.address].average : 0);
+        var workerAddress = workerAddressMap[output.address] != null ? workerAddressMap[output.address] : output.address;
+
+        setAddressHashrate('#hashrate' + output.address, workerHashrate[workerAddress] != null ? workerHashrate[workerAddress].average : 0);
     });
 };
 
 var _showWorker = function (address) {
+    var setDailyPayoutWorker = function(dailyPayout) {
+        if (dailyPayout) {
+            $('.instantpayoutworker').hide();
+            $('.dailypayoutworker').show();
+        }  else {
+            $('.dailypayoutworker').hide();
+            $('.instantpayoutworker').show();
+        }
+    };
+
     if (address == myAddress) {
         $('#genericworkerheader').hide();
         $('#myworkerheader').show();
@@ -55,13 +77,14 @@ var _showWorker = function (address) {
     }
     $('.currentworker').text(address);
 
+    setDailyPayoutWorker(false);
+
     $('.worker-solved').remove();
     $('.workerinfo-info').text('');
     $('#workerinfo_check_hashrate_cont').hide();
 
     if (address != null) {
-        $('#workerinfo_address').text(address);
-        $('#workerinfo_address').attr('href', 'https://garlicinsight.com/address/' + address);
+        setAddress('#workerinfo_address', address);
 
         $.ajax({
             type:   'GET',
@@ -70,10 +93,16 @@ var _showWorker = function (address) {
             dataType: 'json',
             success: function (data, textStatus, jqXHR) {
                 if (data != null && data != '') {
+                    var dailyPayout = address != data.nextpayout.address && data.nextpayout.address != null && data.nextpayout.address != '';
+
+                    setDailyPayoutWorker(dailyPayout);
+
+                    $('#workerinfo_payout_type').text(dailyPayout ? 'Daily' : 'Instant');
                     $('#workerinfo_payout').text('' + data.nextpayout.grlc + ' GRLC');
-                    $('#workerinfo_hashrate_avg').text('' + data.nextpayout.grlc + ' GRLC');
-                    $('#workerinfo_validsharepercent').text('' + (Math.floor(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + ' %');
+                    $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + ' %');
                     $('#workerinfo_blocks').text('' + data.foundblocks.length);
+
+                    setAddress('#workerinfo_consolidationaddress', data.nextpayout.address);
 
                     setAddressHashrate('#workerinfo_hashrate_avg', data.hashrate);
                     setAddressHashrate('#workerinfo_hashrate_cur', data.curhashrate);
@@ -97,6 +126,22 @@ var _showWorker = function (address) {
                         $('#' + prefix + 'height').text(block);
                         $('#' + prefix + 'height').attr("href", 'https://garlicinsight.com/block-index/' + block);
                     });
+
+                    if (!dailyPayout) {
+                        $('#workerinfo_consolidated').text('N/A');
+                    } else {
+                        $.ajax({
+                            type:   'GET',
+                            url:    'https://garli.co.in/ext/getaddress/' + data.nextpayout.address,
+                            contentType: "application/json",
+                            dataType: 'json',
+                            success: function (data, textStatus, jqXHR) {
+                                if (data.balance != null) {
+                                    setAddress('#workerinfo_consolidated', '' + data.balance + GRLC);
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -512,12 +557,18 @@ var init = function () {
             for (var i in addresses) {
                 var workerRate = workerHashrate[addresses[i]] != null ? workerHashrate[addresses[i]].average : 0;
 
-                setAddressHashrate('#hashrate' + addresses[i], workerRate);
+                if (workerHashrate[addresses[i]].usedfor == null) {
+                    setAddressHashrate('#hashrate' + addresses[i], workerRate);
+                } else {
+                    setAddressHashrate('#hashrate' + workerHashrate[addresses[i]].usedfor, workerRate);
+                    workerAddressMap[workerHashrate[addresses[i]].usedfor] = addresses[i];
+                }
 
                 if (workerRate != null && !isNaN(workerRate) && workerRate > 0 && workerHashrate[addresses[i]].current > 0) {
                     workers++;
                 }
             }
+
             setWorkers(workers);
             buildWorkerList(data);
         }

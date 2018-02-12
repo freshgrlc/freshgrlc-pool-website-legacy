@@ -279,6 +279,13 @@ th {
     margin-right: 20px;
 }
 
+.na {
+    font-family: 'Karla', sans-serif;
+    color: #f31010;
+    font-weight: bold;
+    font-style: italic;
+}
+
 .smallheading {
     color: #ffa517;
     font-style: italic;
