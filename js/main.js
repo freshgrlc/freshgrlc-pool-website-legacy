@@ -137,7 +137,7 @@ var _showWorker = function (address) {
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
                                 if (data.balance != null) {
-                                    setAddress('#workerinfo_consolidated', '' + data.balance + 'GRLC');
+                                    $('#workerinfo_consolidated').text('' + data.balance + ' GRLC');
                                 }
                             }
                         });
