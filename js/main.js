@@ -83,8 +83,10 @@ var _showWorker = function (address) {
     $('.workerinfo-info').text('');
     $('#workerinfo_check_hashrate_cont').hide();
 
-    if (address != null) {
-        setAddress('#workerinfo_address', address);
+    if (address == null) {
+        setAddress('#workerinfo_address', '', 'workerinfo-info');
+    } else {
+        setAddress('#workerinfo_address', address, 'workerinfo-info');
 
         $.ajax({
             type:   'GET',
