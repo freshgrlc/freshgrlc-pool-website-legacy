@@ -60,6 +60,27 @@
                     <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
                 </p>
                 <div style="text-align: left">
+                    <span class="date">13-02-2018</span><span class="smallheading">Advised to add --submit-stale to ccminer-tpruvot command</span>
+                    <p>
+                        From now on we advice any miners on this pool to add <span class="monocolored">--submit-stale</span> to their
+                        ccminer-tpruvot / ccminer v2.2.5 command line. Since this pool sends out more frequent work-updates,
+                        while only discarding old work when the network actually finds a new block, it seems that ccminer's stale job
+                        checks prevent it from sending otherwise valid shares.
+                    </p>
+                    <p>
+                        Note that changing this setting might decrease your valid share ratio, but you will find more valid shares overall,
+                        therefore receive higher payouts.
+                    </p>
+                    <p>
+                        This looks to be (one of) the main causes of the hashrate issues we have seen on this pool. It is unclear to
+                        me whether this also affects mining on other pools, as I don't know the exact checks ccminer uses here. At any rate,
+                        the effect of not using this option on this pool should be a lot higher than on others.
+                    </p>
+                    <p>
+                        Note that if you are using other mining software or are using the <i>nanashi</i> ccminer fork, you do not have to change anything.
+                    </p>
+                </div>
+                <div style="text-align: left">
                     <span class="date">13-02-2018</span><span class="smallheading">Ready for the hard-fork</span>
                     <p>
                         The is a quick update to make people aware that this pool is now ready for the upcoming hard-fork
@@ -213,15 +234,15 @@
                         that looks something like this:
                     </p>
                     <p>
-                        <span class="smallerheading">ccminer (generic)</span><br />
+                        <span class="smallerheading">ccminer-nanashi</span><br />
                         <span class="monocolored-small">
                             ccminer --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
                         </span>
                     </p>
                     <p>
-                        <span class="smallerheading">ccminer (based on <a href="https://pandawanfr.github.io/GarlicRecipes/mining-win-nvidia.html" target="_blank">Pandawan's Guide</a>)</span><br />
+                        <span class="smallerheading">ccminer-tpruvot (based on <a href="https://pandawanfr.github.io/GarlicRecipes/mining-win-nvidia.html" target="_blank">Pandawan's Guide</a>)</span><br />
                         <span class="monocolored-small">
-                            ccminer-x64 --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85
+                            ccminer-x64 --algo=scrypt:10 -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale
                         </span>
                     </p>
                     <p>
