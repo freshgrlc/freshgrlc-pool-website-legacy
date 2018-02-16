@@ -30,11 +30,11 @@ var showHashrate = function (hashrate) {
 var updateData = function () {
     var seconds = Math.round(Date.now() / 1000 - startTime);
     var testShares = sharevals ? testShareVals : testShareCount;
-    var result = Math.round(testShareVals / seconds * 65536);
+    var result = Math.round(testShareVals / seconds * 65536 * 256);
 
     $('#curseconds').text(seconds);
     $('#curminershares').text(minerBaseShares + testShares);
-    $('#calc').text('(' + (minerBaseShares + testShares) + ' - ' + minerBaseShares + ') shares ' + (sharevals ? '' : ('* ' + testDifficulty + ' ')) + '/ ' + seconds + ' seconds * 2^16 = ' + result + ' H/s');
+    $('#calc').text('(' + (minerBaseShares + testShares) + ' - ' + minerBaseShares + ') shares ' + (sharevals ? '' : ('* ' + testDifficulty + ' ')) + '/ ' + seconds + ' seconds * 2^24 = ' + result + ' H/s');
     showHashrate(result);
 };
 
@@ -116,11 +116,11 @@ var init = function () {
         console.debug(totalShares, newShares, lastVal, baseVal, shareValue);
 
         if (shareValue == null) {
-            if (newShares == 96 || newShares == 512) {
+            if (newShares == 2 || newShares == 16) {
                 shareValue = newShares;
                 message('Ready. Please enter details below.', false);
                 setup();
-            } else if ((newShares % 32) != 0) {
+            } else if ((newShares % 2) != 0) {
                 message('Please connect your worker to port 3334 (for normal GPU mining) or 3335 (for multi-GPU mining rigs)', false);
             }
         } else if (Math.floor(newShares / shareValue) != newShares / shareValue) {
