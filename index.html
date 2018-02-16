@@ -60,6 +60,32 @@
                     <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
                 </p>
                 <div style="text-align: left">
+                    <span class="date">16-02-2018</span><span class="smallheading">Daily payments are here!</span>
+                    <p>
+                        While everyone is anxiously waiting for the hard-fork to occur, we have other big news: By popular demand, we bring you
+                        daily payments!
+                    </p>
+                    <p>
+                        We have had a lot of people ask if it would be possible to set a certain treshold for payout, similar to how other pools
+                        handle payout. However, we are not like other pools! The big thing that makes this pool different is that it does not
+                        collect your block reward. Instead it crafts the blocks in such a way that your rewards are sent to you without the pool
+                        ever even touching them.
+                    </p>
+                    <p>
+                        With daily payout, we find a middle ground. Instead of directly sending you your part of the block reward, it gets collected
+                        in a personal consolidation address managed by the pool. Once every day, all your rewards are then sent to you in one
+                        transaction.
+                    </p>
+                    <p>
+                        This last part will require a small fee. However, this fee should in almost all circumstances be (way) less than the fees
+                        other pools ask for. Still to much? Just keep using the instant payout instead. All this is just another option for miners
+                        who are interested!
+                    </p>
+                    <p>
+                        Want to know more? You will find all the information in the How to mine tab.
+                    </p>
+                </div>
+                <div style="text-align: left">
                     <span class="date">13-02-2018</span><span class="smallheading">Advised to add --submit-stale to ccminer-tpruvot command</span>
                     <p>
                         From now on we advice any miners on this pool to add <span class="monocolored">--submit-stale</span> to their
@@ -223,13 +249,55 @@
                 </div>
             </div>
             <div id="content-howtomine" class="contentdiv">
-                <h1>How to mine on the FreshGRLC pool</h1>
+                <h1>How to mine on the FreshGRLC.net pool</h1>
                 <div style="text-align: left;">
+                    <span class="smallheading">Mining at FreshGRLC.net: 2 options</span><br />
                     <p>
-                        You can mine at our pool by simply connecting with your mining software to our pool's stratum server,
-                        using your wallet address as username.
+                        Right now we offer 2 ways of mining at this pool. Or rather, we offer to types of payment:
+                        <ul>
+                            <li>Instant payout</li>
+                            <li>Daily payout</li>
+                        </ul>
                     </p>
                     <p>
+                        Instant payout is what made this pool special from the very beginning. You directly get a part of the block's
+                        miners reward (and transaction fees). <br />
+                        Basically, you are "solo-mining together" and that against 0% fee. Simple and no bamboozle.
+                    </p>
+                    <p>
+                        Since mid-Februari, we also offer daily payouts. This is a way to reduce the amount of Unspent
+                        Transaction Outputs (UTXOs) in your wallet, therefore making it cheaper to send coins to other people
+                        down the line. With daily payouts you still get a part of the block's mining reward, but instead of
+                        directly sending it to your wallet address, it is send to a personal consolidation address managed by
+                        the pool. Once a day, all your rewards are consolidated using a special low fee
+                        (typically less than 0.1%, in a lot of cases only a fraction of that) and sent to your payout address.
+                    </p>
+                    <p>
+                        You can choose whichever payment method you like most and configure your worker to use it using
+                        the instructions below.
+                    </p>
+                    <p>
+                        <span class="smallerheading"><b>NOTE</b></span><br />
+                        Because of how the pool works and combines multiple workers together based on their address,
+                        the pool will only set your chosen payment method when it first registers your worker.<br />
+                        This means that if you want to change payment method you either have to stop mining and wait until your
+                        worker does no longer appear on the Workers list tab, or change your payout address so your miner can
+                        register itself as a new worker.
+                    </p>
+                    <p>&nbsp;</p>
+                    <span class="smallheading">Our bread and (garlic-) butter: Instant payout</span><br />
+                    <p>
+                        You can mine at our pool by simply connecting with your mining software to our pool's stratum server,
+                        using your wallet address as username. This will set up your worker for instant payout, in other words:
+                        you get paid whenever we find a block. Instantaneous.
+                    </p>
+                    <p>
+                        Using this method, the pool does not even touch your earnings once. Instead you get a part of the raw miners reward.
+                        Ideal if you have difficulty trusting pool owners: You see the pool finding a block? You see a transaction in your wallet.
+                        Usually (if you use a proper wallet), you will receive the transaction notification even before the pool lists the block as found.
+                    </p>
+                    <p>
+                        This method is also easiest to set up.
                         For the 3 most popular miners, <em>ccminer</em>, <em>sgminer</em> and <em>cpuminer</em>, you would use a command (or BAT file line)
                         that looks something like this:
                     </p>
@@ -256,18 +324,76 @@
                         Once you are connected and see your first accepted share, your miner should pop up in the <em>Worker list</em> tab
                         and <em>Current block</em> estimated payout tab within a minute.
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                        <span class="smallheading">NOTE</span><br />
+                        <span class="smallerheading"><b>NOTE</b></span><br />
                         <i>Don't forget to replace <em>GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB</em> in the above examples with your own mainnet wallet address<br />
                         (34 characters long and starting with a <em>G</em>). The example address is fake and will cause authentication failures if you try to use it.</i>
+                    </p>
+                    <p>&nbsp;</p>
+                    <span class="smallheading">Yesterday's Garlic: Daily payout</span><br />
+                    <p>
+                        As an alternative to instant payout, we offer daily payout. With daily payout all your mining rewards go to a special personal consolidation address
+                        managed by the pool. Once a day, at 20:00 GMT, the pool will schedule a low-fee payout from this address to your payout wallet address, thereby
+                        combining all your rewards into a single transaction. The payout transaction will then be processed/confirmed in the next few blocks the pool finds
+                        (typically within an hour).
+                    </p>
+                    <p>
+                        The idea of this payout method is that it is fully transparent, since everything happens on the blockchain. You can check your per-block
+                        mining reward using the pool's website and verify it to some extend based on your hashrate. When the pool finds a block you can directly view
+                        your mining reward being sent to your consolidation address on the blockchain. From there, you would notice if anyone (including the pool)
+                        tried to steal it.
+                    </p>
+                    <p>
+                        Note that all this requires a small fee. This fee is used for the actual consolidation transaction and does not go to the pool owner.
+                        Instead it is handled as any other fee and therefore shared between all the miners on this pool.
+                    </p>
+                    <p>
+                        This fee is typically between 0.0% and 0.1%. Fees of 0.01% are normal for standard GPU mining. To get an idea of the consolidation fee,
+                        check the My worker tab.
+                    </p>
+                    <p>
+                        In order to use daily payouts, follow the same steps as for instant payout, but instead of just using your payout address as username,
+                        prepend it with <em>daily-</em>.
+                    </p>
+                    <p>
+                        If we apply this to the examples listed above under instant payout, they would become:
+                    </p>
+                    <p>
+                        <span class="smallerheading">ccminer</span><br />
+                        <span class="monocolored-small">
+                            ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale
+                        </span>
+                    </p>
+                    <p>
+                        <span class="smallerheading">sgminer</span><br />
+                        <span class="monocolored-small">
+                            sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
+                        </span>
+                    </p>
+                    <p>
+                        <span class="smallerheading">cpuminer</span><br />
+                        <span class="monocolored-small">
+                            cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
+                        </span>
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                        <span class="lightertext"><i><u>Tip:</u></i></span>
+                        <i>If you use the Garlicoin Core GUI (a.k.a. garlicoin-qt), you can import your personal consolidation address as a watch-only address.
+                           That way you will still get a notification whenever the pool find a block and immediately see your reward. It will also show the consolidation
+                           fees as the costs for a '<em>Payment to yourself</em>'.</i>
+                    </p>
+                    <p>
+                        <i>To do this, go to the My worker tab and copy your personal consolidation address. Then go to Garlicoin Core, choose 'Debug window' from the Help menu,
+                        switch to the Console tab and type: <span class="monocolored-small">importaddress <i>address</i></span></i>, where <em>address</em> is the consolidation
+                        address you copied from the My Worker tab.
                     </p>
                     <p>&nbsp;</p>
                     <p>
                         <span class="lightertext"><i>For questions:</i></span> Message <em>nuc1e4r5n4k3#5815</em> on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.
                     </p>
                     <p>&nbsp;</p>
-                    <h1>Static stratum difficulty</h1>
+                    <span class="smallheading">Static stratum difficulty</span><br />
                     <p>
                         First of all: if you don't know what this is, don't worry. The examples above should be both sufficient <i>and</i> optimal in almost all scenarios.
                     </p>
