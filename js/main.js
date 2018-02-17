@@ -29,7 +29,7 @@ var setAddressHashrate = function (query, hashrate) {
     if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
         hashrate = '--';
     } else {
-        hashrate = Math.round(hashrate / 1000) / 1000;
+        hashrate = Math.round(hashrate / 10000) / 100;
     }
     $(query).text(hashrate + ' MH/s');
 };
