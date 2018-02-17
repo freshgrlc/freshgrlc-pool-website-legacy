@@ -27,8 +27,20 @@ h1 {
     font-size: 2em;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+.myworker {
+    background-color: #484848;
+}
+
+.myworker a {
+    color: #ddd;
+}
+
 td {
-    padding: 3px 15px;
+    padding: 4px 16px;
 }
 
 .table-nopad td {

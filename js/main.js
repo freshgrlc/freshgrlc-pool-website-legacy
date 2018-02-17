@@ -55,6 +55,10 @@ var setCbOutputs = function (data) {
 
         var workerAddress = workerAddressMap[output.address] != null ? workerAddressMap[output.address] : output.address;
 
+        if (workerAddress == myAddress) {
+            $('#' + prefix).addClass('myworker');
+        }
+
         setAddressHashrate('#hashrate' + output.address, workerHashrate[workerAddress] != null ? workerHashrate[workerAddress].average : 0);
     });
 };
@@ -222,6 +226,10 @@ var buildWorkerList = function (data) {
         $('#workerslist').append(html);
         $('#' + prefix + 'addr').text(output.address);
         setAddressHashrate('#' + prefix + 'rate', output.hashrate);
+
+        if (output.address == myAddress) {
+            $('#' + prefix).addClass('myworker');
+        }
     });
     $('.workerlink').click(function (event) {
         showWorker($(event.target).text());
