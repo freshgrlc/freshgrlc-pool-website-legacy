@@ -29,9 +29,9 @@ var setAddressHashrate = function (query, hashrate) {
     if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
         hashrate = '--';
     } else {
-        hashrate = Math.round(hashrate / 100) / 10;
+        hashrate = Math.round(hashrate / 10000) / 100;
     }
-    $(query).text(hashrate + ' kH/s');
+    $(query).text(hashrate + ' MH/s');
 };
 
 var setCbOutputs = function (data) {
@@ -261,13 +261,13 @@ var setBlockMinerInfo = function (height, miner) {
 };
 
 var setGlobalHashrate = function (hashrate) {
-    var pretty = Math.floor(hashrate / 10000) / 100;
-    $('.globalhashrate').text('' + pretty + ' MH/s');
+    var pretty = Math.floor(hashrate / 10000000) / 100;
+    $('.globalhashrate').text('' + pretty + ' GH/s');
 };
 
 var setPoolHashrate = function (hashrate, networkHashrate) {
-    var pretty = Math.floor(hashrate / 10000) / 100;
-    $('.poolhashrate').text('' + pretty + ' MH/s');
+    var pretty = Math.floor(hashrate / 1000000) / 1000;
+    $('.poolhashrate').text('' + pretty + ' GH/s');
 
     var percent = Math.floor(hashrate / networkHashrate * 1000) / 10;
     $('.poolhashratepercent').text('' + percent + ' %');
