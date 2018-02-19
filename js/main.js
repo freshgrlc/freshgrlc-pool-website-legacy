@@ -11,7 +11,7 @@ var setAddress = function(id, address, cls) {
     var linkIcon = '<span' + (cls != null ? ' class="' + cls + '"' : '') + ' style="color: #777;">&#x2197;</span>';
 
     $target.text(address);
-    $target.attr('href', (address.substring(0, 1) == 'G' ? 'https://garlicinsight.com/address/' : 'https://garli.co.in/address/') + address);
+    $target.attr('href', 'https://garlicinsight.com/address/' + address);
     $parent.html($parent.html() + linkIcon);
 };
 
