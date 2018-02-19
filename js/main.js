@@ -1,9 +1,11 @@
 var blocks = {};
+var blockStatus = {};
 var workerHashrate = {};
 var workerAddressMap = {};
 var luckInfo = [];
 var myAddress = null;
 var currentWorker = null;
+var curHeight = 0;
 
 var setAddress = function(id, address, cls) {
     var $target = $(id);
@@ -237,6 +239,38 @@ var buildWorkerList = function (data) {
 };
 
 var redrawMinedBlocks = function () {
+    var getBlockStatus = function(height, cb) {
+        $.ajax({
+            type:   'GET',
+            url:    'https://garlicinsight.com/insight-grlc-api/block-index/' + height,
+            contentType: "application/json",
+            dataType: 'json',
+            success: function (data, textStatus, jqXHR) {
+                if (data != null && data != '' && data.blockHash != null && data.blockHash != '') {
+                    $.ajax({
+                        type:   'GET',
+                        url:    'https://garlicinsight.com/insight-grlc-api/block/' + data.blockHash,
+                        contentType: "application/json",
+                        dataType: 'json',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data != null && data != '') {
+                                if (data.poolInfo != null && data.poolInfo.poolName == 'FreshGRLC.net') {
+                                    cb('confirmed');
+                                } else {
+                                    cb('orphaned');
+                                }
+                            } else {
+                                cb('error');
+                            }
+                        }
+                    });
+                } else {
+                    cb('error');
+                }
+            }
+        });
+    };
+
     $('.blkheight').remove();
     var ids = [];
     $.each(blocks, function (height) {
@@ -244,22 +278,51 @@ var redrawMinedBlocks = function () {
     });
     $.each(ids, function (_, height) {
         var prefix = 'blk' + height;
-        var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td></tr>';
+        var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td><td class="blkheight-status" id="' + prefix + 'status"></td></tr>';
         $('#blks').append(html);
         setBlockLink('#' + prefix + 'nr', height);
         $('#' + prefix + 'miner').text(blocks[height]);
         $('#' + prefix + 'miner').click(function () {
             showWorker(blocks[height]);
         });
+        if (curHeight == 0) {
+            return;
+        }
+        if (blockStatus[height] == null || (blockStatus[height] == 'confirming' && curHeight != 0 && height <= curHeight - 6)) {
+            blockStatus[height] = 'check';
+            $('#' + prefix + 'status').text('Checking...');
+            $('#' + prefix + 'status').addClass('blkheight-check');
+
+            getBlockStatus(height, function (status) {
+                if (status == 'error') {
+                    blockStatus[height] = null;
+                } else if (status == 'confirmed' && (curHeight == 0 || height > curHeight - 6)) {
+                    blockStatus[height] = 'confirming';
+                } else {
+                    blockStatus[height] = status;
+                }
+                redrawMinedBlocks();
+            });
+        } else {
+            console.debug('block ' + height + ': ' + blockStatus[height]);
+            if (blockStatus[height] == 'confirmed') {
+                $('#' + prefix + 'status').text('Confirmed');
+                $('#' + prefix + 'status').addClass('blkheight-confirmed');
+            } else if (blockStatus[height] == 'confirming') {
+                $('#' + prefix + 'status').text('Pending');
+                $('#' + prefix + 'status').addClass('blkheight-pending');
+            } else if (blockStatus[height] == 'orphaned') {
+                $('#' + prefix + 'status').text('Orphaned');
+                $('#' + prefix + 'status').addClass('blkheight-orphaned');
+            }
+        }
     });
 };
 
 var setCurrentBlock = function (height) {
     $('.currentblock').text(height);
-};
 
-var addMinedBlock = function (height) {
-    blocks[height] = '<no info>';
+    curHeight = height;
     redrawMinedBlocks();
 };
 

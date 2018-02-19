@@ -368,3 +368,25 @@ th {
     color: #ffa517;
 }
 
+.blkheight-status {
+    font-family: 'Karla', sans-serif;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.blkheight-check {
+    color: #484848;
+}
+
+.blkheight-confirmed {
+    color: #069c12;
+}
+
+.blkheight-pending {
+    color: #a8a8a8;
+}
+
+.blkheight-orphaned {
+    color: #9e1f1f;
+}
+
