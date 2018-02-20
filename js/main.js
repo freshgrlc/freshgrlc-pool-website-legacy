@@ -6,6 +6,7 @@ var luckInfo = [];
 var myAddress = null;
 var currentWorker = null;
 var curHeight = 0;
+var redrawMinedBlocksTimeout = null;
 
 var setAddress = function(id, address, cls) {
     var $target = $(id);
@@ -301,10 +302,12 @@ var redrawMinedBlocks = function () {
                 } else {
                     blockStatus[height] = status;
                 }
-                redrawMinedBlocks();
+                if (redrawMinedBlocksTimeout != null) {
+                    clearTimeout(redrawMinedBlocksTimeout);
+                }
+                redrawMinedBlocksTimeout = setTimeout(redrawMinedBlocks, 500);
             });
         } else {
-            console.debug('block ' + height + ': ' + blockStatus[height]);
             if (blockStatus[height] == 'confirmed') {
                 $('#' + prefix + 'status').text('Confirmed');
                 $('#' + prefix + 'status').addClass('blkheight-confirmed');
