@@ -60,6 +60,24 @@
                     <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
                 </p>
                 <div style="text-align: left">
+                    <span class="date">20-02-2018</span><span class="smallheading">Glitch in daily payout processing</span>
+                    <p>
+                        As a lot of people are probably aware of by now, last night we experienced a glitch in the daily payout processor.
+                    </p>
+                    <p>
+                        Probably caused by a off-by-one error in the block maturity test (full investigation is still pending), more than 90% of
+                        payouts got cancelled by the final verification and sanity checking code due to an incorrect transaction amount.
+                    </p>
+                    <p>
+                        In the mean time I have manually initiated another payment round, which executed successfully. This means a small amount
+                        of miners received payment twice (where the second time only payout for the work since the last payout was included).
+                    </p>
+                    <p>
+                        More information will follow as soon as the root cause if the payout issue is found. I will keep a close eye
+                        on the daily payouts and manually request another round in case we experience another failure.
+                    </p>
+                </div>
+                <div style="text-align: left">
                     <span class="date">16-02-2018</span><span class="smallheading">Daily payments are here!</span>
                     <p>
                         While everyone is anxiously waiting for the hard-fork to occur, we have other big news: By popular demand, we bring you
