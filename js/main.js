@@ -135,6 +135,22 @@ var _showWorker = function (address) {
                     date.setUTCSeconds(data.lastseen);
                     $('#workerinfo_lastseen').text(date);
 
+                    $('.worker-name-hashrate').remove();
+                    $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
+                        var prefix = 'workernamehashrate' + i;
+                        var html =  '<tr class="worker-name-hashratename" id="' + prefix + '">' +
+                                        '<td class="table-rowheader red" id="' + prefix + 'name">[none]</td>' +
+                                        '<td class="monocolored" id="' + prefix + 'currate"></td>' +
+                                        '<td class="monocolored" id="' + prefix + 'avgrate"></td>' +
+                                    '</tr>';
+                        $('#workerinfo_workerslist').append(html);
+                        if (workername != '') {
+                            $('#' + prefix + 'name').text(workername);
+                        }
+                        setAddressHashrate('#' + prefix + 'currate', data.workershashrate[workername].current);
+                        setAddressHashrate('#' + prefix + 'avgrate', data.workershashrate[workername].average);
+                    });
+
                     $('.worker-solved').remove();
                     $.each(data.foundblocks, function (i, block) {
                         var prefix = 'foundblockrow' + i;
