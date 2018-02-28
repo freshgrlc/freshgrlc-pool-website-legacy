@@ -138,7 +138,7 @@ var _showWorker = function (address) {
                     $('.worker-name-hashrate').remove();
                     $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
                         var prefix = 'workernamehashrate' + i;
-                        var html =  '<tr class="worker-name-hashratename" id="' + prefix + '">' +
+                        var html =  '<tr class="worker-name-hashrate" id="' + prefix + '">' +
                                         '<td class="table-rowheader red" id="' + prefix + 'name">[none]</td>' +
                                         '<td class="monocolored" id="' + prefix + 'currate"></td>' +
                                         '<td class="monocolored" id="' + prefix + 'avgrate"></td>' +
