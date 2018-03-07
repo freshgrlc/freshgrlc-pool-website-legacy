@@ -1,0 +1,12 @@
+.stats > :first-child table {
+    font-size: 1.25rem;
+
+    th {
+        font-weight: normal;
+    }
+
+    td {
+        font-weight: bold;
+        text-align: right;
+    }
+}

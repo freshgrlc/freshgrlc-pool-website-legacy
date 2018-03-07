@@ -3,38 +3,61 @@ var blockStatus = {};
 var workerHashrate = {};
 var workerAddressMap = {};
 var luckInfo = [];
-var myAddress = null;
+var myAddress = localStorage['myAddress'];
 var currentWorker = null;
 var curHeight = 0;
 var redrawMinedBlocksTimeout = null;
 
-var setAddress = function(id, address, cls) {
+var formatHashrate = function (hashrate) {
+    if (!hashrate) {
+        return '-';
+    }
+
+    var suffix = 'H/s';
+    if (hashrate >= 1e12) {
+        suffix = 'TH/s';
+        hashrate /= 1e12;
+    }
+    else if (hashrate >= 1e9) {
+        suffix = 'GH/s';
+        hashrate /= 1e9;
+    }
+    else if (hashrate >= 1e6) {
+        suffix = 'MH/s';
+        hashrate /= 1e6;
+    }
+    else if (hashrate >= 1e3) {
+        suffix = 'kH/s';
+        hashrate /= 1e3;
+    }
+
+    return hashrate.toFixed(2) + ' <span class="suffix">' + suffix + '</span>';
+};
+
+var formatDate = function (date) {
+    return date.toLocaleString();
+};
+
+var setAddress = function (id, address, cls) {
     var $target = $(id);
     var $parent = $target.parent();
-    var linkIcon = '<span' + (cls != null ? ' class="' + cls + '"' : '') + ' style="color: #777;">&#x2197;</span>';
 
     $target.text(address);
     $target.attr('href', 'https://garlicinsight.com/address/' + address);
-    $parent.html($parent.html() + linkIcon);
+    $parent.html($parent.html());
 };
 
-var setBlockLink = function(id, height, cls) {
+var setBlockLink = function (id, height, cls) {
     var $target = $(id);
     var $parent = $target.parent();
-    var linkIcon = '<span' + (cls != null ? ' class="' + cls + '"' : '') + ' style="color: #777;">&#x2197;</span>';
 
     $target.text(height);
     $target.attr('href', 'https://garlicinsight.com/block-index/' + height);
-    $parent.html($parent.html() + linkIcon);
+    $parent.html($parent.html());
 };
 
 var setAddressHashrate = function (query, hashrate) {
-    if (hashrate === null || hashrate === undefined || isNaN(hashrate)) {
-        hashrate = '--';
-    } else {
-        hashrate = Math.round(hashrate / 10000) / 100;
-    }
-    $(query).text(hashrate + ' MH/s');
+    $(query).html(formatHashrate(hashrate));
 };
 
 var setCbOutputs = function (data) {
@@ -44,11 +67,11 @@ var setCbOutputs = function (data) {
     }), function (i, output) {
         var prefix = 'cbouttxrow' + i;
         var html =  '<tr class="cbouttx" id="' + prefix + '">' +
-                        '<td><a class="mono" href="" target="_blank" id="' + prefix + 'addr"></a></td>' +
-                        '<td id="' + prefix + 'reward"></td>' +
-                        '<td id="' + prefix + 'pct"></td>' +
-                        '<td id="' + prefix + 'shares"></td>' +
-                        '<td id="hashrate' + output.address + '"></td>' +
+                        '<td><a href="" target="_blank" id="' + prefix + 'addr"></a></td>' +
+                        '<td class="numeric" id="' + prefix + 'reward"></td>' +
+                        '<td class="numeric" id="' + prefix + 'pct"></td>' +
+                        '<td class="numeric" id="' + prefix + 'shares"></td>' +
+                        '<td class="numeric" id="hashrate' + output.address + '"></td>' +
                     '</tr>';
         $('#cbout').append(html);
         setAddress('#' + prefix + 'addr', output.address);
@@ -117,8 +140,8 @@ var _showWorker = function (address) {
                     setDailyPayoutWorker(dailyPayout);
 
                     $('#workerinfo_payout_type').text(dailyPayout ? 'Daily' : 'Instant');
-                    $('#workerinfo_payout').text('' + data.nextpayout.grlc + ' GRLC');
-                    $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + ' %');
+                    $('#workerinfo_payout').html('' + data.nextpayout.grlc + ' <span class="suffix">GRLC</span>');
+                    $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + '%');
                     $('#workerinfo_blocks').text('' + data.foundblocks.length);
 
                     setAddress('#workerinfo_consolidationaddress', data.nextpayout.address, 'workerinfo-info');
@@ -133,18 +156,21 @@ var _showWorker = function (address) {
 
                     var date = new Date(0);
                     date.setUTCSeconds(data.lastseen);
-                    $('#workerinfo_lastseen').text(date);
+                    $('#workerinfo_lastseen').text(formatDate(date));
 
                     $('.worker-name-hashrate').remove();
                     $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
                         var prefix = 'workernamehashrate' + i;
                         var html =  '<tr class="worker-name-hashrate" id="' + prefix + '">' +
-                                        '<td class="table-rowheader red" id="' + prefix + 'name">[none]</td>' +
-                                        '<td class="monocolored" id="' + prefix + 'currate"></td>' +
-                                        '<td class="monocolored" id="' + prefix + 'avgrate"></td>' +
+                                        '<td id="' + prefix + 'name"></td>' +
+                                        '<td id="' + prefix + 'currate"></td>' +
+                                        '<td id="' + prefix + 'avgrate"></td>' +
                                     '</tr>';
                         $('#workerinfo_workerslist').append(html);
-                        if (workername != '') {
+                        if (workername == '') {
+                            $('#' + prefix).addClass('worker-name-none');
+                        }
+                        else {
                             $('#' + prefix + 'name').text(workername);
                         }
                         setAddressHashrate('#' + prefix + 'currate', data.workershashrate[workername].current);
@@ -152,12 +178,14 @@ var _showWorker = function (address) {
                     });
 
                     $('.worker-solved').remove();
+                    $('#workerinfo_blockslist').toggle(data.foundblocks.length > 0);
+                    $('#workerinfo_blockslist ul').empty();
                     $.each(data.foundblocks, function (i, block) {
                         var prefix = 'foundblockrow' + i;
-                        var html =  '<tr class="worker-solved" id="' + prefix + '">' +
-                                        '<td><a class="mono" href="" target="_blank" id="' + prefix + 'height"></a></td>' +
-                                    '</tr>';
-                        $('#workerinfo_blockslist').append(html);
+                        var html =  '<li class="worker-solved" id="' + prefix + '">' +
+                                        '<a href="" target="_blank" id="' + prefix + 'height"></a>' +
+                                    '</li>\n';
+                        $('#workerinfo_blockslist ul').append(html);
                         setBlockLink('#' + prefix + 'height', block);
                     });
 
@@ -171,7 +199,7 @@ var _showWorker = function (address) {
                             dataType: 'json',
                             success: function (data, textStatus, jqXHR) {
                                 if (data.balance != null) {
-                                    $('#workerinfo_consolidated').text('' + data.balance + ' GRLC');
+                                    $('#workerinfo_consolidated').html('' + data.balance + ' <span class="suffix">GRLC</span>');
 
                                     var utxos = 0;
                                     var utxoValue = 0.0;
@@ -190,9 +218,9 @@ var _showWorker = function (address) {
                                     var estimatedSize = (utxos * 76 + 7 + 34) * 1.457;
                                     var estimatedFee = estimatedSize * 5.0 / 100000000.0;
 
-                                    $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + ' %');
+                                    $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + '%');
                                 } else {
-                                    $('#workerinfo_consolidated').text('0 GRLC');
+                                    $('#workerinfo_consolidated').html('0 <span class="suffix">GRLC</span>');
                                     $('#workerinfo_consolidatefee').text(' - ');
                                 }
                             }
@@ -211,18 +239,15 @@ var refreshWorker = function () {
 var setAsMyWorker = function () {
     myAddress = currentWorker;
     localStorage.setItem('myAddress', myAddress);
-    selectMenu('myworker');
 };
 
 var showWorker = function (address) {
     if (address == myAddress) {
-        selectMenu('myworker');
-        return;
+        location.hash = '#myworker';
     }
-
-    $('.contentdiv').hide();
-    $('#content-myworker').show();
-    _showWorker(address);
+    else {
+        location.hash = '#' + address;
+    }
 };
 
 var buildWorkerList = function (data) {
@@ -239,11 +264,11 @@ var buildWorkerList = function (data) {
     }), function (i, output) {
         var prefix = 'worker' + i;
         var html =  '<tr class="workerentry" id="' + prefix + '">' +
-                        '<td><a class="mono workerlink" href="#" id="' + prefix + 'addr"></a></td>' +
+                        '<td><a class="workerlink" href="#" id="' + prefix + 'addr"></a></td>' +
                         '<td id="' + prefix + 'rate"></td>' +
                     '</tr>';
         $('#workerslist').append(html);
-        $('#' + prefix + 'addr').text(output.address);
+        $('#' + prefix + 'addr').text(output.address).attr('href', '#' + output.address);
         setAddressHashrate('#' + prefix + 'rate', output.hashrate);
 
         if (output.address == myAddress) {
@@ -307,7 +332,7 @@ var redrawMinedBlocks = function () {
         }
         if (blockStatus[height] == null || (blockStatus[height] == 'confirming' && curHeight != 0 && height <= curHeight - 6)) {
             blockStatus[height] = 'check';
-            $('#' + prefix + 'status').text('Checking...');
+            $('#' + prefix + 'status').text('Checking');
             $('#' + prefix + 'status').addClass('blkheight-check');
 
             getBlockStatus(height, function (status) {
@@ -351,16 +376,14 @@ var setBlockMinerInfo = function (height, miner) {
 };
 
 var setGlobalHashrate = function (hashrate) {
-    var pretty = Math.floor(hashrate / 10000000) / 100;
-    $('.globalhashrate').text('' + pretty + ' GH/s');
+    $('.globalhashrate').html(formatHashrate(hashrate));
 };
 
 var setPoolHashrate = function (hashrate, networkHashrate) {
-    var pretty = Math.floor(hashrate / 1000000) / 1000;
-    $('.poolhashrate').text('' + pretty + ' GH/s');
+    $('.poolhashrate').html(formatHashrate(hashrate));
 
     var percent = Math.floor(hashrate / networkHashrate * 1000) / 10;
-    $('.poolhashratepercent').text('' + percent + ' %');
+    $('.poolhashratepercent').text('' + percent + '%');
 };
 
 var setWorkers = function (workers) {
@@ -387,7 +410,7 @@ var getAndSetLuckInfo = function () {
 
                 var luckAverage = Math.floor(totalLuck / periods * 1000) / 10;
 
-                $('.poolluck').text('' + luckAverage + ' %');
+                $('.poolluck').text('' + luckAverage + '%');
 
                 drawLuckGraphs(luckInfo, luckAverage);
             }
@@ -395,25 +418,17 @@ var getAndSetLuckInfo = function () {
     });
 };
 
-var selectMenu = function (id) {
-    var contentDiv = '#content-' + id;
-
-    $('.menuitem').removeClass('selected');
-    $('#' + id).addClass('selected');
-
-    $('.contentdiv').hide();
-    $(contentDiv).show();
-
-    if (id == 'myworker') {
-        _showWorker(myAddress);
-    } else if (id == 'stats') {
-        getAndSetLuckInfo();
-    }
-};
-
 var drawLuckGraphs = function (data, average) {
     var blocksVsHashrateSeries = [];
     var luckSeries = [];
+    var colors = {
+        primary: 'hsl(37, 100%, 55%)',
+        secondary: 'hsl(5, 90%, 45%)',
+        text: 'hsla(37, 100%, 85%, 0.87)',
+        white: '#fff',
+        border: 'hsla(37, 100%, 85%, 0.25)',
+        borderLight: 'hsla(37, 100%, 85%, 0.125)'
+    };
 
     blocksVsHashrateSeries.push({
         'name': 'Hashrate',
@@ -441,33 +456,38 @@ var drawLuckGraphs = function (data, average) {
             text: ''
         },
         xAxis: {
+            lineColor: colors.border,
+            lineWidth: 1,
+            tickColor: colors.border,
             title: {
                 text: 'Block heights',
                 style: {
-                    color: '#aaaaaa',
+                    color: colors.text,
                     fontSize: '16px'
                 }
             },
             labels: {
                 style: {
-                    color: '#dddddd',
+                    color: colors.text,
                     fontSize: '14px'
                 }
             }
         },
         yAxis: {
+            lineColor: colors.border,
+            lineWidth: 1,
             title: {
                 text: 'Percentage',
                 style: {
-                    color: '#aaaaaa',
+                    color: colors.text,
                     fontSize: '16px'
                 }
             },
             min: 0,
-            gridLineColor: '#333333',
+            gridLineColor: colors.borderLight,
             labels: {
                 style: {
-                    color: '#dddddd',
+                    color: colors.text,
                     fontSize: '14px'
                 }
             }
@@ -479,21 +499,22 @@ var drawLuckGraphs = function (data, average) {
             borderWidth: 0,
             itemStyle: {
                 fontSize: '16px',
-                color: '#e58500',
+                fontWeight: 'normal',
+                color: colors.text
 
             },
             itemHoverStyle:{
-                color: '#e58500'
+                color: colors.white
             }
         },
         tooltip: {
             formatter: function() {
-                return '<b>' + this.series.name + '</b><br/><i>' + (this.x - 50) + '-' + (this.x + 50) + '</i>:   <b>' + this.y + ' %</b>';
+                return '<b>' + this.series.name + '</b><br>' + (this.x - 50) + '-' + (this.x + 50) + ':   <b>' + this.y + ' %</b>';
             }
         },
         chart: {
             zoomType: 'x',
-            backgroundColor: '#444',
+            backgroundColor: 'transparent',
             style: {
                 color: "#e58500"
             }
@@ -519,7 +540,7 @@ var drawLuckGraphs = function (data, average) {
                 }
             }
         },
-        colors: [ '#f31010', '#ffa517' ],
+        colors: [colors.secondary , colors.primary],
         series: blocksVsHashrateSeries
     });
 
@@ -528,44 +549,49 @@ var drawLuckGraphs = function (data, average) {
             text: ''
         },
         xAxis: {
+            lineColor: colors.border,
+            lineWidth: 1,
+            tickColor: colors.border,
             title: {
                 text: 'Block heights',
                 style: {
-                    color: '#aaaaaa',
+                    color: colors.text,
                     fontSize: '16px'
                 }
             },
             labels: {
                 style: {
-                    color: '#dddddd',
+                    color: colors.text,
                     fontSize: '14px'
                 }
             }
         },
         yAxis: {
+            lineColor: colors.border,
+            lineWidth: 1,
             title: {
                 text: 'Percentage',
                 style: {
-                    color: '#aaaaaa',
+                    color: colors.text,
                     fontSize: '16px'
                 }
             },
             min: 0,
-            gridLineColor: '#333333',
+            gridLineColor: colors.borderLight,
             labels: {
                 style: {
-                    color: '#dddddd',
+                    color: colors.text,
                     fontSize: '14px'
                 }
             },
             plotLines: [{
                 value: average,
-                color: '#aaaaaa',
+                color: colors.white,
                 dashStyle: 'shortdash',
                 width: 1,
                 label: {
                     style: {
-                        color: '#eeeeee'
+                        color: colors.text
                     },
                     text: '48-hour average (' + average + ' %)'
                 }
@@ -578,21 +604,21 @@ var drawLuckGraphs = function (data, average) {
             borderWidth: 0,
             itemStyle: {
                 fontSize: '16px',
-                color: '#e58500',
-
+                fontWeight: 'normal',
+                color: colors.text
             },
             itemHoverStyle:{
-                color: '#e58500'
+                color: colors.white
             }
         },
         tooltip: {
             formatter: function() {
-                return '<b>' + this.series.name + '</b><br/><i>' + (this.x - 50) + '-' + (this.x + 50) + '</i>:   <b>' + this.y + ' %</b>';
+                return '<b>' + this.series.name + '</b><br/>' + (this.x - 50) + '-' + (this.x + 50) + ':   <b>' + this.y + ' %</b>';
             }
         },
         chart: {
             zoomType: 'x',
-            backgroundColor: '#444',
+            backgroundColor: 'transparent',
             style: {
                 color: "#e58500"
             }
@@ -618,12 +644,82 @@ var drawLuckGraphs = function (data, average) {
                 }
             }
         },
-        colors: [ '#ddd' ],
+        colors: [colors.white],
         series: luckSeries
     });
 };
 
+var activateElement = function (elementList, selector) {
+    let match = selector;
+    if (typeof selector === 'string') {
+        match = (el) => el.matches(selector);
+    }
+    elementList.forEach(el => {
+        el.classList.toggle('active', match(el));
+    });
+};
+
+var initNavigation = function () {
+    const contentElements = document.querySelectorAll('.contentdiv');
+    const menuElements = document.querySelectorAll('nav li');
+
+    function syncHash() {
+        const hash = location.hash.substr(1) || 'poolnews';
+
+        let elementToShow = '#content-' + hash;
+        if (hash == 'stats') {
+            getAndSetLuckInfo();
+        }
+        else if (hash == 'myworker') {
+            _showWorker(myAddress);
+        }
+        else if (hash.match(/G\w{25,33}/)) {
+            _showWorker(hash);
+            elementToShow = '#content-myworker';
+        }
+
+        activateElement(contentElements, elementToShow);
+        activateElement(menuElements, (el) => el.firstChild.hash === '#' + hash);
+
+        const top = document.querySelector('.nav-flow').offsetTop + 32;
+        if (window.scrollY > top) {
+            window.scrollTo(0, top);
+        }
+    }
+
+    syncHash();
+    window.addEventListener('hashchange', syncHash);
+};
+
+var fixNavigation = function () {
+    const nav = document.querySelector('nav');
+    const fixAt = nav.offsetTop + nav.clientTop;
+
+    const syncFixity = function () {
+        nav.classList.toggle('fixed', window.scrollY >= fixAt);
+    };
+
+    syncFixity();
+    window.addEventListener('scroll', syncFixity, { passive: true });
+};
+
+var highlightNewArticles = function () {
+    document.querySelectorAll('#content-poolnews .date').forEach(el => {
+        const dateString = el.getAttribute('datetime');
+        const date = Date.parse(dateString);
+        if (date) {
+            const diff = Date.now() - date;
+            const isNew = diff < 48 * 60 * 60 * 1000;
+            el.classList.toggle('new', isNew);
+        }
+    });
+};
+
 var init = function () {
+    initNavigation();
+    fixNavigation();
+    highlightNewArticles();
+
     Highcharts.setOptions({
         lang: {
             numericSymbols: null
@@ -632,14 +728,6 @@ var init = function () {
             useUTC: false
         }
     });
-
-    myAddress = localStorage['myAddress'];
-
-    $('.menuitem').click(function (event) {
-        selectMenu($(event.target).attr('id'));
-    });
-
-    selectMenu('poolnews');
 
     $('#stratumurl1').text('stratum+tcp://freshgarlicblocks.net:3032');
     $('#stratumurl2').text('stratum+tcp://freshgarlicblocks.net:3333');
@@ -657,7 +745,7 @@ var init = function () {
         var type = Object.keys(rawdata)[0];
         var data = rawdata[type];
 
-        console.debug('Received event: ', type, data);
+        // console.debug('Received event: ', type, data);
 
         if (type == 'rpcinfo') {
             setCurrentBlock(data.blocks + 1);
@@ -696,10 +784,7 @@ var init = function () {
         }
     };
 
-    eventSource.onerror = function () {
-        eventSource.close();
-        $('#overlay').show();
-    };
-
     getAndSetLuckInfo();
 };
+
+document.addEventListener('DOMContentLoaded', init);

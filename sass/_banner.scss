@@ -1,0 +1,44 @@
+#banner {
+    margin: 0 auto;
+    padding: 3em 0 4em;
+    text-align: center;
+    width: -moz-fit-content;
+    width: fit-content;
+}
+
+#banner h1 {
+    color: $primary;
+    font-family: 'TeX Gyre Schola', 'Comic Sans MS';
+    font-style: italic;
+    font-size: 72px;
+    font-weight: normal;
+    margin: 0;
+    text-shadow: -4px -3px hsl(5, 50%, 15%);
+}
+
+#banner h2 {
+    background: #ffa71a;
+    color: #363430;
+    font-family: 'Space Mono';
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5em;
+    margin: 0 auto;
+    max-width: 600px; // Fall back for when fit-content isn't supported.
+    padding: 2px;
+    text-transform: uppercase;
+}
+
+#banner div {
+    display: block;
+    margin: 0.5em 0 0;
+    padding: 0px;
+    font-size: 1.5em;
+    font-style: italic;
+    font-weight: normal;
+}
+
+#banner p {
+    margin: 0px;
+    padding: 0px;
+}
