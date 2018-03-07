@@ -8,7 +8,7 @@
 
 #banner h1 {
     color: $primary;
-    font-family: 'TeX Gyre Schola', 'Comic Sans MS';
+    font-family: $font-serif;
     font-style: italic;
     font-size: 72px;
     font-weight: normal;
@@ -19,7 +19,7 @@
 #banner h2 {
     background: #ffa71a;
     color: #363430;
-    font-family: 'Space Mono';
+    font-family: $font-mono;
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 0.5em;

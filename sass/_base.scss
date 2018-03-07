@@ -1,7 +1,7 @@
 body {
     background-color: $mono;
     color: $text;
-    font-family: 'Karla', sans-serif;
+    font-family: $font-sans;
     line-height: 1.4;
     margin: 0;
 }
@@ -69,7 +69,7 @@ table .numeric {
 
 code {
     display: block;
-    font-family: 'Space Mono';
+    font-family: $font-mono;
     font-style: normal;
     font-weight: normal;
     margin-bottom: 2em;

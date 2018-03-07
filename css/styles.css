@@ -7,7 +7,7 @@
 body {
   background-color: #363430;
   color: rgba(255, 226, 179, 0.87);
-  font-family: 'Karla', sans-serif;
+  font-family: "Karla", sans-serif;
   line-height: 1.4;
   margin: 0; }
 
@@ -58,7 +58,7 @@ table .numeric {
 
 code {
   display: block;
-  font-family: 'Space Mono';
+  font-family: "Space Mono", monospace;
   font-style: normal;
   font-weight: normal;
   margin-bottom: 2em;
@@ -134,7 +134,7 @@ p code {
 
 #banner h1 {
   color: #ffa71a;
-  font-family: 'TeX Gyre Schola', 'Comic Sans MS';
+  font-family: "TeX Gyre Schola", serif;
   font-style: italic;
   font-size: 72px;
   font-weight: normal;
@@ -144,7 +144,7 @@ p code {
 #banner h2 {
   background: #ffa71a;
   color: #363430;
-  font-family: 'Space Mono';
+  font-family: "Space Mono", monospace;
   font-size: 16px;
   font-weight: bold;
   letter-spacing: 0.5em;
@@ -258,9 +258,9 @@ nav .active a {
 #content {
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 900px;
   padding: 0 15px;
-  font-size: 1.25em; }
+  font-size: 1.125em; }
 
 h3 {
   font-size: 1.5em;
@@ -408,7 +408,7 @@ td.numeric {
     display: inline; }
 
 .stats > :first-child table {
-  font-size: 1.25rem; }
+  font-size: 1.125rem; }
   .stats > :first-child table th {
     font-weight: normal; }
   .stats > :first-child table td {
