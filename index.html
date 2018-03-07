@@ -1,720 +1,799 @@
-<html>
-    <head>
-        <link href="https://fonts.googleapis.com/css?family=Karla|Space+Mono:700" rel="stylesheet">
-        <link rel="stylesheet" href="css/styles.css" />
-        <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,400i,700|Space+Mono:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
 
-        <title>FreshGRLC.NET - FreshGarlicBlocks.net - 0% fee, instant payout Garlicoin mining pool</title>
+    <title>FreshGRLC.NET &ndash; The 0% fee, instant payout, Garlicoin mining pool</title>
 
-        <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script language="javascript" src="js/highcharts.js"></script>
-        <script language="javascript" src="js/main.js"></script>
-    </head>
-    <body onLoad="init();">
-        <div id="overlay">
-            <div id="overlay-box">
-                <h1>Auto-refresh has been disabled</h1>
-                <p>
-                    To save server network bandwidth, the auto-refresh<br />
-                    on this page automatically disables after some time.
-                </p>
-                <p>
-                    Please refresh to page to continue receiving updates.
-                </p>
-                <p>
-                    <a style="color: #fefefe;" href="#" onClick="$('#overlay').hide();">Close</a>
-                </p>
-            </div>
+    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript" src="js/highcharts.js"></script>
+    <script language="javascript" src="js/main.js"></script>
+</head>
+<body>
+    <div id="banner" class="toplevel">
+        <h1>FreshGRLC.NET</h1>
+        <h2>freshgarlicblocks.net</h2>
+        <div>
+            The 0% fee, <span data-tooltip="Different to many other pools, we send mining rewards&#xa;directly to your wallet the instant they are mined. Your&#xa;coins never touch a wallet outside of your control.">instant payout</span>, Garlicoin mining pool
         </div>
-        <div id="banner" class="toplevel">
+    </div>
+
+    <nav>
+        <ul>
+            <li class="active"><a href="#poolnews">Pool news</a></li>
+            <li><a href="#howtomine">How to mine</a></li>
+            <li><a href="#stats">Pool stats</a></li>
+            <li><a href="#workers">Workers list</a></li>
+            <li><a href="#curblock">Current block</a></li>
+            <li><a href="#myworker">My worker</a></li>
+        </ul>
+    </nav>
+    <div class="nav-flow"></div>
+
+    <div id="content" class="toplevel">
+        <div id="content-poolnews" class="contentdiv active">
+
+            <article>
+                <time datetime="2018-03-02" class="date">Mar 02, 2018</time>
+                <h3>Pool unavailable for about 80 minutes</h3>
+                <p>
+                    This morning the pool went down for about 80 minutes due to a networking infrastructure incident at the datacenter our pool is running from.
+                    Unfortunately there was not much I could do during this time apart from waiting for the provider to fix this issue.
+                </p>
+                <p>
+                    I did contemplate temporary moving the pool to another server, but decided against it as it would probably take longer to get that up <i>and</i>
+                    get all the miners to move over than it would take to wait for the problem to be resolved.
+                </p>
+                <p>
+                    I understand it if people will now move away to another pool because they consider this pool to be unreliable. And to be honest, I get it. This pool is not comparable to the big ones that have multiple geolocated servers, load-balancing and failover, such as Soup, Bakery or Org.
+                </p>
+                <p>
+                    I am running this pool for fun and paying everything myself, without getting (or requesting) anything in return. This means unfortunately that I cannot pay for premium infra. I have the pool running on dedicated hardware, with a dedicated internet uplink. This to make sure we are fast (low-latency) and can handle the load and especially burst network traffic without compromise. However, this is where my budged stops.
+                </p>
+                <p>
+                    If you have a large mining rig and cannot afford downtime, this pool is probably not for you. If you still want to mine at this pool, I would recommend you to use a failover configuration to another pool in case these types of events happen again. Org has a <a href="https://garlicpool.org/index.php?page=gettingstarted" target="_blank">nice example</a> on how you can configure failover in your miner command line (/bat file).
+                    This might actually be useful for everyone mining here.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-28" class="date">Feb 28, 2018</time>
+                <h3>Per-worker hashrates</h3>
+                <p>
+                    For people that have multiple individual mining rigs: we do now support per-worker hashrates on the <a href="#myworker">my worker</a> page.
+                </p>
+                <p>
+                    This means that if you use the common format of appending a period ('<em>.</em>') followed by a nickname for you worker
+                    to your username/mining address, you will find it listed by its name on the <a href="#myworker">my worker</a> page,
+                    together with its current and average hashrate.
+                </p>
+                <p>
+                    The same information is now also available via the <em>workerinfo</em> API, allowing you to monitor individual workers.
+                </p>
+                <div class="card code">
+                    <div class="card-header">
+                        Example formats
+                    </div>
+                    <div class="card-body">
+                        <code>-u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB<strong>.GTX1060</strong></code>
+                        <code>-u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB<strong>.My_PC</strong></code>
+                    </div>
+                </div>
+            </article>
+
+            <article>
+                <time datetime="2018-02-20" class="date">Feb 20, 2018</time>
+                <h3>Glitch in daily payout processing</h3>
+                <p>
+                    As a lot of people are probably aware of by now, last night we experienced a glitch in the daily payout processor.
+                </p>
+                <p>
+                    Probably caused by a off-by-one error in the block maturity test (full investigation is still pending), more than 90% of
+                    payouts got cancelled by the final verification and sanity checking code due to an incorrect transaction
+                    amount.
+                </p>
+                <p>
+                    In the mean time I have manually initiated another payment round, which executed successfully. This means a small amount
+                    of miners received payment twice (where the second time only payout for the work since the last payout
+                    was included).
+                </p>
+                <p>
+                    More information will follow as soon as the root cause if the payout issue is found. I will keep a close eye on the daily
+                    payouts and manually request another round in case we experience another failure.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-16" class="date">Feb 16, 2018</time>
+                <h3>Daily payments are here!</h3>
+                <p>
+                    While everyone is anxiously waiting for the hard-fork to occur, we have other big news: By popular demand, we bring you daily
+                    payments!
+                </p>
+                <p>
+                    We have had a lot of people ask if it would be possible to set a certain treshold for payout, similar to how other pools
+                    handle payout. However, we are not like other pools! The big thing that makes this pool different is
+                    that it does not collect your block reward. Instead it crafts the blocks in such a way that your rewards
+                    are sent to you without the pool ever even touching them.
+                </p>
+                <p>
+                    With daily payout, we find a middle ground. Instead of directly sending you your part of the block reward, it gets collected
+                    in a personal consolidation address managed by the pool. Once every day, all your rewards are then sent
+                    to you in one transaction.
+                </p>
+                <p>
+                    This last part will require a small fee. However, this fee should in almost all circumstances be (way) less than the fees
+                    other pools ask for. Still too much? Just keep using the instant payout instead. All this is just another
+                    option for miners who are interested!
+                </p>
+                <p>
+                    Want to know more? You will find all the information in the How to mine tab.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-13" class="date">Feb 13, 2018</time>
+                <h3>Advised to add --submit-stale to ccminer-tpruvot command</h3>
+                <p>
+                    From now on we advice any miners on this pool to add
+                    <strong>--submit-stale</strong> to their ccminer-tpruvot / ccminer v2.2.5 command line. Since this pool sends out
+                    more frequent work-updates, while only discarding old work when the network actually finds a new block,
+                    it seems that ccminer's stale job checks prevent it from sending otherwise valid shares.
+                </p>
+                <p>
+                    Note that changing this setting might decrease your valid share ratio, but you will find more valid shares overall, therefore
+                    receive higher payouts.
+                </p>
+                <p>
+                    This looks to be (one of) the main causes of the hashrate issues we have seen on this pool. It is unclear to me whether this
+                    also affects mining on other pools, as I don't know the exact checks ccminer uses here. At any rate,
+                    the effect of not using this option on this pool should be a lot higher than on others.
+                </p>
+                <p>
+                    Note that if you are using other mining software or are using the
+                    <i>nanashi</i> ccminer fork, you do not have to change anything.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-13" class="date">Feb 13, 2018</time>
+                <h3>Ready for the hard-fork</h3>
+                <p>
+                    The is a quick update to make people aware that this pool is now ready for the upcoming hard-fork scheduled to occur after
+                    block
+                    <strong>58670</strong>, expected around
+                    <em>19:00 GMT on the 16th</em>.
+                </p>
+                <p>
+                    We are now running an a fork-enabled Garlicoin Core node and stand ready to switch the pool over to the new hashing algorithm
+                    on a moments notice.
+                </p>
+                <p>
+                    We are planning to take the pool offline after block
+                    <strong>58660</strong> and get the new pool up as soon as possible, expecting this to happen minutes before the
+                    actual fork occurs. This should give everyone enough time to update their miners and re-connect, this
+                    so we can start mining for
+                    <em>
+                        <i>Allium</i>
+                    </em> as soon as block
+                    <strong>58670</strong> is found.
+                </p>
+                <p>
+                    Miners that don't want to loose out on a chance to get the blocks in between should make sure they join another pool at that
+                    time.
+                </p>
+            </article>
+            <article>
+                <time datetime="2018-02-12" class="date">Feb 12, 2018</time>
+                <h3>Testnet pool available in preparation for hard-fork</h3>
+                <p>
+                    In order to allow miners to prepare for the upcoming Garlicoin hard-fork, we made a
+                    <a href="https://testnet.freshgarlicblocks.net">testnet pool</a> available. The testnet has already forked to the new
+                    <strong>Allium</strong> hashing algorithm, so as soon as mining software becomes available you can connect to this pool and test
+                    your new setup.
+                </p>
+                <p>
+                    The testnet pool's stratum server is at:
+                </p>
+                <code>stratum+tcp://testnet.freshgarlicblocks.net:3032</code>
+                <p>
+                    Note that sources for
+                    <a href="https://github.com/lenis0012/ccminer/">ccminer</a>
+                    and
+                    <a href="https://github.com/GarlicoinOrg/cpuminer-multi">cpuminer</a> can already be obtained via their respecive github repositories.
+                </p>
+                <p>
+                    More information regarding the hard-fork, and how this pool will prepare for and handle the fork, will be announced later
+                    this week.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-11" class="date">Feb 11, 2018</time>
+                <h3>More information with regards to hashrate issues</h3>
+                <p>
+                    This is just a quick heads-up to say I wrote a
+                    <a href="https://www.reddit.com/r/garlicoin/comments/7wvrxx/psa_when_is_a_hash_not_a_hash_or_how_you_should/" target="_blank">reddit post</a>
+                    with more information about tests I did with different versions of ccminer and how you should not trust the miner-reported
+                    hashrate without also having a look at the hashrate the pool reports.
+                </p>
+                <p>
+                    See the post itself for more info.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-08" class="date">Feb 8, 2018</time>
+                <h3>Pool hashrate verification test available</h3>
+                <p>
+                    One of the complaints I still get from time to time is that the reported hashrate one this website is lower than it should
+                    be. Some miners therefore decide to go to other pools.
+                </p>
+                <p>
+                    Ever since the new rolling-average hashrate estimation has been implemented, I feel that the hashrate calculations should
+                    be pretty precise (once they have fully stabilized after a few hours) and I have therefore also removed
+                    the warning/disclaimer we used to have on the site.
+                </p>
+                <p>
+                    That said, it is still true that the hashrate estimations are only used within the website's UI. Payout is 100% based on
+                    shares sent to the pool. The main issue here however, is that if the reported hashrate is lower than
+                    expected, it is probably being caused by the fact that less shares are being send to the pool than otherwise
+                    would be the case, hence the pool's hashrate estimation (based on those shares), as well as miner reward
+                    payout, is lower than expected.
+                </p>
+                <p>
+                    Now, it is of course easy to say that the pool is somehow showing incorrect information or maybe even ignoring some shares
+                    send by the miner, therefore reducing both the estimated hashrate as well as payouts.
+                </p>
+                <p>
+                    To counter these claims, and in an attempt at full transparency, we do now have a special page that can be used to test and
+                    verify the pool's processing of your submitted shares. That way, you can verify that the pool is correctly
+                    processing all the shares you sent in and therefore rewarding you correctly based on the work you are
+                    actually doing (i.e. if you are randomly hashing, but for example generating a lot of hardware errors,
+                    therefore not doing a lot of actual work, there is no reason for the pool to reward you for the work
+                    you did not do).
+                </p>
+                <p>
+                    Hopefully, this page will clear things up and lead to one of the following conclusions with relation to why you are maybe
+                    paid less than you thought you would:
+                    <ul>
+                        <li>Your miner is fine, but the pool had a period of bad luck (this is now verifiable using the new luck
+                            graphs).</li>
+                        <li>Your miner is fine, but it itself had a peiod of bad luck (hence it was sending in less shares than
+                            expected).</li>
+                        <li>There is an actual issue with your mining setup and you might be able to tweak it by changing (for
+                            example) intensity settings.</li>
+                    </ul>
+                </p>
+                <p>
+                    The page is available through the <a href="#myworker">my worker</a> tab. You can run the test without having to stop mining at the pool, as it
+                    just analyses pool worker data. You do however need access to your mining software (i.e. you <em>typically</em>
+                    can't do this remotely), as you will need to verify the pool's share counter using the share counter
+                    within your miner software.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-07" class="date">Feb 7, 2018</time>
+                <h3>Pool luck graph fix</h3>
+                <p>
+                    The pool has been restarted to apply a small fix to the pool's luck data gathering.
+                </p>
+                <p>
+                    You might have noticed that some datapoints are missing in the luck graphs. This was caused by the data gatherer sometimes
+                    missing the end of the capture window, therefore combining multiple measurement windows into a single
+                    datapoint.
+                </p>
+                <p>
+                    Note that this does not make the luck graphs incorrect, just somewhat imprecise.
+                </p>
+                <p>
+                    This issue has now been fixed and new data should no longer have this flaw.
+                </p>
+            </article>
+
+            <article>
+                <time datetime="2018-02-06" class="date">Feb 6, 2018</time>
+                <h3>New website</h3>
+                <p>
+                    We have a new website layout!
+                </p>
+                <p>
+                    The original website was only made with 20 - 30 workers in mind and a hardcoded limit of 100 workers.
+                    When Garlicoin mainnet launched and both the network as a whole as well as this pool got a lot more
+                    traction than expected, a lot of changes had to be made in a short time.
+                </p>
+                <p>
+                    One of the final changes, and overhaul of this website, is now complete: Have a look around!
+                </p>
+                <p>
+                    Apart from the overall design (and the same shitty style ;-) , the main features are pool luck graphs and an easier way to
+                    view worker statistics.
+                </p>
+            </article>
+
+        </div>
+        <div id="content-howtomine" class="contentdiv">
+            <h3>How to mine on the FreshGRLC.net pool</h3>
             <p>
-                <a href="/"><img src="../banner.png" /></a>
+                Right now we offer two ways of mining at this pool. Or rather, we offer two types of payment:
             </p>
-            <h1>The 0% fee, instant<span class="tooltip">*<div class="tooltiptext">
-                <p>The mining reward is transfered to your wallet instantly whenever a block gets mined.</p>
-                <p> However, as part of the Garlicoin protocol, you will not be able to use these new coins
-                until the network as a whole has mined another 100 blocks.</p>
-                <p>Depending on the wallet you are using, these coins might or might not show up on your balance in the mean time.
-                If in doubt, please use a block explorer to verify you were properly payed out.</p>
-            </div></span>
-            payout Garlicoin mining pool.</h1>
-        </div>
-        <div id="menu" class="toplevel">
-            <hr width="75%" />
-            <table>
-                <tr>
-                    <td id="poolnews" class="menuitem">Pool news</td>
-                    <td id="howtomine" class="menuitem">How to mine</td>
-                    <td id="stats" class="menuitem">Pool stats</td>
-                    <td id="workers" class="menuitem">Workers list</td>
-                    <td id="curblock" class="menuitem">Current block</td>
-                    <td id="myworker" class="menuitem">My worker</td>
-                </tr>
-            </table>
-            <hr width="75%" />
-        </div>
-        <div id="content" class="toplevel">
-            <div id="content-poolnews" class="contentdiv">
-                <h1>Pool news &amp; announcements</h1>
-                <p style="text-align: right;">
-                    <i>For questions about the pool</span> message <em>nuc1e4r5n4k3#5815</em><br />on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.</i>
-                </p>
-                <div style="text-align: left">
-                    <span class="date">02-03-2018</span><span class="smallheading">Pool unavailable for about 80 minutes</span>
-                    <p>
-                        This morning the pool went down for about 80 minutes due to a networking infrastructure incident at the datacenter our pool is running from.
-                        Unfortunately there was not much I could do during this time apart from waiting for the provider to fix this issue.
-                    </p>
-                    <p>
-                        I did contemplate temporary moving the pool to another server, but decided against it as it would probably take longer to get that up <i>and</i>
-                        get all the miners to move over than it would take to wait for the problem to be resolved.
-                    </p>
-                    <p>
-                        I understand it if people will now move away to another pool because they consider this pool to be unreliable. And to be honest, I get it. This pool is not comparable to the big ones that have multiple geolocated servers, load-balancing and failover, such as Soup, Bakery or Org.
-                    </p>
-                    <p>
-                        I am running this pool for fun and paying everything myself, without getting (or requesting) anything in return. This means unfortunately that I cannot pay for premium infra. I have the pool running on dedicated hardware, with a dedicated internet uplink. This to make sure we are fast (low-latency) and can handle the load and especially burst network traffic without compromise. However, this is where my budged stops.
-                    </p>
-                    <p>
-                        If you have a large mining rig and cannot afford downtime, this pool is probably not for you. If you still want to mine at this pool, I would recommend you to use a failover configuration to another pool in case these types of events happen again. Org has a <a href="https://garlicpool.org/index.php?page=gettingstarted" target="_blank">nice example</a> on how you can configure failover in your miner command line (/bat file).
-                        This might actually be useful for everyone mining here.
-                    </p>
+                <ul>
+                    <li>Instant payout</li>
+                    <li>Daily payout</li>
+                </ul>
+            <p>
+                Instant payout is what made this pool special from the very beginning. You directly get a part of the block's miners reward
+                (and transaction fees).
+                <br /> Basically, you are "solo-mining together" and that against 0% fee. Simple and no bamboozle.
+            </p>
+            <p>
+                Since mid-February, we also offer daily payouts. This is a way to reduce the amount of Unspent Transaction Outputs (UTXOs)
+                in your wallet, therefore making it cheaper to send coins to other people down the line. With daily payouts
+                you still get a part of the block's mining reward, but instead of directly sending it to your wallet
+                address, it is send to a personal consolidation address managed by the pool. Once a day, all your rewards
+                are consolidated using a special low fee (typically less than 0.1%, in a lot of cases only a fraction
+                of that) and sent to your payout address.
+            </p>
+            <p>
+                You can choose whichever payment method you like most and configure your worker to use it using the instructions below.
+            </p>
+            <div class="card note">
+                <div class="card-header">
+                    Note
                 </div>
-                <div style="text-align: left">
-                    <span class="date">28-02-2018</span><span class="smallheading">Per-worker hashrates</span>
+                <div class="card-body">
                     <p>
-                        For people that have multiple individual mining rigs: we do now support per-worker hashrates on the <em>My worker</em> page.
-                    </p>
-                    <p>
-                        This means that if you use the common format of appending a period ('<em>.</em>') followed by a nickname for you worker
-                        to your username/mininig address, you will find it listed by its name on the <em>My worker</em> page,
-                        together with its current and average hashrate.
-                    </p>
-                    <p>
-                        The same information is now also available via the <em>workerinfo</em> API, allowing you to monitor individual workers.
-                    </p>
-                    <p>
-                        Example formats:
-                    </p>
-                    <p class="monocolored-small">
-                        &nbsp;&nbsp;&nbsp;&nbsp;-u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB.GTX1060
-                    </p>
-                    <p class="monocolored-small">
-                        &nbsp;&nbsp;&nbsp;&nbsp;-u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB.My_PC
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">20-02-2018</span><span class="smallheading">Glitch in daily payout processing</span>
-                    <p>
-                        As a lot of people are probably aware of by now, last night we experienced a glitch in the daily payout processor.
-                    </p>
-                    <p>
-                        Probably caused by a off-by-one error in the block maturity test (full investigation is still pending), more than 90% of
-                        payouts got cancelled by the final verification and sanity checking code due to an incorrect transaction amount.
-                    </p>
-                    <p>
-                        In the mean time I have manually initiated another payment round, which executed successfully. This means a small amount
-                        of miners received payment twice (where the second time only payout for the work since the last payout was included).
-                    </p>
-                    <p>
-                        More information will follow as soon as the root cause if the payout issue is found. I will keep a close eye
-                        on the daily payouts and manually request another round in case we experience another failure.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">16-02-2018</span><span class="smallheading">Daily payments are here!</span>
-                    <p>
-                        While everyone is anxiously waiting for the hard-fork to occur, we have other big news: By popular demand, we bring you
-                        daily payments!
-                    </p>
-                    <p>
-                        We have had a lot of people ask if it would be possible to set a certain treshold for payout, similar to how other pools
-                        handle payout. However, we are not like other pools! The big thing that makes this pool different is that it does not
-                        collect your block reward. Instead it crafts the blocks in such a way that your rewards are sent to you without the pool
-                        ever even touching them.
-                    </p>
-                    <p>
-                        With daily payout, we find a middle ground. Instead of directly sending you your part of the block reward, it gets collected
-                        in a personal consolidation address managed by the pool. Once every day, all your rewards are then sent to you in one
-                        transaction.
-                    </p>
-                    <p>
-                        This last part will require a small fee. However, this fee should in almost all circumstances be (way) less than the fees
-                        other pools ask for. Still too much? Just keep using the instant payout instead. All this is just another option for miners
-                        who are interested!
-                    </p>
-                    <p>
-                        Want to know more? You will find all the information in the How to mine tab.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">13-02-2018</span><span class="smallheading">Advised to add --submit-stale to ccminer-tpruvot command</span>
-                    <p>
-                        From now on we advice any miners on this pool to add <span class="monocolored">--submit-stale</span> to their
-                        ccminer-tpruvot / ccminer v2.2.5 command line. Since this pool sends out more frequent work-updates,
-                        while only discarding old work when the network actually finds a new block, it seems that ccminer's stale job
-                        checks prevent it from sending otherwise valid shares.
-                    </p>
-                    <p>
-                        Note that changing this setting might decrease your valid share ratio, but you will find more valid shares overall,
-                        therefore receive higher payouts.
-                    </p>
-                    <p>
-                        This looks to be (one of) the main causes of the hashrate issues we have seen on this pool. It is unclear to
-                        me whether this also affects mining on other pools, as I don't know the exact checks ccminer uses here. At any rate,
-                        the effect of not using this option on this pool should be a lot higher than on others.
-                    </p>
-                    <p>
-                        Note that if you are using other mining software or are using the <i>nanashi</i> ccminer fork, you do not have to change anything.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">13-02-2018</span><span class="smallheading">Ready for the hard-fork</span>
-                    <p>
-                        The is a quick update to make people aware that this pool is now ready for the upcoming hard-fork
-                        scheduled to occur after block <span class="monocolored">58670</span>, expected around <em>19:00 GMT on the 16th</em>.
-                    </p>
-                    <p>
-                        We are now running an a fork-enabled Garlicoin Core node and stand ready to switch the pool over
-                        to the new hashing algorithm on a moments notice.
-                    </p>
-                    <p>
-                        We are planning to take the pool offline after block <span class="monocolored">58660</span> and get the new pool up as soon as possible,
-                        expecting this to happen minutes before the actual fork occurs. This should give everyone enough time
-                        to update their miners and re-connect, this so we can start mining for <em><i>Allium</i></em> as soon as block
-                        <span class="monocolored">58670</span> is found.
-                    </p>
-                    <p>
-                        Miners that don't want to loose out on a chance to get the blocks in between should make sure they join
-                        another pool at that time.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">12-02-2018</span><span class="smallheading">Testnet pool available in preparation for hard-fork</span>
-                    <p>
-                        In order to allow miners to prepare for the upcoming Garlicoin hard-fork, we made a
-                        <a href="https://testnet.freshgarlicblocks.net">testnet pool</a> available. The testnet has already forked to the
-                        new <em><i>Allium</i></em> hashing algorithm, so as soon as mining software becomes available you can connect to
-                        this pool and test your new setup.
-                    </p>
-                    <p>
-                        The testnet pool's stratum server is at:
-                    </p>
-                    <p>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="monocolored">stratum+tcp://testnet.freshgarlicblocks.net:3032</span>
-                    </p>
-                    <p>
-                        Note that sources for <a href="https://github.com/lenis0012/ccminer/">ccminer</a>
-                        and <a href="https://github.com/GarlicoinOrg/cpuminer-multi">cpuminer</a> can already be obtained via
-                        their respecive github repositories.
-                    </p>
-                    <p>
-                        More information regarding the hard-fork, and how this pool will prepare for and handle the fork, will be announced
-                        later this week.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">11-02-2018</span><span class="smallheading">More information with regards to hashrate issues</span>
-                    <p>
-                        This is just a quick heads-up to say I wrote a <a href="https://www.reddit.com/r/garlicoin/comments/7wvrxx/psa_when_is_a_hash_not_a_hash_or_how_you_should/">reddit post</a>
-                        with more information about tests I did with different versions of ccminer and how you should not trust the miner-reported
-                        hashrate without also having a look at the hashrate the pool reports.
-                    </p>
-                    <p>
-                        See the post itself for more info.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">08-02-2018</span><span class="smallheading">Pool hashrate verification test available</span>
-                    <p>
-                        One of the complaints I still get from time to time is that the reported hashrate one
-                        this website is lower than it should be. Some miners therefore decide to go to other
-                        pools.
-                    </p>
-                    <p>
-                        Ever since the new rolling-average hashrate estimation has been implemented, I feel
-                        that the hashrate calculations should be pretty precise (once they have fully stabilized
-                        after a few hours) and I have therefore also removed the warning/disclaimer we used
-                        to have on the site.
-                    </p>
-                    <p>
-                        That said, it is still true that the hashrate estimations are only used within the website's
-                        UI. Payout is 100% based on shares sent to the pool. The main issue here however, is that if
-                        the reported hashrate is lower than expected, it is probably being caused by the fact that
-                        less shares are being send to the pool than otherwise would be the case, hence the pool's
-                        hashrate estimation (based on those shares), as well as miner reward payout, is lower than
-                        expected.
-                    </p>
-                    <p>
-                        Now, it is of course easy to say that the pool is somehow showing incorrect information or maybe
-                        even ignoring some shares send by the miner, therefore reducing both the estimated hashrate
-                        as well as payouts.
-                    </p>
-                    <p>
-                        To counter these claims, and in an attempt at full transparency, we do now have a special page
-                        that can be used to test and verify the pool's processing of your submitted shares. That way,
-                        you can verify that the pool is correctly processing all the shares you sent in and therefore
-                        rewarding you correctly based on the work you are actually doing (i.e. if you are randomly hashing,
-                        but for example generating a lot of hardware errors, therefore not doing a lot of actual work,
-                        there is no reason for the pool to reward you for the work you did not do).
-                    </p>
-                    <p>
-                        Hopefully, this page will clear things up and lead to one of the following conclusions with
-                        relation to why you are maybe paid less than you thought you would:
-                        <ul>
-                            <li>Your miner is fine, but the pool had a period of bad luck (this is now verifiable using the new luck graphs).</li>
-                            <li>Your miner is fine, but it itself had a peiod of bad luck (hence it was sending in less shares than expected).</li>
-                            <li>There is an actual issue with your mining setup and you might be able to tweak it by changing (for example) intensity settings.</li>
-                        </ul>
-                    </p>
-                    <p>
-                        The page is available through the 'My worker' tab. You can run the test without having to stop
-                        mining at the pool, as it just analyses pool worker data. You do however need access to your mining
-                        software (i.e. you - typically - can't do this remotely), as you will need to verify the pool's share
-                        counter using the share counter within your miner software.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">07-02-2018</span><span class="smallheading">Pool luck graph fix</span>
-                    <p>
-                        The pool has been restarted to apply a small fix to the pool's luck data gathering.
-                    </p>
-                    <p>
-                        You might have noticed that some datapoints are missing in the luck graphs. This was
-                        caused by the data gatherer sometimes missing the end of the capture window, therefore
-                        combining multiple measurement windows into a single datapoint.
-                    </p>
-                    <p>
-                        Note that this does not make the luck graphs incorrect, just somewhat imprecise.
-                    </p>
-                    <p>
-                        This issue has now been fixed and new data should no longer have this flaw.
-                    </p>
-                </div>
-                <div style="text-align: left">
-                    <span class="date">06-02-2018</span><span class="smallheading">New website</span>
-                    <p>
-                        We have a new website layout!
-                    </p>
-                    <p>
-                        The original website was only made with 20 - 30 workers in mind and a hardcoded limit of 100 workers.<br />
-                        When Garlicoin mainnet launched and both the network as a whole as well as this pool got a lot more traction
-                        than expected, a lot of changes had to be made in a short time.
-                    </p>
-                    <p>
-                        One of the final changes, and overhaul of this website, is now complete: Have a look around!
-                    </p>
-                    <p>
-                        Apart from the overal design (and the same shitty style ;-) , the main features are pool luck graphs
-                        and an easier way to view worker statistics.
-                    </p>
-                </div>
-            </div>
-            <div id="content-howtomine" class="contentdiv">
-                <h1>How to mine on the FreshGRLC.net pool</h1>
-                <div style="text-align: left;">
-                    <span class="smallheading">Mining at FreshGRLC.net: 2 options</span><br />
-                    <p>
-                        Right now we offer 2 ways of mining at this pool. Or rather, we offer to types of payment:
-                        <ul>
-                            <li>Instant payout</li>
-                            <li>Daily payout</li>
-                        </ul>
-                    </p>
-                    <p>
-                        Instant payout is what made this pool special from the very beginning. You directly get a part of the block's
-                        miners reward (and transaction fees). <br />
-                        Basically, you are "solo-mining together" and that against 0% fee. Simple and no bamboozle.
-                    </p>
-                    <p>
-                        Since mid-Februari, we also offer daily payouts. This is a way to reduce the amount of Unspent
-                        Transaction Outputs (UTXOs) in your wallet, therefore making it cheaper to send coins to other people
-                        down the line. With daily payouts you still get a part of the block's mining reward, but instead of
-                        directly sending it to your wallet address, it is send to a personal consolidation address managed by
-                        the pool. Once a day, all your rewards are consolidated using a special low fee
-                        (typically less than 0.1%, in a lot of cases only a fraction of that) and sent to your payout address.
-                    </p>
-                    <p>
-                        You can choose whichever payment method you like most and configure your worker to use it using
-                        the instructions below.
-                    </p>
-                    <p>
-                        <span class="smallerheading"><b>NOTE</b></span><br />
                         Because of how the pool works and combines multiple workers together based on their address,
-                        the pool will only set your chosen payment method when it first registers your worker.<br />
-                        This means that if you want to change payment method you either have to stop mining and wait until your
-                        worker does no longer appear on the Workers list tab, or change your payout address so your miner can
-                        register itself as a new worker.
-                    </p>
-                    <p>&nbsp;</p>
-                    <span class="smallheading">Our bread and (garlic-) butter: Instant payout</span><br />
-                    <p>
-                        You can mine at our pool by simply connecting with your mining software to our pool's stratum server,
-                        using your wallet address as username. This will set up your worker for instant payout, in other words:
-                        you get paid whenever we find a block. Instantaneous.
+                        the pool will only set your chosen payment method when it first registers your worker.
                     </p>
                     <p>
-                        Using this method, the pool does not even touch your earnings once. Instead you get a part of the raw miners reward.
-                        Ideal if you have difficulty trusting pool owners: You see the pool finding a block? You see a transaction in your wallet.
-                        Usually (if you use a proper wallet), you will receive the transaction notification even before the pool lists the block as found.
-                    </p>
-                    <p>
-                        This method is also easiest to set up.
-                        For the 3 most popular miners, <em>ccminer</em>, <em>sgminer</em> and <em>cpuminer</em>, you would use a command (or BAT file line)
-                        that looks something like this:
-                    </p>
-                    <p>
-                        <span class="smallerheading">ccminer</span><br />
-                        <span class="monocolored-small">
-                            ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale
-                        </span>
-                    </p>
-                    <p>
-                        <span class="smallerheading">sgminer</span><br />
-                        <span class="monocolored-small">
-                            sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
-                        </span>
-                    </p>
-                    <p>
-                        <span class="smallerheading">cpuminer</span><br />
-                        <span class="monocolored-small">
-                            cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
-                        </span>
-                    </p>
-                    <p>&nbsp;</p>
-                    <p>
-                        Once you are connected and see your first accepted share, your miner should pop up in the <em>Worker list</em> tab
-                        and <em>Current block</em> estimated payout tab within a minute.
-                    </p>
-                    <p>
-                        <span class="smallerheading"><b>NOTE</b></span><br />
-                        <i>Don't forget to replace <em>GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB</em> in the above examples with your own mainnet wallet address<br />
-                        (34 characters long and starting with a <em>G</em>). The example address is fake and will cause authentication failures if you try to use it.</i>
-                    </p>
-                    <p>&nbsp;</p>
-                    <span class="smallheading">Yesterday's Garlic: Daily payout</span><br />
-                    <p>
-                        As an alternative to instant payout, we offer daily payout. With daily payout all your mining rewards go to a special personal consolidation address
-                        managed by the pool. Once a day, at 20:00 GMT, the pool will schedule a low-fee payout from this address to your payout wallet address, thereby
-                        combining all your rewards into a single transaction. The payout transaction will then be processed/confirmed in the next few blocks the pool finds
-                        (typically within an hour).
-                    </p>
-                    <p>
-                        The idea of this payout method is that it is fully transparent, since everything happens on the blockchain. You can check your per-block
-                        mining reward using the pool's website and verify it to some extend based on your hashrate. When the pool finds a block you can directly view
-                        your mining reward being sent to your consolidation address on the blockchain. From there, you would notice if anyone (including the pool)
-                        tried to steal it.
-                    </p>
-                    <p>
-                        Note that all this requires a small fee. This fee is used for the actual consolidation transaction and does not go to the pool owner.
-                        Instead it is handled as any other fee and therefore shared between all the miners on this pool.
-                    </p>
-                    <p>
-                        This fee is typically between 0.0% and 0.1%. Fees of 0.01% are normal for standard GPU mining. To get an idea of the consolidation fee,
-                        check the My worker tab.
-                    </p>
-                    <p>
-                        In order to use daily payouts, follow the same steps as for instant payout, but instead of just using your payout address as username,
-                        prepend it with <em>daily-</em>.
-                    </p>
-                    <p>
-                        If we apply this to the examples listed above under instant payout, they would become:
-                    </p>
-                    <p>
-                        <span class="smallerheading">ccminer</span><br />
-                        <span class="monocolored-small">
-                            ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale
-                        </span>
-                    </p>
-                    <p>
-                        <span class="smallerheading">sgminer</span><br />
-                        <span class="monocolored-small">
-                            sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15
-                        </span>
-                    </p>
-                    <p>
-                        <span class="smallerheading">cpuminer</span><br />
-                        <span class="monocolored-small">
-                            cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x
-                        </span>
-                    </p>
-                    <p>&nbsp;</p>
-                    <p>
-                        <span class="lightertext"><i><u>Tip:</u></i></span>
-                        <i>If you use the Garlicoin Core GUI (a.k.a. garlicoin-qt), you can import your personal consolidation address as a watch-only address.
-                           That way you will still get a notification whenever the pool find a block and immediately see your reward. It will also show the consolidation
-                           fees as the costs for a '<em>Payment to yourself</em>'.</i>
-                    </p>
-                    <p>
-                        <i>To do this, go to the My worker tab and copy your personal consolidation address. Then go to Garlicoin Core, choose 'Debug window' from the Help menu,
-                        switch to the Console tab and type: <span class="monocolored-small">importaddress <i>address</i></span></i>, where <em>address</em> is the consolidation
-                        address you copied from the My Worker tab.
-                    </p>
-                    <p>&nbsp;</p>
-                    <p>
-                        <span class="lightertext"><i>For questions:</i></span> Message <em>nuc1e4r5n4k3#5815</em> on the Garlicoin discord, or visit <a href="https://discord.gg/8KKUpQp" target="_blank">our own discord</a>.
-                    </p>
-                    <p>&nbsp;</p>
-                    <span class="smallheading">Static stratum difficulty</span><br />
-                    <p>
-                        First of all: if you don't know what this is, don't worry. The examples above should be both sufficient <i>and</i> optimal in almost all scenarios.
-                    </p>
-                    <p>
-                        Apart from the stratum server on port <em>3032</em>, which is a vardiff (variable difficulty, tries to make workers send 1 share every
-                        15 seconds on average), there are a couple of other ports available as well.
-                    </p>
-                </div>
-                <div style="display: inline-block; text-align: left;">
-                    <p>
-                        <table>
-                            <tr>
-                                <th class="table-smallheader">URL</th>
-                                <th class="table-smallheader">Type</th>
-                                <th class="table-smallheader">Used for</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="stratumurl" id="stratumurl1"></span>
-                                </td>
-                                <td>Vardiff</td>
-                                <td>Generic purpose, works for any miner</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="stratumurl" id="stratumurl2"></span>
-                                </td>
-                                <td>Vardiff</td>
-                                <td>Also vardiff, but starts out with diff 4 instead of diff 1</td>
-                            </tr>
-                            <tr>
-                                <td><span class="stratumurl" id="stratumurl3"></span></td>
-                                <td>Diff 2</td>
-                                <td>GPU mining users that can't use/have<br />problems with vardiff</td>
-                            </tr>
-                            <tr>
-                                <td><span class="stratumurl" id="stratumurl4"></span></td>
-                                <td>Diff 16</td>
-                                <td>Higher hashrate mining rigs (up to ~ 50 MH/s)<br /> that can't use/have problems with vardiff</td></td>
-                            </tr>
-                            <tr>
-                                <td><span class="stratumurl" id="stratumurl5"></span></td>
-                                <td>Diff 128</td>
-                                <td>High-end mining rigs.<br />You typically want to use this port instead of vardiff</td></td>
-                            </tr>
-                        </table>
+                        This means that if you want to change payment method you either have to stop mining and wait
+                        until your worker does no longer appear on the Workers list tab, or change your payout
+                        address so your miner can register itself as a new worker.
                     </p>
                 </div>
             </div>
-            <div id="content-stats" class="contentdiv">
-                <div>
-                    <h1>Pool stats</h1>
-                    <table align="center">
-                        <tr>
-                            <td>
-                                <i>Current block being mined:</i>
-                            </td>
-                            <td class="monocolored currentblock"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i>Estimated current pool hashrate:</i>
-                            </td>
-                            <td class="hashrate poolhashrate"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i>Global Garlicoin network hashrate:</i>
-                            </td>
-                            <td class="hashrate globalhashrate"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i>Pool's hashrate as percentage:</i>
-                            </td>
-                            <td class="hashrate poolhashratepercent"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <i>Pool's luck over last 48 hours:</i>
-                            </td>
-                            <td class="hashrate poolluck"></td>
-                        </tr>
-                    </table>
+            <h3>Our bread and (garlic-) butter: Instant payout</h3>
+            <p>
+                You can mine at our pool by simply connecting with your mining software to our pool's stratum server, using your wallet address
+                as username. This will set up your worker for instant payout, in other words: you get paid whenever we
+                find a block. Instantaneous.
+            </p>
+            <p>
+                Using this method, the pool does not even touch your earnings once. Instead you get a part of the raw miners reward. Ideal
+                if you have difficulty trusting pool owners: You see the pool finding a block? You see a transaction
+                in your wallet. Usually (if you use a proper wallet), you will receive the transaction notification even
+                before the pool lists the block as found.
+            </p>
+            <p>
+                This method is also easiest to set up. For the 3 most popular miners,
+                <em>ccminer</em>,
+                <em>sgminer</em> and
+                <em>cpuminer</em>, you would use a command (or BAT file line) that looks something like this:
+            </p>
+            <div class="card code">
+                <div class="card-header">
+                    ccminer
                 </div>
-                <div>
-                    <h1 style="margin: 0px; padding: 0px;">Blocks vs Hashrate</h1>
-                    <div id="graph_blkhash" style="width: 900px; margin: 0px auto;"></div>
-                </div>
-                <div>
-                    <h1 style="margin: 0px; padding: 0px;">Pool's luck</h1>
-                    <div id="graph_luck" style="width: 900px; margin: 0px auto;"></div>
-                </div>
-                <div>&nbsp;</div>
-                <div>
-                    <table align="center" id="blks">
-                        <tr>
-                            <th colspan="3">
-                                <span class="table-header">Last blocks mined by the pool</span>
-                                <p>&nbsp;</p>
-                            </th>
-                        </tr>
-                        <tr class="table-colheader">
-                            <th style="text-align: center; padding-left: 0px;">Height</th>
-                            <th style="text-align: center;">Miner</th>
-                            <th style="text-align: center; padding-left: 0px;">Status</th>
-                        </tr>
-                    </table>
+                <div class="card-body">
+                    <code>ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale</code>
                 </div>
             </div>
-            <div id="content-workers" class="contentdiv">
-                <table align="center" id="workerslist">
-                    <th colspan="2">
-                        <h1 style="padding-bottom: 0px; margin-bottom: 0px;">Workers</h1>
-                        <p>&nbsp;</p>
-                    </th>
-                    <tr class="table-colheader">
-                        <th>Worker (address)</th>
-                        <th>Hashrate</th>
-                    </tr>
-                </table>
+            <div class="card code">
+                <div class="card-header">
+                    sgminer
+                </div>
+                <div class="card-body">
+                    <code>sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15</code>
+                </div>
             </div>
-            <div id="content-curblock" class="contentdiv">
-                <table align="center" id="cbout">
+            <div class="card code">
+                <div class="card-header">
+                    cpuminer
+                </div>
+                <div class="card-body">
+                    <code>cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x</code>
+                </div>
+            </div>
+            <p>
+                Once you are connected and see your first accepted share, your miner should pop up in the
+                <em>Worker list</em> tab and
+                <em>Current block</em> estimated payout tab within a minute.
+            </p>
+            <div class="card note">
+                <div class="card-header">
+                    Note
+                </div>
+                <div class="card-body">
+                    <p>
+                        Don't forget to replace <em>GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB</em>
+                        in the above examples with your own mainnet wallet address
+                        <br>
+                        (34 characters long and starting with a <em>G</em>). The example address
+                        is fake and will cause authentication failures if you try to use it.
+                    </p>
+                </div>
+            </div>
+            <h3>Yesterday's Garlic: Daily payout</h3>
+            <p>
+                As an alternative to instant payout, we offer daily payout. With daily payout all your mining rewards go to a special personal
+                consolidation address managed by the pool. Once a day, at 20:00 GMT, the pool will schedule a low-fee
+                payout from this address to your payout wallet address, thereby combining all your rewards into a single
+                transaction. The payout transaction will then be processed/confirmed in the next few blocks the pool
+                finds (typically within an hour).
+            </p>
+            <p>
+                The idea of this payout method is that it is fully transparent, since everything happens on the blockchain. You can check
+                your per-block mining reward using the pool's website and verify it to some extend based on your hashrate.
+                When the pool finds a block you can directly view your mining reward being sent to your consolidation
+                address on the blockchain. From there, you would notice if anyone (including the pool) tried to steal
+                it.
+            </p>
+            <p>
+                Note that all this requires a small fee. This fee is used for the actual consolidation transaction and does not go to the
+                pool owner. Instead it is handled as any other fee and therefore shared between all the miners on this
+                pool.
+            </p>
+            <p>
+                This fee is typically between 0.0% and 0.1%. Fees of 0.01% are normal for standard GPU mining. To get an idea of the consolidation
+                fee, check the <a href="#myworker">my worker</a> tab.
+            </p>
+            <p>
+                In order to use daily payouts, follow the same steps as for instant payout, but instead of just using your payout address
+                as username, prepend it with
+                <em>daily-</em>.
+            </p>
+            <p>
+                If we apply this to the examples listed above under instant payout, they would become:
+            </p>
+            <div class="card code">
+                <div class="card-header">
+                    ccminer
+                </div>
+                <div class="card-body">
+                    <code>ccminer-x64 --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB --max-temp=85 --submit-stale></code>
+                </div>
+            </div>
+            <div class="card code">
+                <div class="card-header">
+                    sgminer
+                </div>
+                <div class="card-body">
+                    <code>sgminer --algorithm allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x -I 15</code>
+                </div>
+            </div>
+            <div class="card code">
+                <div class="card-header">
+                    cpuminer
+                </div>
+                <div class="card-body">
+                    <code>cpuminer --algo=allium -o stratum+tcp://freshgarlicblocks.net:3032 -u daily-GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxB -p x</code>
+                </div>
+            </div>
+            <div class="card note">
+                <div class="card-header">
+                    Tip
+                </div>
+                <div class="card-body">
+                    <p>
+                        If you use the Garlicoin Core GUI (a.k.a. garlicoin-qt), you can import your personal consolidation
+                        address as a watch-only address. That way you will still get a notification whenever the pool find
+                        a block and immediately see your reward. It will also show the consolidation fees as the costs for
+                        a 'Payment to yourself'.
+                    </p>
+                    <p>
+                        To do this, go to the <a href="#myworker">my worker</a>a tab and copy your personal consolidation address. Then go to
+                        Garlicoin Core, choose 'Debug window' from the Help menu, switch to the Console tab and type:
+                        <code>importaddress &lt;address&gt;</code>, where <code>&lt;address&gt;</code> is the
+                        consolidation address you copied from the <a href="#myworker">my worker</a> tab.
+                    </p>
+                </div>
+            </div>
+            <h3>Static stratum difficulty</h3>
+            <p>
+                First of all: if you don't know what this is, don't worry. The examples above should be both sufficient
+                <i>and</i> optimal in almost all scenarios.
+            </p>
+            <p>
+                Apart from the stratum server on port
+                <em>3032</em>, which is a vardiff (variable difficulty, tries to make workers send 1 share every 15 seconds
+                on average), there are a couple of other ports available as well.
+            </p>
+
+            <table>
+                <thead>
                     <tr>
-                        <th colspan="5">
-                            <h1 style="padding-bottom: 0px; margin-bottom: 0px;">Coinbase tx outputs for current block</h1>
-                            <i>(If a block was found right now, this would be everyone's rewards)</i>
-                            <p>&nbsp;</p>
-                        </th>
+                        <th>URL</th>
+                        <th>Type</th>
+                        <th>Used for</th>
                     </tr>
-                    <tr class="table-colheader">
-                        <th>Address</th>
-                        <th>Reward</th>
-                        <th>Percentage</th>
-                        <th>Shares</th>
-                        <th>Hashrate</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="stratumurl" id="stratumurl1">stratum+tcp://freshgarlicblocks.net:3032</span>
+                        </td>
+                        <td>Vardiff</td>
+                        <td>Generic purpose, works for any miner</td>
                     </tr>
-                </table>
-                <p>&nbsp;</p>
-                <p>
-                    <div class="smallheading">Note on share management</div>
-                    Everyone's shares will decrease by 90% if the pool finds a block<br />
-                    (except when multiple blocks are found within a small amount of time).
-                </p>
-                <p>
-                    Shares decrease by 5% whenever anyone finds a new block on the network<br />
-                    (this happens more or less every 41 seconds).
-                </p>
-                <p>
-                    Workers under the minimum share floor of 8 shares don't get paid,<br />
-                    but are also not affected by the 5% share decrease<br />
-                    (this to decrease the amount of dust the pool is generating somewhat).
-                </p>
-                <p>
-                    This is all part of the payout management logic in order to keep payout fair.
-                </p>
-                <p>
-                    Note that this does not mean that the pool takes a fee by decreasing worker shares,<br />
-                    as shares are the only thing on which block reward payout is based. Rather,<br />
-                    this is a way to get workers that stopped mining slowly out of the system<br />
-                    while still giving them something for their work.<br />
-                    It also helps new workers joining to pool to get a little bit extra in times<br />
-                    where the pool is unlucky and can't find a block for a while.
-                </p>
-                <p>
-                    These numbers might change in the future.
-                </p>
-            </div>
-            <div id="content-myworker" class="contentdiv">
-                <div id="genericworkerheader">
-                    <h1 >Worker <small><span class="monocolored currentworker"></span></small></h1>
-                    <a href="#" onClick="setAsMyWorker();">Set as my worker</a>
-                </div>
-                <h1 id="myworkerheader">My worker</h1>
-                <div id="nomyworker">
-                    You have not yet selected a worker as your own. Click on your worker address in the <em>Workers list</em> tab
-                    and select <em>Select as my worker</em>.
-                </div>
-                <div id="workerinfo" style="width: 800px; margin: 0px auto">
-                    <table align="center">
+                    <tr>
+                        <td>
+                            <span class="stratumurl" id="stratumurl2">stratum+tcp://freshgarlicblocks.net:3033</span>
+                        </td>
+                        <td>Vardiff</td>
+                        <td>Also vardiff, but starts out with diff 4 instead of diff 1</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="stratumurl" id="stratumurl3">stratum+tcp://freshgarlicblocks.net:3034</span>
+                        </td>
+                        <td>Diff 2</td>
+                        <td>GPU mining users that can't use/have
+                            <br />problems with vardiff</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="stratumurl" id="stratumurl4">stratum+tcp://freshgarlicblocks.net:3035</span>
+                        </td>
+                        <td>Diff 16</td>
+                        <td>Higher hashrate mining rigs (up to ~ 50 MH/s)
+                            <br /> that can't use/have problems with vardiff</td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="stratumurl" id="stratumurl5">stratum+tcp://freshgarlicblocks.net:3036</span>
+                        </td>
+                        <td>Diff 128</td>
+                        <td>High-end mining rigs.
+                            <br />You typically want to use this port instead of vardiff</td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div id="content-stats" class="contentdiv">
+            <div class="stats">
+                <div>
+                    <h3>Pool stats</h3>
+                    <table>
                         <tr>
-                            <th class="table-rowheader">Payout type:</th>
-                            <td class="monocolored" id="workerinfo_payout_type" class="workerinfo-info"></td>
+                            <th>Current block being mined:</th>
+                            <td class="currentblock"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Payout address:</th>
-                            <td class="monocolored"><a href="#" target="_blank" id="workerinfo_address" class="workerinfo-info"></a></td>
+                            <th>Number of workers:</th>
+                            <td class="workers"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Consolidation address:</th>
-                            <td class="monocolored"><span class="dailypayoutworker"><a href="#" target="_blank" id="workerinfo_consolidationaddress" class="workerinfo-info"></a></span><span class="na instantpayoutworker">N / A</span></td>
+                            <th>Estimated current pool hashrate:</th>
+                            <td class="poolhashrate"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Next mining reward:</th>
-                            <td class="monocolored workerinfo-info" id="workerinfo_payout"></td>
+                            <th>Global Garlicoin network hashrate:</th>
+                            <td class="globalhashrate"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">GRLC waiting for payout:</th>
-                            <td><span class="monocolored workerinfo-info dailypayoutworker" id="workerinfo_consolidated"></span><span class="na instantpayoutworker">N / A</span></td>
+                            <th>Pool's hashrate as percentage:</th>
+                            <td class="poolhashratepercent"></td>
                         </tr>
                         <tr>
-                            <th class="table-rowheader">Estimated payout fee:</th>
-                            <td><span class="monocolored workerinfo-info dailypayoutworker" id="workerinfo_consolidatefee"></span><span class="na instantpayoutworker">N / A</span></td>
-                        </tr>
-                        <tr>
-                            <th class="table-rowheader">Hashrate (average):</th>
-                            <td><span class="monocolored workerinfo-info" id="workerinfo_hashrate_avg"></span> <span id="workerinfo_check_hashrate_cont"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a id="workerinfo_check_hashrate" href="#" target="_blank"> Run hashrate verification test</a></span></td>
-                        </tr>
-                        <tr>
-                            <th class="table-rowheader">Hashrate (current):</th>
-                            <td class="monocolored workerinfo-info" id="workerinfo_hashrate_cur"></td>
-                        </tr>
-                        <tr>
-                            <th class="table-rowheader">Valid shares percentage:</th>
-                            <td class="monocolored workerinfo-info" id="workerinfo_validsharepercent"></td>
-                        </tr>
-                        <tr>
-                            <th class="table-rowheader">Last seen:</th>
-                            <td class="monocolored workerinfo-info" id="workerinfo_lastseen"></td>
-                        </tr>
-                        <tr>
-                            <th class="table-rowheader">Blocks solved:</th>
-                            <td class="monocolored workerinfo-info" id="workerinfo_blocks"></td>
+                            <th>Pool's luck over last 48 hours:</th>
+                            <td class="poolluck"></td>
                         </tr>
                     </table>
-                    <p>
-                        <a href="#" onClick="refreshWorker();">Refresh</a>
-                    </p>
-                    <p>&nbsp;</p>
-                    <table id="workerinfo_workerslist" align="center">
-                        <tr>
-                            <th class="table-header" colspan="3" style="padding: 15px 0px;">Hashrate by workername</th>
-                        </tr>
-                        <tr>
-                            <th class="table-smallheader">Worker name</th>
-                            <th class="table-smallheader">Current</th>
-                            <th class="table-smallheader">Average</th>
-                        </tr>
-                    </table>
-                    <p>&nbsp;</p>
-                    <table id="workerinfo_blockslist" align="center">
-                        <tr>
-                            <th class="table-header" style="padding: 15px 0px;">Solved blocks list</th>
-                        </tr>
+                </div>
+                <div>
+                    <h3>Blocks vs Hashrate</h3>
+                    <div id="graph_blkhash"></div>
+                </div>
+                <div>
+                    <h3>Pool's luck</h3>
+                    <div id="graph_luck"></div>
+                </div>
+                <div>
+                    <h3>
+                        Latest blocks mined by the pool
+                    </h3>
+                    <table id="blks">
+                        <thead>
+                            <tr>
+                                <th>Height</th>
+                                <th>Miner</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
             </div>
         </div>
-        <div id="footer" class="toplevel">
-            <table>
-                <tr>
-                    <td><em>Network hashrate:</em><span class="wrapper"><span class="globalhashrate monocolored">-- MH/s</span></span></td>
-                    <td><em>Pool hashrate:</em><span class="wrapper"><span class="poolhashrate monocolored">-- MH/s</span>/<span class="poolhashratepercent monocolored">-- %</span></span></td>
-                    <td><em>Current block:</em><span class="wrapper"><span class="currentblock monocolored">----</span></span></td>
-                    <td><em>Active workers:</em><span class="wrapper"><span class="workers monocolored">---</span></span></td>
-                    <td><em>Pool's 48-hour luck:</em><span class="wrapper"><span class="poolluck monocolored">-- %</span></span></td>
-                </tr>
+        <div id="content-workers" class="contentdiv">
+            <h3>Workers</h3>
+            <table id="workerslist">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th class="numeric">Hashrate</th>
+                    </tr>
+                </thead>
             </table>
         </div>
-    </body>
+        <div id="content-curblock" class="contentdiv">
+            <header>
+                <h3>Coinbase tx outputs for current block</h3>
+                <p class="subtitle">If a block was found right now, this would be everyone's rewards</p>
+            </header>
+            <table id="cbout">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th class="numeric">Reward</th>
+                        <th class="numeric">Percentage</th>
+                        <th class="numeric">Shares</th>
+                        <th class="numeric">Hashrate</th>
+                    </tr>
+                </thead>
+            </table>
+            <h3>Note on share management</h3>
+            <p>
+                Everyone's shares will decrease by 90% if the pool finds a block
+                (except when multiple blocks are found within a small amount of time).
+            </p>
+            <p>
+                Shares decrease by 5% whenever anyone finds a new block on the network
+                (this happens more or less every 41 seconds).
+            </p>
+            <p>
+                Workers under the minimum share floor of 8 shares don't get paid,
+                but are also not affected by the 5% share decrease
+                (this to decrease the amount of dust the pool is generating somewhat).
+            </p>
+            <p>
+                This is all part of the payout management logic in order to keep payout fair.
+            </p>
+            <p>
+                Note that this does not mean that the pool takes a fee by decreasing worker shares,
+                as shares are the only thing on which block reward payout is based. Rather,
+                this is a way to get workers that stopped mining slowly out of the system
+                while still giving them something for their work.
+                It also helps new workers joining to pool to get a little bit extra in times
+                where the pool is unlucky and can't find a block for a while.
+            </p>
+            <p>
+                These numbers might change in the future.
+            </p>
+        </div>
+        <div id="content-myworker" class="contentdiv">
+            <div id="genericworkerheader">
+                <h3>Worker <span class="currentworker"></span></h3>
+                <ul class="actions">
+                    <li><a href="#" onclick="event.preventDefault(); refreshWorker();">Refresh</a></li>
+                    <li><a href="#myworker" onclick="setAsMyWorker()">Set as my worker</a></li>
+                </ul>
+            </div>
+            <div id="myworkerheader">
+                <h3>My worker</h3>
+                <ul class="actions">
+                    <li><a href="#" onclick="event.preventDefault(); refreshWorker();">Refresh</a></li>
+                </ul>
+            </div>
+            <div id="nomyworker">
+                You have not yet selected a worker as your own. Click on your worker address in the
+                <em>Workers list</em> tab and select
+                <em>Select as my worker</em>.
+            </div>
+            <div id="workerinfo">
+                <table>
+                    <tr>
+                        <th>Payout type:</th>
+                        <td id="workerinfo_payout_type"></td>
+                    </tr>
+                    <tr>
+                        <th>Payout address:</th>
+                        <td>
+                            <a href="#" target="_blank" id="workerinfo_address"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Consolidation address:</th>
+                        <td>
+                            <span class="dailypayoutworker">
+                                <a href="#" target="_blank" id="workerinfo_consolidationaddress"></a>
+                            </span>
+                            <span class="na instantpayoutworker"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Next mining reward:</th>
+                        <td id="workerinfo_payout"></td>
+                    </tr>
+                    <tr>
+                        <th>GRLC waiting for payout:</th>
+                        <td>
+                            <span class="workerinfo-info dailypayoutworker" id="workerinfo_consolidated"></span>
+                            <span class="na instantpayoutworker"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Estimated payout fee:</th>
+                        <td>
+                            <span class="workerinfo-info dailypayoutworker" id="workerinfo_consolidatefee"></span>
+                            <span class="na instantpayoutworker"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Hashrate (average):</th>
+                        <td>
+                            <span id="workerinfo_hashrate_avg"></span>
+                            <span id="workerinfo_check_hashrate_cont">
+                                <br>
+                                <a id="workerinfo_check_hashrate" href="#" target="_blank"> Run hashrate verification test</a>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Hashrate (current):</th>
+                        <td id="workerinfo_hashrate_cur"></td>
+                    </tr>
+                    <tr>
+                        <th>Valid shares percentage:</th>
+                        <td id="workerinfo_validsharepercent"></td>
+                    </tr>
+                    <tr>
+                        <th>Last seen:</th>
+                        <td id="workerinfo_lastseen"></td>
+                    </tr>
+                    <tr>
+                        <th>Blocks solved:</th>
+                        <td id="workerinfo_blocks"></td>
+                    </tr>
+                </table>
+                <h3>Hashrate by worker name</h3>
+                <table id="workerinfo_workerslist">
+                    <thead>
+                        <tr>
+                            <th>Worker name</th>
+                            <th>Current</th>
+                            <th>Average</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div id="workerinfo_blockslist">
+                    <h3>Solved blocks list</h3>
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <ul>
+            <li>
+                <span class="label">Network:</span>
+                <span class="value globalhashrate"></span>
+            </li>
+            <li>
+                <span class="label">Pool:</span>
+                <span class="value">
+                    <span class="poolhashrate">-</span>
+                    <span class="muted">/</span>
+                    <span class="poolhashratepercent">-</span>
+                </span>
+            </li>
+            <li>
+                <span class="label">Workers:</span>
+                <span class="value workers"></span>
+            </li>
+            <li>
+                <span class="label">48-hour luck:</span>
+                <span class="value poolluck"></span>
+            </li>
+        </ul>
+    </div>
+    <div class="footer-flow"></div>
+</body>
 </html>

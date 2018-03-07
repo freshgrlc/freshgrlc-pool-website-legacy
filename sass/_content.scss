@@ -1,0 +1,203 @@
+.myworker td {
+    background-color: $border-light;
+}
+
+.myworker a {
+    color: $white;
+}
+
+#content {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 15px;
+    font-size: 1.125em;
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: normal;
+    margin: 0 0 2em;
+    text-align: center;
+}
+
+article {
+    margin-bottom: 6em;
+}
+
+article h3 {
+    margin-top: 0;
+}
+
+.date {
+    color: $white;
+    display: block;
+    font-weight: bold;
+    margin: 0 0 1rem;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.date.new::before {
+    background-color: $secondary;
+    border-radius: 1px;
+    color: $white;
+    content: "New!";
+    display: inline-block;
+    line-height: 1;
+    margin-right: 0.5em;
+    padding: 4px 4px 2px;
+    text-transform: uppercase;
+}
+
+.badge {
+    background-color: $secondary;
+    border-radius: 1px;
+    color: $white;
+    display: inline-block;
+    line-height: 1;
+    padding: 4px 4px 2px;
+}
+
+.card {
+    margin: 0 auto 2em;
+}
+
+.card-body {
+    p, code {
+        margin-bottom: 1em;
+        &:last-child  {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.card.note {
+    font-style: italic;
+    max-width: 770px;
+
+    .card-header {
+        border-bottom: 4px solid $secondary;
+        color: $white;
+        display: inline-block;
+        margin-bottom: .75em;
+    }
+
+    .card-body {
+        font-style: italic;
+    }
+
+    em {
+        font-style: normal;
+    }
+}
+
+.card.code {
+    .card-header {
+        color: $primary;
+        margin-bottom: 0.5em;
+    }
+
+    .card-body {
+        background: hsl(37, 20%, 10%);
+        border-radius: 4px;
+        color: $white;
+        font-size: 0.75em;
+        padding: 1em;
+    }
+}
+
+h3 {
+    color: $primary;
+    font-size: 1.25em;
+    margin: 3em 0 2rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.contentdiv {
+    display: none;
+}
+
+.contentdiv.active {
+    display: block;
+}
+
+#status {
+    color: #ffa517;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.currentworker {
+    text-transform: none;
+}
+
+.blkheight-check,
+.blkheight-pending {
+    color: $muted;
+    font-style: italic;
+
+    &::after {
+        content: '…';
+    }
+}
+
+.blkheight-orphaned {
+    color: $secondary;
+}
+
+.subtitle {
+    color: $muted;
+    margin-top: -1.5em;
+    font-style: italic;
+    text-align: center;
+}
+
+td.numeric {
+    font-family: 'Space Mono';
+    font-size: 0.875em;
+}
+
+.suffix {
+    color: $muted;
+}
+
+.actions {
+    list-style: none;
+    margin: -0.5em 0 1.5em;
+    padding: 0;
+    text-align: center;
+
+    li {
+        display: inline-block;
+        margin: 0 1em;
+    }
+}
+
+#workerslist td:nth-child(2) {
+    text-align: right;
+}
+
+.worker-name-none td:first-child::before {
+    color: $muted;
+    content: "None";
+    font-style: italic;
+}
+
+#workerinfo_blockslist {
+    text-align: center;
+
+    ul {
+        display: inline-block;
+        list-style: none;
+        margin: 0 auto;
+        padding: 0;
+        text-align: left;
+    }
+
+    li {
+        display: inline;
+    }
+}

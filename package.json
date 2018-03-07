@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "scripts": {
+    "bs": "browser-sync -c bs-config.js",
+    "sass": "node-sass -w -o css sass",
+    "dev": "npm-run-all -p bs sass"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "http-proxy-middleware": "^0.17.4",
+    "node-sass": "^4.7.2",
+    "npm-run-all": "^4.1.2"
+  }
+}

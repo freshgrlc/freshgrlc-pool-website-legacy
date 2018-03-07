@@ -1,0 +1,52 @@
+[data-tooltip] {
+    border-bottom: 2px dashed $border;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+[data-tooltip]::before,
+[data-tooltip]::after {
+    background-color: black;
+    position: absolute;
+    left: 50%;
+    pointer-events: none;
+    top: 100%;
+    transition: all .1s ease;
+    visibility: hidden;
+}
+
+[data-tooltip]::before {
+    height: 16px;
+    width: 16px;
+    content: '';
+    transform: translate(-50%, -2px) translateX(-8px * .707107) rotate(45deg) scale(0, 0);
+    transform-origin: center bottom;
+}
+
+[data-tooltip]::after {
+    border-radius: 4px;
+    color: $white;
+    content: attr(data-tooltip);
+    font-style: normal;
+    font-size: .75em;
+    padding: .75em 1.25em;
+    text-align: left;
+    transform: translate(-50%, 6px) scale(0, 0);
+    transform-origin: center top;
+    white-space: pre;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+[data-tooltip]:hover::before {
+    transform: translate(-50%, -2px) translateX(-8px * .707107) rotate(45deg) scale(1, 1);
+}
+
+[data-tooltip]:hover::after{
+    transform: translate(-50%, 6px) scale(1, 1);
+}
