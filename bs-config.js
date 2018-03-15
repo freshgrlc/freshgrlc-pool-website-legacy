@@ -9,7 +9,7 @@ const proxy = require('http-proxy-middleware');
 
 module.exports = {
     serveStatic: ['.'],
-    files: ['*.html', '**/*.css', '**/*.js'],
+    files: ['**/*.html', '**/*.css', '**/*.js'],
     middleware: [
         {
             route: '/api',
