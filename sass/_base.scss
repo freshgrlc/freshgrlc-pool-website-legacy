@@ -4,6 +4,7 @@ body {
     font-family: $font-sans;
     line-height: 1.4;
     margin: 0;
+    padding-bottom: 4em;
 }
 
 a {
@@ -37,6 +38,7 @@ table {
     font-size: 1rem;
     font-variant-numeric: lining-nums tabular-nums;
     margin: 0 auto 2em;
+    white-space: nowrap;
 }
 
 th,

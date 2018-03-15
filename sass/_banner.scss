@@ -1,3 +1,20 @@
+.discord {
+    float: right;
+    margin: 20px;
+    text-align: center;
+    width: 150px;
+
+    a {
+        color: $white;
+        display: block;
+        text-decoration: none;
+    }
+
+    img {
+        margin-top: -0.25em;
+    }
+}
+
 #banner {
     margin: 0 auto;
     padding: 3em 0 4em;
