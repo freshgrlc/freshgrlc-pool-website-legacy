@@ -126,6 +126,18 @@ p code {
 [data-tooltip]:hover::after {
   transform: translate(-50%, 6px) scale(1, 1); }
 
+.discord {
+  float: right;
+  margin: 20px;
+  text-align: center;
+  width: 150px; }
+  .discord a {
+    color: #fff;
+    display: block;
+    text-decoration: none; }
+  .discord img {
+    margin-top: -0.25em; }
+
 #banner {
   margin: 0 auto;
   padding: 3em 0 4em;
@@ -243,6 +255,21 @@ nav .active a {
 
 #footer .value {
   font-weight: bold; }
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10; }
+
+.overlay iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
 
 .myworker td {
   background-color: rgba(255, 226, 179, 0.125); }
