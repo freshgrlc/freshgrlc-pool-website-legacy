@@ -720,6 +720,23 @@ var init = function () {
     fixNavigation();
     highlightNewArticles();
 
+    document.querySelector('.discord a').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (document.querySelector('.overlay')) {
+            return;
+        }
+        const el = document.createElement('div');
+        el.classList.add('overlay');
+        el.innerHTML = '<iframe src="https://discordapp.com/widget?id=404767431685308417&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>';
+        document.body.appendChild(el);
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.overlay')) {
+            e.target.remove();
+        }
+    });
+
     Highcharts.setOptions({
         lang: {
             numericSymbols: null
