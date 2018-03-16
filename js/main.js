@@ -67,14 +67,13 @@ var setCbOutputs = function (data) {
     }), function (i, output) {
         var prefix = 'cbouttxrow' + i;
         var html =  '<tr class="cbouttx" id="' + prefix + '">' +
-                        '<td><a href="" target="_blank" id="' + prefix + 'addr"></a></td>' +
+                        '<td><a href="#' + output.address + '">' + output.address + '</a></td>' +
                         '<td class="numeric" id="' + prefix + 'reward"></td>' +
                         '<td class="numeric" id="' + prefix + 'pct"></td>' +
                         '<td class="numeric" id="' + prefix + 'shares"></td>' +
                         '<td class="numeric" id="hashrate' + output.address + '"></td>' +
                     '</tr>';
         $('#cbout').append(html);
-        setAddress('#' + prefix + 'addr', output.address);
         $('#' + prefix + 'reward').text(Math.floor(output.reward) / 100000000);
         $('#' + prefix + 'pct').text(output.percentage + '%');
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
@@ -320,13 +319,9 @@ var redrawMinedBlocks = function () {
     });
     $.each(ids, function (_, height) {
         var prefix = 'blk' + height;
-        var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#" id="' + prefix + 'miner"></a></td><td class="blkheight-status" id="' + prefix + 'status"></td></tr>';
+        var html = '<tr class="blkheight" id="' + prefix + '"><td class="blkheight-blk"><a href="#" target="_blank" id="' + prefix + 'nr"></a></td><td><a class="blockheight" href="#' + blocks[height] + '">' + blocks[height] + '</a></td><td class="blkheight-status" id="' + prefix + 'status"></td></tr>';
         $('#blks').append(html);
         setBlockLink('#' + prefix + 'nr', height);
-        $('#' + prefix + 'miner').text(blocks[height]);
-        $('#' + prefix + 'miner').click(function () {
-            showWorker(blocks[height]);
-        });
         if (curHeight == 0) {
             return;
         }
