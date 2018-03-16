@@ -67,7 +67,7 @@ var setCbOutputs = function (data) {
     }), function (i, output) {
         var prefix = 'cbouttxrow' + i;
         var html =  '<tr class="cbouttx" id="' + prefix + '">' +
-                        '<td><a href="#' + output.address + '">' + output.address + '</a></td>' +
+                        '<td><a href="#" id="' + prefix + 'worker">' + output.address + '</a></td>' +
                         '<td class="numeric" id="' + prefix + 'reward"></td>' +
                         '<td class="numeric" id="' + prefix + 'pct"></td>' +
                         '<td class="numeric" id="' + prefix + 'shares"></td>' +
@@ -79,6 +79,8 @@ var setCbOutputs = function (data) {
         $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
 
         var workerAddress = workerAddressMap[output.address] != null ? workerAddressMap[output.address] : output.address;
+
+        $('#' + prefix + 'worker').prop('href', '#' + workerAddress);
 
         if (workerAddress == myAddress) {
             $('#' + prefix).addClass('myworker');
