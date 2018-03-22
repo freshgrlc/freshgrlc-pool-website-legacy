@@ -11,6 +11,8 @@ var redrawMinedBlocksTimeout = null;
 var formatHashrate = function (hashrate) {
     if (!hashrate) {
         return '-';
+    } else if (typeof(hashrate) == 'string') {
+        hashrate = parseFloat(hashrate);
     }
 
     var suffix = 'H/s';
