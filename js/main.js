@@ -138,13 +138,20 @@ var _showWorker = function (address) {
             dataType: 'json',
             success: function (data, textStatus, jqXHR) {
                 if (data != null && data != '') {
+                    var online = data.hashrate > 0;
                     var dailyPayout = address != data.nextpayout.address && data.nextpayout.address != null && data.nextpayout.address != '';
 
                     setDailyPayoutWorker(dailyPayout);
 
-                    $('#workerinfo_payout_type').text(dailyPayout ? 'Daily' : 'Instant');
-                    $('#workerinfo_payout').html('' + data.nextpayout.grlc + ' <span class="suffix">GRLC</span>');
-                    $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + '%');
+                    if (online) {
+                        $('#workerinfo_payout_type').text(dailyPayout ? 'Daily' : 'Instant');
+                        $('#workerinfo_payout').html('' + data.nextpayout.grlc + ' <span class="suffix">GRLC</span>');
+                        $('#workerinfo_validsharepercent').text('' + (Math.round(data.shares.valid / (data.shares.valid + data.shares.invalid) * 1000) / 10) + '%');
+                    } else {
+                        $('#workerinfo_payout_type').text('Offline');
+                        $('#workerinfo_payout').html(' - ');
+                        $('#workerinfo_validsharepercent').text(' - ');
+                    }
                     $('#workerinfo_blocks').text('' + data.foundblocks.length);
 
                     setAddress('#workerinfo_consolidationaddress', data.nextpayout.address, 'workerinfo-info');
@@ -152,7 +159,7 @@ var _showWorker = function (address) {
                     setAddressHashrate('#workerinfo_hashrate_avg', data.hashrate);
                     setAddressHashrate('#workerinfo_hashrate_cur', data.curhashrate);
 
-                    if (address == myAddress) {
+                    if (online && address == myAddress) {
                         $('#workerinfo_check_hashrate_cont').show();
                         $('#workerinfo_check_hashrate').attr('href', 'hashratecheck/?' + address);
                     }
@@ -162,23 +169,25 @@ var _showWorker = function (address) {
                     $('#workerinfo_lastseen').text(formatDate(date));
 
                     $('.worker-name-hashrate').remove();
-                    $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
-                        var prefix = 'workernamehashrate' + i;
-                        var html =  '<tr class="worker-name-hashrate" id="' + prefix + '">' +
-                                        '<td id="' + prefix + 'name"></td>' +
-                                        '<td id="' + prefix + 'currate"></td>' +
-                                        '<td id="' + prefix + 'avgrate"></td>' +
-                                    '</tr>';
-                        $('#workerinfo_workerslist').append(html);
-                        if (workername == '') {
-                            $('#' + prefix).addClass('worker-name-none');
-                        }
-                        else {
-                            $('#' + prefix + 'name').text(workername);
-                        }
-                        setAddressHashrate('#' + prefix + 'currate', data.workershashrate[workername].current);
-                        setAddressHashrate('#' + prefix + 'avgrate', data.workershashrate[workername].average);
-                    });
+                    if (online) {
+                        $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
+                            var prefix = 'workernamehashrate' + i;
+                            var html =  '<tr class="worker-name-hashrate" id="' + prefix + '">' +
+                                            '<td id="' + prefix + 'name"></td>' +
+                                            '<td id="' + prefix + 'currate"></td>' +
+                                            '<td id="' + prefix + 'avgrate"></td>' +
+                                        '</tr>';
+                            $('#workerinfo_workerslist').append(html);
+                            if (workername == '') {
+                                $('#' + prefix).addClass('worker-name-none');
+                            }
+                            else {
+                                $('#' + prefix + 'name').text(workername);
+                            }
+                            setAddressHashrate('#' + prefix + 'currate', data.workershashrate[workername].current);
+                            setAddressHashrate('#' + prefix + 'avgrate', data.workershashrate[workername].average);
+                        });
+                    }
 
                     $('.worker-solved').remove();
                     $('#workerinfo_blockslist').toggle(data.foundblocks.length > 0);
@@ -192,7 +201,7 @@ var _showWorker = function (address) {
                         setBlockLink('#' + prefix + 'height', block);
                     });
 
-                    if (dailyPayout) {
+                    if (online && dailyPayout) {
                         var payoutAddress = data.nextpayout.address;
 
                         $.ajax({
