@@ -196,34 +196,61 @@ var _showWorker = function (address) {
                         var payoutAddress = data.nextpayout.address;
 
                         $.ajax({
-                            type:   'GET',
-                            url:    'https://garli.co.in/ext/getaddress/' + payoutAddress,
-                            contentType: "application/json",
-                            dataType: 'json',
-                            success: function (data, textStatus, jqXHR) {
-                                if (data.balance != null) {
-                                    $('#workerinfo_consolidated').html('' + data.balance + ' <span class="suffix">GRLC</span>');
+                            type:       'GET',
+                            url:        'https://garlicinsight.com/insight-grlc-api/addr/' + payoutAddress + '/balance',
+                            contentType:'application/json',
+                            dataType:   'json',
+                            success:    function (data, textStatus, jqXHR) {
+                                if (data == null) {
+                                    data = 0;
+                                } else {
+                                    data /= 100000000;
+                                }
+                                $('#workerinfo_consolidated').html('' + data + ' <span class="suffix">GRLC</span>');
+                            }
+                        });
+                        $.ajax({
+                            type:       'GET',
+                            url:        'https://garlicinsight.com/insight-grlc-api/txs/?address=' + payoutAddress,
+                            contentType:'application/json',
+                            dataType:   'json',
+                            success:    function (data, textStatus, jqXHR) {
+                                var getAddressOutput = function (txos, address) {
+                                    for (var i in txos) {
+                                        var txo = txos[i];
 
-                                    var utxos = 0;
-                                    var utxoValue = 0.0;
+                                        if (txo.scriptPubKey == undefined || txo.scriptPubKey.addresses == undefined)
+                                            continue;
 
-                                    for (var i in data.last_txs) {
-                                        var tx = data.last_txs[i];
-
-                                        if (tx.vin.coinbase != undefined) {
-                                            utxos++;
-                                            utxoValue += tx.vout[payoutAddress] / 100000000.0;
-                                        } else {
-                                            break;
+                                        for (var ai in txo.scriptPubKey.addresses) {
+                                            if (txo.scriptPubKey.addresses[ai] == address) {
+                                                return parseFloat(txo.value);
+                                            }
                                         }
                                     }
+                                    return 0;
+                                };
 
+                                var utxos = 0;
+                                var utxoValue = 0.0;
+
+                                for (var i in data.txs) {
+                                    var tx = data.txs[i];
+
+                                    if (tx.vin.length == 1 && tx.vin[0].coinbase != undefined) {
+                                        utxos++;
+                                        utxoValue += getAddressOutput(tx.vout, payoutAddress);
+                                    } else {
+                                        break;
+                                    }
+                                }
+
+                                if (utxos > 0) {
                                     var estimatedSize = (utxos * 76 + 7 + 34) * 1.457;
                                     var estimatedFee = estimatedSize * 5.0 / 100000000.0;
 
                                     $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + '%');
                                 } else {
-                                    $('#workerinfo_consolidated').html('0 <span class="suffix">GRLC</span>');
                                     $('#workerinfo_consolidatefee').text(' - ');
                                 }
                             }
