@@ -376,9 +376,10 @@
                     <li>Daily payout</li>
                 </ul>
             <p>
-                Instant payout is what made this pool special from the very beginning. You directly get a part of the block's miners reward
-                (and transaction fees).
-                <br /> Basically, you are "solo-mining together" and that against 0% fee. Simple and no bamboozle.
+                Instant payout is what made this pool special from the very beginning. You directly get a part of the miners reward
+                (and transaction fees) via the block's <a href="https://bitcoin.org/en/glossary/coinbase-transaction" target="_blank">
+                <i>coinbase transaction</i></a>.<br />
+                Basically, you are "solo-mining together" and that against 0% fee! Simple and no bamboozle.
             </p>
             <p>
                 Since mid-February, we also offer daily payouts. This is a way to reduce the amount of Unspent Transaction Outputs (UTXOs)
@@ -419,6 +420,30 @@
                 in your wallet. Usually (if you use a proper wallet), you will receive the transaction notification even
                 before the pool lists the block as found.
             </p>
+            <div class="card note">
+                <div class="card-header">
+                    Warning
+                </div>
+                <div class="card-body">
+                    <p>
+                        With the exceptions that the mining reward is split between workers on the pool and the fact
+                        that the pool determines which transactions will be included, using instant payout is very similar
+                        to solo-mining. Instead of mining for the pool's wallet and being compensated for your work afterwards,
+                        (a part of) the mining reward is directly added to the address you are mining towards, using the block's
+                        coinbase transaction. After this the new coins need to mature before you will be able to spend it.
+                    </p>
+                    <p>
+                        If you are not mining towards a wallet where you control your own private keys and are instead using a
+                        service that holds and manages the coins for you, make sure this service is fully compatible with Garlicoin,
+                        as it seems that some of these services will ignore the fact that you mined coins for them and not properly
+                        accredit these coins to your account.
+                    </p>
+                    <p>
+                        If in doubt, use daily payout instead, as it will send your coins from a pool-managed P2SH-P2WSH address
+                        instead of using coinbase transactions.
+                    </p>
+                </div>
+            </div>
             <p>
                 This method is also easiest to set up. For the 3 most popular miners,
                 <em>ccminer</em>,
