@@ -708,7 +708,7 @@ var initNavigation = function () {
         else if (hash == 'myworker') {
             _showWorker(myAddress);
         }
-        else if (hash.match(/G\w{25,33}/)) {
+        else if (hash.match(/[GMWQmnw]\w{25,33}/)) {
             _showWorker(hash);
             elementToShow = '#content-myworker';
         }
