@@ -10,13 +10,11 @@ const proxy = require('http-proxy-middleware');
 module.exports = {
     serveStatic: ['.'],
     files: ['**/*.html', '**/*.css', '**/*.js'],
-    middleware: [
-        {
-            route: '/api',
-            handle: proxy({
-                target: 'https://www.freshgarlicblocks.net/',
-                changeOrigin: true,
-            }),
-        }
-    ]
+    middleware: [{
+        route: '/api',
+        handle: proxy({
+            target: 'https://www.freshgarlicblocks.net/',
+            changeOrigin: true,
+        }),
+    }]
 };

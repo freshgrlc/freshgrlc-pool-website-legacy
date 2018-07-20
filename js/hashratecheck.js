@@ -1,4 +1,3 @@
-
 var worker;
 var shareValue = null;
 var running = false;
@@ -90,7 +89,7 @@ var init = function () {
 
     message('Synchronizing with worker - Connecting to pool...', true);
 
-    eventSource.onmessage = function(event) {
+    eventSource.onmessage = function (event) {
         var newShares = Math.round(JSON.parse(event.data).shares);
 
         console.log('Worker [' + worker + ']: Shares: ' + newShares);
