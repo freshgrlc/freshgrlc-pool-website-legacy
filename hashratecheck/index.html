@@ -1,158 +1,124 @@
 <html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Karla|Space+Mono:700" rel="stylesheet">
+        <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="shortcut icon" type="image/png" href="/favicon.png" />
 
-<head>
-    <link href="https://fonts.googleapis.com/css?family=Karla|Space+Mono:700" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+        <title>FreshGRLC.NET - FreshGarlicBlocks.net - 0% fee, instant payout Garlicoin mining pool</title>
 
-    <title>FreshGRLC.NET - FreshGarlicBlocks.net - 0% fee, instant payout Garlicoin mining pool</title>
-
-    <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script language="javascript" src="/js/hashratecheck.js"></script>
-</head>
-
-<body onLoad="init();">
-    <div id="banner" class="toplevel">
-        <p>
-            <a href="/">
-                <img src="/banner.png" />
-            </a>
-        </p>
-        <h1>The 0% fee, instant
-            <span class="tooltip">*
-                <div class="tooltiptext">
-                    <p>The mining reward is transfered to your wallet instantly whenever a block gets mined.</p>
-                    <p> However, as part of the Garlicoin protocol, you will not be able to use these new coins until the network
-                        as a whole has mined another 100 blocks.</p>
-                    <p>Depending on the wallet you are using, these coins might or might not show up on your balance in the
-                        mean time. If in doubt, please use a block explorer to verify you were properly payed out.</p>
-                </div>
-            </span>
+        <script language="javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script language="javascript" src="/js/hashratecheck.js"></script>
+    </head>
+    <body onLoad="init();">
+        <div id="banner" class="toplevel">
+            <p>
+                <a href="/"><img src="/banner.png" /></a>
+            </p>
+            <h1>The 0% fee, instant<span class="tooltip">*<div class="tooltiptext">
+                <p>The mining reward is transfered to your wallet instantly whenever a block gets mined.</p>
+                <p> However, as part of the Garlicoin protocol, you will not be able to use these new coins
+                until the network as a whole has mined another 100 blocks.</p>
+                <p>Depending on the wallet you are using, these coins might or might not show up on your balance in the mean time.
+                If in doubt, please use a block explorer to verify you were properly payed out.</p>
+            </div></span>
             payout Garlicoin mining pool.</h1>
-    </div>
-    <div id="content" class="toplevel">
-        <div style="width: 700px; margin: 0px auto; text-align: left;">
-            <h1 class="yellow">FreshGRLC worker hashrate verification page</h1>
-            <p>
-                This page was created because I still occasionally receive complaints about the hashrate on the pool's website being wrong.
-            </p>
-            <p>
-                <span class="yellow" style="font-style: italic; font-weight: 600;">Before we continue</span>
-                <br /> If you are using
-                <em>ccminer</em>, make sure you have added the
-                <span class="monocolored-small">--submit-stale</span>
-                flag to your command / BAT file, as explained in the
-                <i>How to mine</i> tab. This will increase the amount of valid shares that are sent to the pool, therefore increasing
-                your payout and pool-detected hashrate.
-            </p>
-            <p>
-                This page allows you to manually verify whether the hashrate calculated by the pool corresponds to the amount of shares your
-                worker is sending in. If this is indeed that case, then for whatever reason (including the possibility that
-                you are just being unlucky), your miner is sending less shares to the pool than expected for its hashrate,
-                hence the pool estimates a lower hashrate than it should.
-            </p>
-            <p class="yellow" style="font-style: italic; font-weight: 600;">
-                If this is the case, then it is not a problem with the pool, but rather with your mining setup.
-            </p>
-            <p>
-                You are advised to run the test until the reported hashrate more or less stabilizes, which takes typically about half an
-                hour (1800 seconds). At the very least we recommend to leave the test running for a minute or 10 (600 seconds).
-                The test works best if you have only one worker connected to the pool under a specific address. That way
-                you can verify the pool share counter against the shares reported by your mining software.
-            </p>
-            <p>
-                If for whatever reason you see the pool processing
-                <em>
-                    <i>less</i>
-                </em> shares than you sent in (with the exception of a very small difference, see the note below), please contact
-                <em>nuc1e4r5n4k3#5815</em> on Discord about it.
-            </p>
-            <p>
-                <span class="smallheading">Note</span>
-                <br /> Using this page to verify your hashrate will not interrupt the mining at this pool, even if it requires
-                you to reconnect to a different stratum port.
-            </p>
-            <p>
-                <span class="smallheading">Note</span>
-                <br /> Due to the way this page connects to the pool, it can happen that it occasionally misses a single share.
-                The chance for this to happen is however very low and it should not be more than max 1%.
-                <br /> This only affects this page and not the pool in general.
-            </p>
-            <p>&nbsp;</p>
-            <table align="center">
-                <tr>
-                    <td>
-                        <img src="/working.gif" id="busy" />
-                    </td>
-                    <td id="status" valign="center"></td>
-                </tr>
-            </table>
         </div>
-        <div style="width: 700px; margin: 0px auto; text-align: left;">
-            <table id="input">
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">How does your mining software report (accepted) shares:</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <input type="radio" name="sharetype" id="scnt" value="1" checked="yes" />
-                        <label for="scnt"> By share count (reported shares increase by 1, for
-                            <em>ccminer</em>)</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <input type="radio" name="sharetype" id="sval" value="1" />
-                        <label for="sval"> By share value (reported shares increase by 96 or 512, for
-                            <em>sgminer</em> and most other miners)</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">Current accepted shares reported by your mining software:</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <input id="curshares" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">Ready?</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <input type="button" id="go" style="height: 30px; font-size: 16px;" value="Start"
-                        />
-                    </td>
-                </tr>
-            </table>
-            <table id="data">
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">Seconds elapsed:</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <span id="curseconds" class="hashrate"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">Current reported shares by your mining software:</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <span id="curminershares" class="hashrate"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="smallheading" style="padding-top: 30px;">Hashrate calculation:</td>
-                </tr>
-                <tr>
-                    <td> &nbsp; &nbsp; &nbsp;
-                        <span id="calc" class="hashrate"></span>
-                    </td>
-                </tr>
-            </table>
+        <div id="content" class="toplevel">
+            <div style="width: 700px; margin: 0px auto; text-align: left;">
+                <h1 class="yellow">FreshGRLC worker hashrate verification page</h1>
+                <p>
+                    This page was created because I still occasionally receive complaints about the hashrate on the pool's website being wrong.
+                </p>
+                <p>
+                    <span class="yellow" style="font-style: italic; font-weight: 600;">Before we continue</span><br />
+                    If you are using <em>ccminer</em>, make sure you have added the <span class="monocolored-small">--submit-stale</span>
+                    flag to your command / BAT file, as explained in the <i>How to mine</i> tab. This will increase the amount of valid
+                    shares that are sent to the pool, therefore increasing your payout and pool-detected hashrate.
+                </p>
+                <p>
+                    This page allows you to manually verify whether the hashrate calculated by the pool corresponds to the amount of
+                    shares your worker is sending in. If this is indeed that case, then for whatever reason (including the possibility
+                    that you are just being unlucky), your miner is sending less shares to the pool than expected for its hashrate,
+                    hence the pool estimates a lower hashrate than it should.
+                </p>
+                <p class="yellow" style="font-style: italic; font-weight: 600;">
+                    If this is the case, then it is not a problem with the pool, but rather with your mining setup.
+                </p>
+                <p>
+                    You are advised to run the test until the reported hashrate more or less stabilizes, which takes typically about
+                    half an hour (1800 seconds). At the very least we recommend to leave the test running for a minute or 10 (600 seconds).
+                    The test works best if you have only one worker connected to the pool under a specific address. That way you can verify the
+                    pool share counter against the shares reported by your mining software.
+                </p>
+                <p>
+                    If for whatever reason you see the pool processing <em><i>less</i></em> shares than you sent in
+                    (with the exception of a very small difference, see the note below), please contact
+                    <em>nuc1e4r5n4k3#5815</em> on Discord about it.
+                </p>
+                <p>
+                    <span class="smallheading">Note</span><br />
+                    Using this page to verify your hashrate will not interrupt the mining at this pool, even if it requires you
+                    to reconnect to a different stratum port.
+                </p>
+                <p>
+                    <span class="smallheading">Note</span><br />
+                    Due to the way this page connects to the pool, it can happen that it occasionally misses a single share.
+                    The chance for this to happen is however very low and it should not be more than max 1%.<br />
+                    This only affects this page and not the pool in general.
+                </p>
+                <p>&nbsp;</p>
+                <table align="center">
+                    <tr>
+                        <td><img src="/working.gif" id="busy" /></td>
+                        <td id="status" valign="center"></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="width: 700px; margin: 0px auto; text-align: left;">
+                <table id="input">
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">How does your mining software report (accepted) shares:</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <input type="radio" name="sharetype" id="scnt" value="1" checked="yes" /><label for="scnt"> By share count (reported shares increase by 1, for <em>ccminer</em>)</label></td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <input type="radio" name="sharetype" id="sval" value="1" /><label for="sval"> By share value (reported shares increase by 96 or 512, for <em>sgminer</em> and most other miners)</label></td>
+                    </tr>
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">Current accepted shares reported by your mining software:</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <input id="curshares" /></td>
+                    </tr>
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">Ready?</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <input type="button" id="go" style="height: 30px; font-size: 16px;" value="Start" /></td>
+                    </tr>
+                </table>
+                <table id="data">
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">Seconds elapsed:</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <span id="curseconds" class="hashrate"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">Current reported shares by your mining software:</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <span id="curminershares" class="hashrate"></span></td>
+                    </tr>
+                    <tr>
+                        <td class="smallheading" style="padding-top: 30px;">Hashrate calculation:</td>
+                    </tr>
+                    <tr>
+                        <td> &nbsp; &nbsp; &nbsp; <span id="calc" class="hashrate"></span></td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
-</body>
-
+    </body>
 </html>

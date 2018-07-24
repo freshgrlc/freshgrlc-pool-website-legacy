@@ -11,7 +11,7 @@ var redrawMinedBlocksTimeout = null;
 var formatHashrate = function (hashrate) {
     if (!hashrate) {
         return '-';
-    } else if (typeof (hashrate) == 'string') {
+    } else if (typeof(hashrate) == 'string') {
         hashrate = parseFloat(hashrate);
     }
 
@@ -19,13 +19,16 @@ var formatHashrate = function (hashrate) {
     if (hashrate >= 1e12) {
         suffix = 'TH/s';
         hashrate /= 1e12;
-    } else if (hashrate >= 1e9) {
+    }
+    else if (hashrate >= 1e9) {
         suffix = 'GH/s';
         hashrate /= 1e9;
-    } else if (hashrate >= 1e6) {
+    }
+    else if (hashrate >= 1e6) {
         suffix = 'MH/s';
         hashrate /= 1e6;
-    } else if (hashrate >= 1e3) {
+    }
+    else if (hashrate >= 1e3) {
         suffix = 'kH/s';
         hashrate /= 1e3;
     }
@@ -65,17 +68,17 @@ var setCbOutputs = function (data) {
         return a.reward < b.reward ? 1 : -1;
     }), function (i, output) {
         var prefix = 'cbouttxrow' + i;
-        var html = '<tr class="cbouttx" id="' + prefix + '">' +
-            '<td><a href="#" id="' + prefix + 'worker">' + output.address + '</a></td>' +
-            '<td class="numeric" id="' + prefix + 'reward"></td>' +
-            '<td class="numeric" id="' + prefix + 'pct"></td>' +
-            '<td class="numeric" id="' + prefix + 'shares"></td>' +
-            '<td class="numeric" id="hashrate' + output.address + '"></td>' +
-            '</tr>';
+        var html =  '<tr class="cbouttx" id="' + prefix + '">' +
+                        '<td><a href="#" id="' + prefix + 'worker">' + output.address + '</a></td>' +
+                        '<td class="numeric" id="' + prefix + 'reward"></td>' +
+                        '<td class="numeric" id="' + prefix + 'pct"></td>' +
+                        '<td class="numeric" id="' + prefix + 'shares"></td>' +
+                        '<td class="numeric" id="hashrate' + output.address + '"></td>' +
+                    '</tr>';
         $('#cbout').append(html);
         $('#' + prefix + 'reward').text(Math.floor(output.reward) / 100000000);
         $('#' + prefix + 'pct').text(output.percentage + '%');
-        $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100) / 100);
+        $('#' + prefix + 'shares').text(Math.floor(parseFloat(output.shares) * 100)/100);
 
         var workerAddress = workerAddressMap[output.address] != null ? workerAddressMap[output.address] : output.address;
 
@@ -90,11 +93,11 @@ var setCbOutputs = function (data) {
 };
 
 var _showWorker = function (address) {
-    var setDailyPayoutWorker = function (dailyPayout) {
+    var setDailyPayoutWorker = function(dailyPayout) {
         if (dailyPayout) {
             $('.instantpayoutworker').hide();
             $('.dailypayoutworker').show();
-        } else {
+        }  else {
             $('.dailypayoutworker').hide();
             $('.instantpayoutworker').show();
         }
@@ -129,8 +132,8 @@ var _showWorker = function (address) {
         setAddress('#workerinfo_address', address, 'workerinfo-info');
 
         $.ajax({
-            type: 'GET',
-            url: '/api/workerinfo/' + address,
+            type:   'GET',
+            url:    '/api/workerinfo/' + address,
             contentType: "application/json",
             dataType: 'json',
             success: function (data, textStatus, jqXHR) {
@@ -169,15 +172,16 @@ var _showWorker = function (address) {
                     if (online) {
                         $.each(Object.keys(data.workershashrate).sort(), function (i, workername) {
                             var prefix = 'workernamehashrate' + i;
-                            var html = '<tr class="worker-name-hashrate" id="' + prefix + '">' +
-                                '<td id="' + prefix + 'name"></td>' +
-                                '<td id="' + prefix + 'currate"></td>' +
-                                '<td id="' + prefix + 'avgrate"></td>' +
-                                '</tr>';
+                            var html =  '<tr class="worker-name-hashrate" id="' + prefix + '">' +
+                                            '<td id="' + prefix + 'name"></td>' +
+                                            '<td id="' + prefix + 'currate"></td>' +
+                                            '<td id="' + prefix + 'avgrate"></td>' +
+                                        '</tr>';
                             $('#workerinfo_workerslist').append(html);
                             if (workername == '') {
                                 $('#' + prefix).addClass('worker-name-none');
-                            } else {
+                            }
+                            else {
                                 $('#' + prefix + 'name').text(workername);
                             }
                             setAddressHashrate('#' + prefix + 'currate', data.workershashrate[workername].current);
@@ -190,9 +194,9 @@ var _showWorker = function (address) {
                     $('#workerinfo_blockslist ul').empty();
                     $.each(data.foundblocks, function (i, block) {
                         var prefix = 'foundblockrow' + i;
-                        var html = '<li class="worker-solved" id="' + prefix + '">' +
-                            '<a href="" target="_blank" id="' + prefix + 'height"></a>' +
-                            '</li>\n';
+                        var html =  '<li class="worker-solved" id="' + prefix + '">' +
+                                        '<a href="" target="_blank" id="' + prefix + 'height"></a>' +
+                                    '</li>\n';
                         $('#workerinfo_blockslist ul').append(html);
                         setBlockLink('#' + prefix + 'height', block);
                     });
@@ -201,11 +205,11 @@ var _showWorker = function (address) {
                         var payoutAddress = data.nextpayout.address;
 
                         $.ajax({
-                            type: 'GET',
-                            url: 'https://garlicinsight.com/insight-grlc-api/addr/' + payoutAddress + '/balance',
-                            contentType: 'application/json',
-                            dataType: 'json',
-                            success: function (data, textStatus, jqXHR) {
+                            type:       'GET',
+                            url:        'https://garlicinsight.com/insight-grlc-api/addr/' + payoutAddress + '/balance',
+                            contentType:'application/json',
+                            dataType:   'json',
+                            success:    function (data, textStatus, jqXHR) {
                                 if (data == null) {
                                     data = 0;
                                 } else {
@@ -215,11 +219,11 @@ var _showWorker = function (address) {
                             }
                         });
                         $.ajax({
-                            type: 'GET',
-                            url: 'https://garlicinsight.com/insight-grlc-api/txs/?address=' + payoutAddress,
-                            contentType: 'application/json',
-                            dataType: 'json',
-                            success: function (data, textStatus, jqXHR) {
+                            type:       'GET',
+                            url:        'https://garlicinsight.com/insight-grlc-api/txs/?address=' + payoutAddress,
+                            contentType:'application/json',
+                            dataType:   'json',
+                            success:    function (data, textStatus, jqXHR) {
                                 var getAddressOutput = function (txos, address) {
                                     for (var i in txos) {
                                         var txo = txos[i];
@@ -279,7 +283,8 @@ var setAsMyWorker = function () {
 var showWorker = function (address) {
     if (address == myAddress) {
         location.hash = '#myworker';
-    } else {
+    }
+    else {
         location.hash = '#' + address;
     }
 };
@@ -290,20 +295,17 @@ var buildWorkerList = function (data) {
     $('.workerentry').remove();
 
     $.each(data, function (address, hashrate) {
-        asList.push({
-            'address': address,
-            'hashrate': hashrate.average
-        });
+        asList.push({ 'address': address, 'hashrate': hashrate.average });
     });
 
     $.each(asList.sort(function (a, b) {
         return a.hashrate < b.hashrate ? 1 : -1;
     }), function (i, output) {
         var prefix = 'worker' + i;
-        var html = '<tr class="workerentry" id="' + prefix + '">' +
-            '<td><a class="workerlink" href="#" id="' + prefix + 'addr"></a></td>' +
-            '<td id="' + prefix + 'rate"></td>' +
-            '</tr>';
+        var html =  '<tr class="workerentry" id="' + prefix + '">' +
+                        '<td><a class="workerlink" href="#" id="' + prefix + 'addr"></a></td>' +
+                        '<td id="' + prefix + 'rate"></td>' +
+                    '</tr>';
         $('#workerslist').append(html);
         $('#' + prefix + 'addr').text(output.address).attr('href', '#' + output.address);
         setAddressHashrate('#' + prefix + 'rate', output.hashrate);
@@ -318,17 +320,17 @@ var buildWorkerList = function (data) {
 };
 
 var redrawMinedBlocks = function () {
-    var getBlockStatus = function (height, cb) {
+    var getBlockStatus = function(height, cb) {
         $.ajax({
-            type: 'GET',
-            url: 'https://garlicinsight.com/insight-grlc-api/block-index/' + height,
+            type:   'GET',
+            url:    'https://garlicinsight.com/insight-grlc-api/block-index/' + height,
             contentType: "application/json",
             dataType: 'json',
             success: function (data, textStatus, jqXHR) {
                 if (data != null && data != '' && data.blockHash != null && data.blockHash != '') {
                     $.ajax({
-                        type: 'GET',
-                        url: 'https://garlicinsight.com/insight-grlc-api/block/' + data.blockHash,
+                        type:   'GET',
+                        url:    'https://garlicinsight.com/insight-grlc-api/block/' + data.blockHash,
                         contentType: "application/json",
                         dataType: 'json',
                         success: function (data, textStatus, jqXHR) {
@@ -425,8 +427,8 @@ var setWorkers = function (workers) {
 
 var getAndSetLuckInfo = function () {
     $.ajax({
-        type: 'GET',
-        url: '/api/luck/',
+        type:   'GET',
+        url:    '/api/luck/',
         contentType: "application/json",
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
@@ -478,10 +480,10 @@ var drawLuckGraphs = function (data, average) {
     });
 
     $.each(data, function (i, entry) {
-        blocksVsHashrateSeries[0].data.push([entry.startBlock + 50, Math.floor(entry.hashratePercent * 1000) / 10]);
-        blocksVsHashrateSeries[1].data.push([entry.startBlock + 50, Math.floor(entry.blocksPercent * 1000) / 10]);
+        blocksVsHashrateSeries[0].data.push([ entry.startBlock + 50, Math.floor(entry.hashratePercent * 1000) / 10 ]);
+        blocksVsHashrateSeries[1].data.push([ entry.startBlock + 50, Math.floor(entry.blocksPercent * 1000) / 10 ]);
 
-        luckSeries[0].data.push([entry.startBlock + 50, Math.floor(entry.luck * 1000) / 10]);
+        luckSeries[0].data.push([ entry.startBlock + 50, Math.floor(entry.luck * 1000) / 10 ]);
     });
 
     $('#graph_blkhash').highcharts({
@@ -536,12 +538,12 @@ var drawLuckGraphs = function (data, average) {
                 color: colors.text
 
             },
-            itemHoverStyle: {
+            itemHoverStyle:{
                 color: colors.white
             }
         },
         tooltip: {
-            formatter: function () {
+            formatter: function() {
                 return '<b>' + this.series.name + '</b><br>' + (this.x - 50) + '-' + (this.x + 50) + ':   <b>' + this.y + ' %</b>';
             }
         },
@@ -573,7 +575,7 @@ var drawLuckGraphs = function (data, average) {
                 }
             }
         },
-        colors: [colors.secondary, colors.primary],
+        colors: [colors.secondary , colors.primary],
         series: blocksVsHashrateSeries
     });
 
@@ -640,12 +642,12 @@ var drawLuckGraphs = function (data, average) {
                 fontWeight: 'normal',
                 color: colors.text
             },
-            itemHoverStyle: {
+            itemHoverStyle:{
                 color: colors.white
             }
         },
         tooltip: {
-            formatter: function () {
+            formatter: function() {
                 return '<b>' + this.series.name + '</b><br/>' + (this.x - 50) + '-' + (this.x + 50) + ':   <b>' + this.y + ' %</b>';
             }
         },
@@ -702,9 +704,11 @@ var initNavigation = function () {
         let elementToShow = '#content-' + hash;
         if (hash == 'stats') {
             getAndSetLuckInfo();
-        } else if (hash == 'myworker') {
+        }
+        else if (hash == 'myworker') {
             _showWorker(myAddress);
-        } else if (hash.match(/[GMWQmnw]\w{25,33}/)) {
+        }
+        else if (hash.match(/[GMWQmnw]\w{25,33}/)) {
             _showWorker(hash);
             elementToShow = '#content-myworker';
         }
@@ -731,9 +735,7 @@ var fixNavigation = function () {
     };
 
     syncFixity();
-    window.addEventListener('scroll', syncFixity, {
-        passive: true
-    });
+    window.addEventListener('scroll', syncFixity, { passive: true });
 };
 
 var highlightNewArticles = function () {
@@ -753,14 +755,20 @@ var init = function () {
     fixNavigation();
     highlightNewArticles();
 
-    document.querySelector('.discord a').addEventListener('click', function (e) {
+    document.querySelector('.discord a').addEventListener('click', function(e) {
         e.preventDefault();
-        document.getElementsByClassName('overlay')[0].style.display = 'block';
+        if (document.querySelector('.overlay')) {
+            return;
+        }
+        const el = document.createElement('div');
+        el.classList.add('overlay');
+        el.innerHTML = '<iframe src="https://discordapp.com/widget?id=404767431685308417&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>';
+        document.body.appendChild(el);
     });
 
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
         if (e.target.matches('.overlay')) {
-            e.target.style.display="none";
+            e.target.remove();
         }
     });
 
@@ -784,7 +792,7 @@ var init = function () {
     var poolHashrate = 0;
     var networkHashrate = 0;
 
-    eventSource.onmessage = function (event) {
+    eventSource.onmessage = function(event) {
         var rawdata = JSON.parse(event.data);
         var type = Object.keys(rawdata)[0];
         var data = rawdata[type];
