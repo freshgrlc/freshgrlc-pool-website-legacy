@@ -45,7 +45,7 @@ var setAddress = function (id, address, cls) {
     var $parent = $target.parent();
 
     $target.text(address);
-    $target.attr('href', 'https://garlicinsight.com/address/' + address);
+    $target.attr('href', 'https://insight.garli.co.in/address/' + address);
     $parent.html($parent.html());
 };
 
@@ -54,7 +54,7 @@ var setBlockLink = function (id, height, cls) {
     var $parent = $target.parent();
 
     $target.text(height);
-    $target.attr('href', 'https://garlicinsight.com/block-index/' + height);
+    $target.attr('href', 'https://insight.garli.co.in/block-index/' + height);
     $parent.html($parent.html());
 };
 
@@ -206,7 +206,7 @@ var _showWorker = function (address) {
 
                         $.ajax({
                             type:       'GET',
-                            url:        'https://garlicinsight.com/insight-grlc-api/addr/' + payoutAddress + '/balance',
+                            url:        'https://insight.garli.co.in/insight-grlc-api/addr/' + payoutAddress + '/balance',
                             contentType:'application/json',
                             dataType:   'json',
                             success:    function (data, textStatus, jqXHR) {
@@ -220,7 +220,7 @@ var _showWorker = function (address) {
                         });
                         $.ajax({
                             type:       'GET',
-                            url:        'https://garlicinsight.com/insight-grlc-api/txs/?address=' + payoutAddress,
+                            url:        'https://insight.garli.co.in/insight-grlc-api/txs/?address=' + payoutAddress,
                             contentType:'application/json',
                             dataType:   'json',
                             success:    function (data, textStatus, jqXHR) {
@@ -323,14 +323,14 @@ var redrawMinedBlocks = function () {
     var getBlockStatus = function(height, cb) {
         $.ajax({
             type:   'GET',
-            url:    'https://garlicinsight.com/insight-grlc-api/block-index/' + height,
+            url:    'https://insight.garli.co.in/insight-grlc-api/block-index/' + height,
             contentType: "application/json",
             dataType: 'json',
             success: function (data, textStatus, jqXHR) {
                 if (data != null && data != '' && data.blockHash != null && data.blockHash != '') {
                     $.ajax({
                         type:   'GET',
-                        url:    'https://garlicinsight.com/insight-grlc-api/block/' + data.blockHash,
+                        url:    'https://insight.garli.co.in/insight-grlc-api/block/' + data.blockHash,
                         contentType: "application/json",
                         dataType: 'json',
                         success: function (data, textStatus, jqXHR) {
