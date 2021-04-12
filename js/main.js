@@ -7,6 +7,8 @@ var myAddress = localStorage['myAddress'];
 var currentWorker = null;
 var curHeight = 0;
 var redrawMinedBlocksTimeout = null;
+var apiReqs = {};
+var apiQueue = [];
 
 var formatHashrate = function (hashrate) {
     if (!hashrate) {
@@ -40,22 +42,85 @@ var formatDate = function (date) {
     return date.toLocaleString();
 };
 
-var setAddress = function (id, address, cls) {
-    var $target = $(id);
-    var $parent = $target.parent();
+let callApi = (endpoint, param, options) => {
+    let serializeOpts = options => {
+        let serialized = '';
+        for (let key in options) {
+            if (serialized !== '') serialized += '&';
+            serialized += key + '=' + options[key];
+        }
+        return serialized;
+    };
 
-    $target.text(address);
-    $target.attr('href', 'https://insight.garli.co.in/address/' + address);
-    $parent.html($parent.html());
+    const url = 'https://api.freshgrlc.net/blockchain/grlc/' + endpoint + '/' + param + (options !== undefined ? '?' + serializeOpts(options) : '');
+
+    if (apiReqs[url] !== undefined)
+        return apiReqs[url];
+    
+    apiReqs[url] = new Promise((resolve, reject) => {
+        let doAjax = () => $.ajax({
+            type:     'GET',
+            url:      url,
+            dataType: 'json',
+            success:  response => {
+                apiQueue = apiQueue.filter(v => v !== apiReqs[url]);
+                delete apiReqs[url];
+                resolve(response)
+            }
+        });
+
+        if (apiQueue.length === 0) {
+            doAjax();
+        } else {
+            apiQueue[apiQueue.length - 1].then(response => doAjax());
+        }
+    });
+
+    apiQueue.push(apiReqs[url]);
+    return apiReqs[url];
 };
 
-var setBlockLink = function (id, height, cls) {
-    var $target = $(id);
-    var $parent = $target.parent();
+let searchForObject = async (id, allowedObjects, options) => {
+    let identifyObjectType = object => {
+        return object.address !== undefined ? 'address' :
+               object.height  !== undefined ? 'block'   :
+               undefined;
+    };
+
+    const objectInfo = await callApi('search', id, options);
+    return objectInfo === null || (allowedObjects !== undefined && allowedObjects.indexOf(identifyObjectType(objectInfo)) < 0) ? null : objectInfo;
+};
+
+var setAddress = function (id, address) {
+    let setAddressLink = ($target, address) =>
+        $target.attr('href', 'https://explorer.freshgrlc.net/grlc/address/' + address);
+
+    let $target = $(id);
+
+    $target.text(address);
+    setAddressLink($target, address);
+
+    searchForObject(address, 'address').then(info => 
+        setAddressLink($target, info.address)
+    );
+};
+
+var setBlockLink = function (id, height) {
+    let $target = $(id);
+    var realUrl = null;
 
     $target.text(height);
-    $target.attr('href', 'https://insight.garli.co.in/block-index/' + height);
-    $parent.html($parent.html());
+    $target.click(() => {
+        if (realUrl)
+            return true;
+
+        searchForObject(height, 'block').then(info => {
+            realUrl = 'https://explorer.freshgrlc.net/grlc/blocks/' + info.hash;
+            $target.attr('href', realUrl);
+            window.open(realUrl);
+        });
+        return false;
+    });
 };
 
 var setAddressHashrate = function (query, hashrate) {
@@ -202,55 +267,22 @@ var _showWorker = function (address) {
                     });
 
                     if (online && dailyPayout) {
-                        var payoutAddress = data.nextpayout.address;
+                        searchForObject(data.nextpayout.address, 'address').then(info => {
+                            const payoutAddress = info.address;
 
-                        $.ajax({
-                            type:       'GET',
-                            url:        'https://insight.garli.co.in/insight-grlc-api/addr/' + payoutAddress + '/balance',
-                            contentType:'application/json',
-                            dataType:   'json',
-                            success:    function (data, textStatus, jqXHR) {
-                                if (data == null) {
-                                    data = 0;
-                                } else {
-                                    data /= 100000000;
-                                }
-                                $('#workerinfo_consolidated').html('' + data + ' <span class="suffix">GRLC</span>');
-                            }
-                        });
-                        $.ajax({
-                            type:       'GET',
-                            url:        'https://insight.garli.co.in/insight-grlc-api/txs/?address=' + payoutAddress,
-                            contentType:'application/json',
-                            dataType:   'json',
-                            success:    function (data, textStatus, jqXHR) {
-                                var getAddressOutput = function (txos, address) {
-                                    for (var i in txos) {
-                                        var txo = txos[i];
+                            callApi('address', payoutAddress + '/balance/').then(balance =>
+                                $('#workerinfo_consolidated').html('' + (balance == null ? 0 : balance) + ' <span class="suffix">GRLC</span>')
+                            );
 
-                                        if (txo.scriptPubKey == undefined || txo.scriptPubKey.addresses == undefined)
-                                            continue;
-
-                                        for (var ai in txo.scriptPubKey.addresses) {
-                                            if (txo.scriptPubKey.addresses[ai] == address) {
-                                                return parseFloat(txo.value);
-                                            }
-                                        }
-                                    }
-                                    return 0;
-                                };
-
+                            callApi('address', payoutAddress + '/mutations/').then(mutations => {
                                 var utxos = 0;
                                 var utxoValue = 0.0;
 
-                                for (var i in data.txs) {
-                                    var tx = data.txs[i];
-
-                                    if (tx.vin.length == 1 && tx.vin[0].coinbase != undefined) {
+                                for (let i in mutations) {
+                                    const mutation = mutations[i];
+                                    if (mutation.change > 0.0) {
                                         utxos++;
-                                        utxoValue += getAddressOutput(tx.vout, payoutAddress);
-                                    } else {
-                                        break;
+                                        utxoValue += mutation.change;
                                     }
                                 }
 
@@ -262,7 +294,7 @@ var _showWorker = function (address) {
                                 } else {
                                     $('#workerinfo_consolidatefee').text(' - ');
                                 }
-                            }
+                            });
                         });
                     }
                 }
@@ -320,36 +352,10 @@ var buildWorkerList = function (data) {
 };
 
 var redrawMinedBlocks = function () {
-    var getBlockStatus = function(height, cb) {
-        $.ajax({
-            type:   'GET',
-            url:    'https://insight.garli.co.in/insight-grlc-api/block-index/' + height,
-            contentType: "application/json",
-            dataType: 'json',
-            success: function (data, textStatus, jqXHR) {
-                if (data != null && data != '' && data.blockHash != null && data.blockHash != '') {
-                    $.ajax({
-                        type:   'GET',
-                        url:    'https://insight.garli.co.in/insight-grlc-api/block/' + data.blockHash,
-                        contentType: "application/json",
-                        dataType: 'json',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data != null && data != '') {
-                                if (data.poolInfo != null && data.poolInfo.poolName == 'FreshGRLC.net') {
-                                    cb('confirmed');
-                                } else {
-                                    cb('orphaned');
-                                }
-                            } else {
-                                cb('error');
-                            }
-                        }
-                    });
-                } else {
-                    cb('error');
-                }
-            }
-        });
+    let getBlockStatus = (height, cb) => {
+        searchForObject(height, 'block', {expand: 'miner'}).then(block => 
+            cb(block.miner !== undefined ? block.miner.name === 'FreshGRLC.net' ? 'confirmed' : 'orphaned' : 'error')
+        );
     };
 
     $('.blkheight').remove();
