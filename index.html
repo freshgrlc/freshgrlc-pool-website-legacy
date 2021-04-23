@@ -41,6 +41,48 @@
 
     <div id="content">
         <div id="content-poolnews" class="contentdiv active">
+            <article>
+                <time datetime="2021-04-23" class="date">Apr 23, 2021</time>
+                <h3>We're back! (+ daily payout system migration)</h3>
+                <p>
+                    We are back, and how!
+                </p>
+                <p>
+                    In the last week we not only saw the coin's value increase by a factor 10, with it it also suddenly got quite busy on the mining pools again, 
+                    with the network difficulty <a href="https://explorer.freshgrlc.net/grlc/difficultygraphs?period=week" target="_blank">increasing by a factor
+                    4</a> as well!<br />
+                    I would like to welcome all the new garlic bread bakers who have chosen to join this pool, it is quite a honor to still have around
+                    <a href="https://explorer.freshgrlc.net/grlc/pooldistribution?period=day" target="_blank">a quarter of the network hashrate</a> on this pool!
+                </p>
+                <p>
+                    But that also means I should finally start fixing some of the long standing problems with it. And the first thing had to be the daily payout
+                    system that was limping around on its last legs.
+                </p>
+                <p>
+                    In the early hours of this morning I migrated the pool to use the new <a href="https://github.com/freshgrlc/freshgrlc-wallet" target="_blank">
+                    FreshGRLC.net Managed Wallet API</a>, which will in the future also serve as backend for an upcoming web-wallet. Some daily payout miners will
+                    have already noticed their consolidation address has changed to a new one starting with a <strong>W</strong>.
+                </p>
+                <p>
+                    These W-addresses are very similar to normal <strong>G</strong>-addresses, with the exception that they are cheaper to send coins from. Moreover,
+                    every G-address has a corresponding W-address and they can be found <a href="https://explorer.freshgrlc.net/grlc/address/GR1Vcgj2r6EjGQJHHGkAUr1XnidA19MrxC" target="_blank">
+                    on the explorer</a>.<br />
+                    They are also the same as the longer type of addresses that start with <strong>grlc1</strong>. Actually, both W-addresses and grlc1-addresses cointain
+                    the exact same data, just written in a different form. Since W-addresses predate grlc1-addresses, all FreshGRLC.net services use the W-address format.
+                    <br />
+                    But again, you can easily convert them using the explorer as shown above.
+                </p>
+                <p>
+                    For more information about W-addresses, see my <a href="https://www.reddit.com/r/garlicoin/comments/8prtxp/as_part_of_my_ongoing_effort_to_develop_stupid/" target="_blank">
+                    original post</a> from back in the day.<br />
+                    Note by the way that <a href="https://insight.garli.co.in/" target="_blank">Insight</a> doesn't support either the W-address format nor the grlc1-address
+                    format and these type of addresses will instead show up as <strong>Unparsed address</strong>.
+                </p>
+                <p>
+                    As for the new daily payout backend? Everything seems to be working fine now, but their might be some early kinks in the new system that will have to
+                    be ironed out, in which case I will try take care of them as fast and best as possble.
+                </p>
+            </article>
 
             <article>
                 <time datetime="2018-03-24" class="date">Mar 24, 2018</time>
