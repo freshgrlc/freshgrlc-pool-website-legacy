@@ -92,17 +92,9 @@ let searchForObject = async (id, allowedObjects, options) => {
 };
 
 var setAddress = function (id, address) {
-    let setAddressLink = ($target, address) =>
-        $target.attr('href', 'https://explorer.freshgrlc.net/grlc/address/' + address);
-
     let $target = $(id);
-
     $target.text(address);
-    setAddressLink($target, address);
-
-    searchForObject(address, 'address').then(info => 
-        setAddressLink($target, info.address)
-    );
+    $target.attr('href', 'https://explorer.freshgrlc.net/grlc/address/' + address);
 };
 
 var setBlockLink = function (id, height) {
@@ -267,34 +259,32 @@ var _showWorker = function (address) {
                     });
 
                     if (online && dailyPayout) {
-                        searchForObject(data.nextpayout.address, 'address').then(info => {
-                            const payoutAddress = info.address;
+                        let payoutAddress = data.nextpayout.address;
 
-                            callApi('address', payoutAddress + '/balance/').then(balance =>
-                                $('#workerinfo_consolidated').html('' + (balance == null ? 0 : balance) + ' <span class="suffix">GRLC</span>')
-                            );
+                        callApi('address', payoutAddress + '/balance/').then(balance =>
+                            $('#workerinfo_consolidated').html('' + (balance == null ? 0 : balance) + ' <span class="suffix">GRLC</span>')
+                        );
 
-                            callApi('address', payoutAddress + '/mutations/').then(mutations => {
-                                var utxos = 0;
-                                var utxoValue = 0.0;
+                        callApi('address', payoutAddress + '/mutations/').then(mutations => {
+                            var utxos = 0;
+                            var utxoValue = 0.0;
 
-                                for (let i in mutations) {
-                                    const mutation = mutations[i];
-                                    if (mutation.change > 0.0) {
-                                        utxos++;
-                                        utxoValue += mutation.change;
-                                    }
+                            for (let i in mutations) {
+                                const mutation = mutations[i];
+                                if (mutation.change > 0.0) {
+                                    utxos++;
+                                    utxoValue += mutation.change;
                                 }
+                            }
 
-                                if (utxos > 0) {
-                                    var estimatedSize = (utxos * 76 + 7 + 34) * 1.457;
-                                    var estimatedFee = estimatedSize * 5.0 / 100000000.0;
+                            if (utxos > 0) {
+                                var estimatedSize = (utxos * 76 + 7 + 34) * 1.457;
+                                var estimatedFee = estimatedSize * 5.0 / 100000000.0;
 
-                                    $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + '%');
-                                } else {
-                                    $('#workerinfo_consolidatefee').text(' - ');
-                                }
-                            });
+                                $('#workerinfo_consolidatefee').text('' + (Math.round(estimatedFee / utxoValue * 1000000) / 10000) + '%');
+                            } else {
+                                $('#workerinfo_consolidatefee').text(' - ');
+                            }
                         });
                     }
                 }
