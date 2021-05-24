@@ -42,6 +42,60 @@
     <div id="content">
         <div id="content-poolnews" class="contentdiv active">
             <article>
+                <time datetime="2021-05-24" class="date">May 24, 2021</time>
+                <h3>Update on workers, share management and payout method</h3>
+                <p>
+                    In the last month we've seen quite an influx of new miners on the pool. With so many new members, we've also seen a lot of people
+                    wanting to switch to daily payout after initially starting mining using the (default) instant payout method.
+                </p>
+                <p>
+                    Unfortunately, due to the way the pool is coded, is isn't possible to easily switch between the two methods while also preventing
+                    abuse by third parties. Therefore, only way to change payout method is to completely stop mining, wait for your address to be dropped
+                    by the pool and start mining using again using the correct payout prefix to your username (See <a href="#howtomine"><i>How to mine</i></a>).
+                </p>
+                <p>
+                    This usually means waiting quite some time. An easy alternative would be to just generate a new address using your favorite wallet and
+                    use that to mine to with whichever method you prefer. And this is indeed what most people do, as it means they don't have to wait for
+                    the pool to make its final payment and drop the worker.
+                </p>
+                <p>
+                    However, since most people were chosing this as a fast an easy solution, it meant that a bug in the share and worker management logic of
+                    the pool went unoticed for quite some time. It turns out that however long your waited, in a lot of cases the pool wasn't dropping workers
+                    at all!
+                </p>
+                <p>
+                    Which brings me to this update. Various alterations have been made today to the way the pool handles shares and workers:
+                </p>
+                <ul>
+                    <li>
+                        The pool will now only take blocks found by the pool itself into account for share management. The old 1% decrease in shares whenever
+                        anyone on the network finds a block is gone. The 20% decrease whenever the pool finds a block remains the same.
+                    </li>
+                    <li>
+                        The pool will no longer ignore blocks found in rapid succession for share management. As this pool frequently counts for nearly 25% of
+                        the total hashrate on the network, the chance of this happening increases and therefore this rule makes the share management less predicatable
+                        instead of more predicatable.
+                    </li>
+                    <li>
+                        Worker eviction from the pool is fixed. Workers are evicted whenever their shares drop to less than 5. This is a change from the old 0.02/0.08
+                        shares, which means eviction will happen a lot faster and the pool will generate a lot less dust outputs. Eviction time depends on multiple factors,
+                        including your hashrate and pool luck. However, for regular miners with a single, average GPU eviction time should be around 1.5 hours.
+                    </li>
+                    <li>
+                        A new initial requirement of 15 shares has been introduced in order for a worker to qualify for payout in the first place. Until this requirement
+                        is met a worker will just collect shares without being included in the block rewards transaction or subject to the 20% share reduction rule. <br />
+                        This is intended for very low hashrate workers that have difficulty keeping up with the requirement of submitting at least 1.25 shares within the
+                        time it takes the pool to find a block to avoid early eviction. <br />
+                        Once this initial 15 shares requirement has been met, they will behave like any other worker until and including when they hit 5 shares or lower and
+                        are removed from the pool. When this happens, they can start building again to the 15 initial shares from 0.
+                    </li>
+                </ul>
+                <p>
+                    This is also summarized in the note at the bottom of the <a href="#curblock"><i>Current block</i> section</a>.
+                </p>
+            </article>
+
+            <article>
                 <time datetime="2021-04-23" class="date">Apr 23, 2021</time>
                 <h3>We're back! (+ daily payout system migration)</h3>
                 <p>
