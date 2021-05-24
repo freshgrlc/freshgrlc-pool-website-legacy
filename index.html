@@ -760,15 +760,17 @@
             <p>
                 Everyone's shares will decrease by 20% if the pool finds a block
                 (except when multiple blocks are found within a small amount of time).
+                When a worker's shares drops below 5, it will be evicted from the pool.
             </p>
             <p>
-                Shares decrease by 1% whenever anyone finds a new block on the network
-                (this happens more or less every 41 seconds).
+                This is part of the payout management logic in order to keep payout fair
+                and reduce pool switching.
             </p>
             <p>
-                Workers under the minimum share floor of 8 shares don't get paid,
-                but are also not affected by the 1% share decrease
-                (this to decrease the amount of dust the pool is generating somewhat).
+                Workers will not get paid and are not affected by this rule until the
+                minimum share floor of 15 shares is reached. This is to both reduce dust
+                outputs and give (very) low hashrate a chance to get enough shares for a
+                proper payout.
             </p>
             <p>
                 This is all part of the payout management logic in order to keep payout fair.
@@ -780,9 +782,6 @@
                 while still giving them something for their work.
                 It also helps new workers joining to pool to get a little bit extra in times
                 where the pool is unlucky and can't find a block for a while.
-            </p>
-            <p>
-                These numbers might change in the future.
             </p>
         </div>
         <div id="content-myworker" class="contentdiv">
